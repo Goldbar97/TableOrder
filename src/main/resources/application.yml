@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: TableOrder
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    defer-datasource-initialization: true
+
+  jwt:
+    secret: c2VvbmdqdW4ta2FuZy1qd3Qtc2VjcmV0LWtleS1nZW5lcmF0b3ItZm9yLWdlbmVyYWwtcHJvamVjdA==

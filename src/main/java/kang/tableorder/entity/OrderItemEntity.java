@@ -15,11 +15,12 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Builder
-@Entity(name = "ORDER")
+@Entity(name = "ORDER_ITEM")
 @Getter
 @NoArgsConstructor
 @Setter
 public class OrderItemEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

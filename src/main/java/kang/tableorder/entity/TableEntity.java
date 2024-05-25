@@ -18,6 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 public class TableEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
