@@ -6,7 +6,6 @@ import kang.tableorder.entity.UserEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.UserRepository;
-import kang.tableorder.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +18,6 @@ public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  private final TokenProvider tokenProvider;
 
   // 회원가입
   public SignUpDto.Response signUp(SignUpDto.Request form) {
@@ -61,11 +59,10 @@ public class UserService implements UserDetailsService {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
-    String token = tokenProvider.generateToken(userEntity.getEmail(), userEntity.getRoles());
-
     return SignInDto.Response.builder()
         .id(userEntity.getId())
-        .token(token)
+        .email(userEntity.getEmail())
+        .roles(userEntity.getRoles())
         .build();
   }
 

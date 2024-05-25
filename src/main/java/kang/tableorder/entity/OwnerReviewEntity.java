@@ -6,6 +6,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -31,16 +32,16 @@ public class OwnerReviewEntity {
   private Integer id;
 
   @ManyToOne
-  @Column(nullable = false)
-  private RestaurantEntity restaurantId;
+  @JoinColumn(name = "restaurant_id")
+  private RestaurantEntity restaurantEntity;
 
   @ManyToOne
-  @Column(nullable = false)
-  private CustomerReviewEntity customerReviewId;
+  @JoinColumn(name = "customer_review_id")
+  private CustomerReviewEntity customerReviewEntity;
 
   @ManyToOne
-  @Column(nullable = false)
-  private UserEntity userId;
+  @JoinColumn(name = "user_id")
+  private UserEntity userEntity;
 
   @Column(nullable = false)
   private String description;
