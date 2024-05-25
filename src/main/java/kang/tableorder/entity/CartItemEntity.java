@@ -20,6 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 public class CartItemEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

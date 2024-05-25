@@ -22,6 +22,7 @@ import org.springframework.data.annotation.CreatedDate;
 @NoArgsConstructor
 @Setter
 public class OrderEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
