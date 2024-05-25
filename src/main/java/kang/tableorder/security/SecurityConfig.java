@@ -40,7 +40,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(e -> {
           e
               .requestMatchers("/signup", "/signin")
-              .permitAll()
+              .permitAll();
+          e
               .anyRequest()
               .authenticated();
         })
