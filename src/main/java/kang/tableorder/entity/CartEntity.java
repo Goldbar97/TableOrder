@@ -6,6 +6,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,16 @@ public class CartEntity {
   private Integer id;
 
   @OneToOne
-  private UserEntity userId;
+  @JoinColumn(name = "tables_id")
+  private TablesEntity tablesEntity;
 
   @OneToOne
-  private GuestEntity guestId;
+  @JoinColumn(name = "user_id")
+  private UserEntity userEntity;
+
+  @OneToOne
+  @JoinColumn(name = "guest_id")
+  private GuestEntity guestEntity;
 
   @Column(nullable = false)
   private Integer totalPrice;

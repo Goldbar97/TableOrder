@@ -1,10 +1,10 @@
 package kang.tableorder.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -26,11 +26,12 @@ public class OrderItemEntity {
   private Integer id;
 
   @OneToOne
-  @Column(unique = true)
-  private MenuEntity menuId;
+  @JoinColumn(name = "menu_id")
+  private MenuEntity menuEntity;
 
   @ManyToOne
-  private OrderEntity orderId;
+  @JoinColumn(name = "order_id")
+  private OrderEntity orderEntity;
 
   private Integer count;
 

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import kang.tableorder.type.MenuCategory;
 import lombok.AllArgsConstructor;
@@ -26,11 +27,11 @@ public class MenuEntity {
   private Integer id;
 
   @ManyToOne
-  @Column(nullable = false)
-  private RestaurantEntity restaurantId;
+  @JoinColumn(name = "restaurant_id")
+  private RestaurantEntity restaurantEntity;
 
   @Column(nullable = false)
-  private Enum<MenuCategory> category;
+  private MenuCategory category;
 
   @Column(nullable = false)
   private String name;

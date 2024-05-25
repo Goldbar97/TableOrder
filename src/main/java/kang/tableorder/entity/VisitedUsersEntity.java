@@ -6,6 +6,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,12 +29,12 @@ public class VisitedUsersEntity {
   private Integer id;
 
   @ManyToOne
-  @Column(nullable = false)
-  private RestaurantEntity restaurantId;
+  @JoinColumn(name = "restaurant_id")
+  private RestaurantEntity restaurantEntity;
 
   @ManyToOne
-  @Column(nullable = false)
-  private UserEntity userId;
+  @JoinColumn(name = "user_id")
+  private UserEntity userEntity;
 
   @Column(nullable = false)
   private Integer visitedCount;
