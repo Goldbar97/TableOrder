@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: TableOrder
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    defer-datasource-initialization: true
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/table_order?useUnicode=true&characterEncoding=utf8mb4
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: mariadb
+
+  jwt:
+    secret: c2VvbmdqdW4ta2FuZy1qd3Qtc2VjcmV0LWtleS1nZW5lcmF0b3ItZm9yLWdlbmVyYWwtcHJvamVjdA==
