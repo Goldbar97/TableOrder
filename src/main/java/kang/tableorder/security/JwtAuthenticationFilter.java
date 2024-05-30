@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   public final String TOKEN_HEADER = "Authorization";
   public final String TOKEN_PREFIX = "Bearer ";
   private final TokenProvider tokenProvider;
+  private final AuthenticationService authenticationService;
 
   private String resolveTokenFromRequest(HttpServletRequest request) {
     String token = request.getHeader(TOKEN_HEADER);
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String token = resolveTokenFromRequest(request);
 
     if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-      Authentication auth = tokenProvider.getAuthentication(token);
+      Authentication auth = authenticationService.getAuthentication(token);
       SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
