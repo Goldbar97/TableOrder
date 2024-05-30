@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import kang.tableorder.dto.SignUpDto;
 import kang.tableorder.type.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,20 +62,6 @@ public class UserEntity implements UserDetails {
 
   @LastModifiedDate
   private LocalDateTime updatedAt;
-
-  public static UserEntity from(SignUpDto.Request form) {
-    List<UserRole> roleList = new ArrayList<>();
-    roleList.add(UserRole.valueOf(form.getRole()));
-
-    return UserEntity.builder()
-        .email(form.getEmail())
-        .password(form.getPassword())
-        .name(form.getName())
-        .nickname(form.getNickname())
-        .phoneNumber(form.getPhoneNumber())
-        .roles(roleList)
-        .build();
-  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

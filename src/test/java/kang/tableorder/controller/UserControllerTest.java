@@ -149,7 +149,7 @@ class UserControllerTest {
     SignUpDto.Request request = new SignUpDto.Request();
 
     given(userService.signIn(any(SignInDto.Request.class))).willThrow(new CustomException(
-        ErrorCode.NO_SUCH_USER));
+        ErrorCode.NO_USER));
 
     // when
     // then
@@ -157,8 +157,8 @@ class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.code").value(ErrorCode.NO_SUCH_USER.getStatus().value()))
-        .andExpect(jsonPath("$.message").value(ErrorCode.NO_SUCH_USER.getValue()));
+        .andExpect(jsonPath("$.code").value(ErrorCode.NO_USER.getStatus().value()))
+        .andExpect(jsonPath("$.message").value(ErrorCode.NO_USER.getValue()));
   }
 
   @Test
