@@ -24,7 +24,7 @@ public class RestaurantController {
   // 매장 CREATE
   @PreAuthorize("hasRole('OWNER')")
   @PostMapping("/restaurant/create")
-  public ResponseEntity<Object> createRestaurant(
+  public ResponseEntity<?> createRestaurant(
       @RequestHeader(AUTH) String header,
       @RequestBody RestaurantDto.Create.Request form) {
 
@@ -35,7 +35,7 @@ public class RestaurantController {
 
   // 매장 READ
   @GetMapping("/restaurant")
-  public ResponseEntity<Object> readRestaurant() {
+  public ResponseEntity<?> readRestaurant() {
 
     RestaurantDto.Read.Response info = restaurantService.readRestaurant();
 
@@ -46,7 +46,7 @@ public class RestaurantController {
   // 매장 UPDATE
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/restaurant/update")
-  public ResponseEntity<Object> updateRestaurant(
+  public ResponseEntity<?> updateRestaurant(
       @RequestHeader(AUTH) String header,
       @Valid @RequestBody RestaurantDto.Update.Request form) {
 
@@ -58,7 +58,7 @@ public class RestaurantController {
   // 매장 DELETE
   @PreAuthorize("hasRole('OWNER')")
   @DeleteMapping("/restaurant/delete")
-  public ResponseEntity<Object> deleteRestaurant(
+  public ResponseEntity<?> deleteRestaurant(
       @RequestHeader(AUTH) String header) {
 
     boolean deleted = restaurantService.deleteRestaurant(header);

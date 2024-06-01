@@ -31,4 +31,7 @@ public class TablesEntity {
 
   @Column(nullable = false)
   private Integer number;
+
+  @Column(nullable = false)
+  private String tabletMacId;
 }

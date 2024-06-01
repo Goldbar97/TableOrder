@@ -27,7 +27,7 @@ public class MenuController {
   // 메뉴 CREATE
   @PreAuthorize("hasRole('OWNER')")
   @PostMapping("/restaurant/menu/create")
-  public ResponseEntity<Object> createMenu(
+  public ResponseEntity<?> createMenu(
       @RequestHeader(AUTH) String header,
       @Valid @RequestBody MenuDto.Create.Request form) {
 
@@ -59,7 +59,7 @@ public class MenuController {
   // 메뉴 UPDATE
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/restaurant/menu/update/{menuId}")
-  public ResponseEntity<Object> updateMenu(
+  public ResponseEntity<?> updateMenu(
       @RequestHeader(AUTH) String header,
       @PathVariable Integer menuId,
       @Valid @RequestBody MenuDto.Update.Request form) {
@@ -73,7 +73,7 @@ public class MenuController {
   // 메뉴 DELETE
   @PreAuthorize("hasRole('OWNER')")
   @DeleteMapping("/restaurant/menu/delete/{menuId}")
-  public ResponseEntity<Object> deleteMenu(
+  public ResponseEntity<?> deleteMenu(
       @RequestHeader(AUTH) String header,
       @PathVariable Integer menuId) {
 

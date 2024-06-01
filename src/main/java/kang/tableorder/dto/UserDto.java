@@ -47,15 +47,15 @@ public class UserDto {
       @NotNull(message = "Role cannot be null")
       private List<UserRole> role;
 
-      public static UserEntity toEntity(UserDto.SignUp.Request form) {
+      public UserEntity toEntity() {
 
         return UserEntity.builder()
-            .email(form.getEmail())
-            .password(form.getPassword())
-            .name(form.getName())
-            .nickname(form.getNickname())
-            .phoneNumber(form.getPhoneNumber())
-            .role(form.getRole())
+            .email(this.email)
+            .password(this.password)
+            .name(this.name)
+            .nickname(this.nickname)
+            .phoneNumber(this.phoneNumber)
+            .role(this.role)
             .build();
       }
     }
