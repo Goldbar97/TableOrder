@@ -1,5 +1,6 @@
 package kang.tableorder.service;
 
+import kang.tableorder.dto.UserDetailsDto;
 import kang.tableorder.dto.UserDto;
 import kang.tableorder.entity.UserEntity;
 import kang.tableorder.exception.CustomException;
@@ -124,7 +125,9 @@ public class UserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws CustomException {
-    return userRepository.findByEmail(email)
+    UserEntity userEntity = userRepository.findByEmail(email)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
+
+    return new UserDetailsDto(userEntity);
   }
 }
