@@ -104,6 +104,7 @@ public class RestaurantDto {
     @Getter
     @Setter
     public static class Response {
+
       private Integer id;
       private String name;
       private String location;
