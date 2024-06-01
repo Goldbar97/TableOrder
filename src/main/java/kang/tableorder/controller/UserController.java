@@ -40,34 +40,34 @@ public class UserController {
   }
 
   // 회원 READ
-  @GetMapping("/profile")
-  public ResponseEntity<Object> readProfile(
+  @GetMapping("/user")
+  public ResponseEntity<Object> readUser(
       @RequestHeader(AUTH) String header,
       @RequestBody String password) {
 
-    UserDto.Read.Response info = userService.readProfile(header, password);
+    UserDto.Read.Response info = userService.readUser(header, password);
 
     return ResponseEntity.ok(info);
   }
 
   // 회원 UPDATE
-  @PutMapping("/profile/update")
-  public ResponseEntity<Object> updateProfile(
+  @PutMapping("/user/update")
+  public ResponseEntity<Object> updateUser(
       @RequestHeader(AUTH) String header,
       @Valid @RequestBody UserDto.Update.Request form) {
 
-    UserDto.Update.Response updated = userService.updateProfile(header, form);
+    UserDto.Update.Response updated = userService.updateUser(header, form);
 
     return ResponseEntity.ok(updated);
   }
 
   // 회원 DELETE
-  @DeleteMapping("/profile/delete")
-  public ResponseEntity<Object> deleteProfile(
+  @DeleteMapping("/user/delete")
+  public ResponseEntity<Object> deleteUser(
       @RequestHeader(AUTH) String header,
       @RequestBody String password) {
 
-    boolean deleted = userService.deleteProfile(header, password);
+    boolean deleted = userService.deleteUser(header, password);
 
     return ResponseEntity.ok(deleted);
   }

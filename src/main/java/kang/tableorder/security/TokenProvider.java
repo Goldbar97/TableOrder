@@ -25,12 +25,12 @@ public class TokenProvider {
   @Value("${spring.jwt.secret}")
   private String secretKey;
 
-  public String generateToken(String email, List<UserRole> roles) {
+  public String generateToken(String email, List<UserRole> role) {
     Date now = new Date();
     Date expirationDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
     return Jwts.builder()
-        .claim(KEY_ROLES, roles)
+        .claim(KEY_ROLES, role)
         .subject(email)
         .issuedAt(now)
         .expiration(expirationDate)

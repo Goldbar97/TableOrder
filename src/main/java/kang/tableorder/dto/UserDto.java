@@ -16,6 +16,7 @@ public class UserDto {
 
   public static class SignUp {
 
+    @Builder
     @Getter
     @Setter
     public static class Request {
@@ -44,7 +45,7 @@ public class UserDto {
       private String phoneNumber;
 
       @NotNull(message = "Role cannot be null")
-      private UserRole role;
+      private List<UserRole> role;
 
       public static UserEntity toEntity(UserDto.SignUp.Request form) {
 
@@ -54,7 +55,7 @@ public class UserDto {
             .name(form.getName())
             .nickname(form.getNickname())
             .phoneNumber(form.getPhoneNumber())
-            .roles(List.of((form.getRole())))
+            .role(form.getRole())
             .build();
       }
     }
@@ -68,7 +69,7 @@ public class UserDto {
       private String email;
       private String name;
       private String nickname;
-      private String role;
+      private List<UserRole> role;
 
       public static UserDto.SignUp.Response toDto(UserEntity userEntity) {
         return Response.builder()
@@ -76,7 +77,7 @@ public class UserDto {
             .email(userEntity.getEmail())
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())
-            .role(userEntity.getRoles().toString())
+            .role(userEntity.getRole())
             .build();
       }
     }
@@ -86,6 +87,7 @@ public class UserDto {
 
   public static class SignIn {
 
+    @Builder
     @Getter
     @Setter
     public static class Request {
@@ -107,14 +109,14 @@ public class UserDto {
 
       private Integer id;
       private String email;
-      private List<UserRole> roles;
+      private List<UserRole> role;
       private String token;
 
       public static UserDto.SignIn.Response toDto(UserEntity userEntity, String token) {
         return UserDto.SignIn.Response.builder()
             .id(userEntity.getId())
             .email(userEntity.getEmail())
-            .roles(userEntity.getRoles())
+            .role(userEntity.getRole())
             .token(token)
             .build();
       }
@@ -142,7 +144,7 @@ public class UserDto {
       private String email;
       private String name;
       private String nickname;
-      private String role;
+      private List<UserRole> role;
 
       public static UserDto.Read.Response toDto(UserEntity userEntity) {
         return UserDto.Read.Response.builder()
@@ -150,7 +152,7 @@ public class UserDto {
             .email(userEntity.getEmail())
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())
-            .role(userEntity.getRoles().toString())
+            .role(userEntity.getRole())
             .build();
       }
     }
@@ -158,6 +160,7 @@ public class UserDto {
 
   public static class Update {
 
+    @Builder
     @Getter
     @Setter
     public static class Request {
@@ -190,7 +193,7 @@ public class UserDto {
       private String name;
       private String nickname;
       private String phoneNumber;
-      private List<UserRole> roles;
+      private List<UserRole> role;
       private LocalDateTime createdAt;
       private LocalDateTime updatedAt;
 
@@ -201,7 +204,7 @@ public class UserDto {
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())
             .phoneNumber(userEntity.getPhoneNumber())
-            .roles(userEntity.getRoles())
+            .role(userEntity.getRole())
             .createdAt(userEntity.getCreatedAt())
             .updatedAt(userEntity.getUpdatedAt())
             .build();

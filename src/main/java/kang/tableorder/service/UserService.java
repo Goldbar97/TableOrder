@@ -55,14 +55,14 @@ public class UserService implements UserDetailsService {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
-    String token = tokenProvider.generateToken(userEntity.getEmail(), userEntity.getRoles());
+    String token = tokenProvider.generateToken(userEntity.getEmail(), userEntity.getRole());
 
     return UserDto.SignIn.Response.toDto(userEntity, token);
   }
 
 
   // 사용자 본인 조회
-  public UserDto.Read.Response readProfile(String header, String password) {
+  public UserDto.Read.Response readUser(String header, String password) {
     String email = tokenProvider.getEmail(header);
 
     UserEntity userEntity = userRepository.findByEmail(email)
@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 정보 수정
-  public UserDto.Update.Response updateProfile(String header, UserDto.Update.Request form) {
+  public UserDto.Update.Response updateUser(String header, UserDto.Update.Request form) {
     String email = tokenProvider.getEmail(header);
 
     UserEntity userEntity = userRepository.findByEmail(email)
@@ -106,7 +106,7 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 탈퇴
-  public boolean deleteProfile(String header, String password) {
+  public boolean deleteUser(String header, String password) {
     String email = tokenProvider.getEmail(header);
 
     UserEntity userEntity = userRepository.findByEmail(email)

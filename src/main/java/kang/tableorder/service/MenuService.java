@@ -57,6 +57,7 @@ public class MenuService {
   }
 
   // 메뉴 리스트 조회
+  // 각 리뷰 하나씩 포함
   public List<MenuDto.Read.Response> readMenus(int page, int size) {
 
     // 등록된 매장이 없는 경우
@@ -76,6 +77,7 @@ public class MenuService {
   }
 
   // 메뉴 자세히 조회
+  // 해당 메뉴의 모든 리뷰 조회 가능
   public MenuDto.Read.Response readMenu(Integer menuId) {
 
     // 등록된 매장이 없는 경우
@@ -85,6 +87,10 @@ public class MenuService {
 
     MenuEntity menuEntity = menuRepository.findById(menuId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_MENU));
+
+    if (!menuEntity.getIsAvailable()) {
+      throw new CustomException(ErrorCode.NOT_AVAILABLE);
+    }
 
     return MenuDto.Read.Response.toDto(menuEntity);
   }

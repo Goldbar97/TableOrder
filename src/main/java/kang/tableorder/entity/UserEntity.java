@@ -54,8 +54,8 @@ public class UserEntity implements UserDetails {
   private String phoneNumber;
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @Column(name = "roles", nullable = false)
-  private List<UserRole> roles;
+  @Column(name = "role", nullable = false)
+  private List<UserRole> role;
 
   @CreatedDate
   private LocalDateTime createdAt;
@@ -67,8 +67,8 @@ public class UserEntity implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> authorities = new ArrayList<>();
 
-    for (UserRole role : roles) {
-      authorities.add(new SimpleGrantedAuthority(role.getValue()));
+    for (UserRole r : role) {
+      authorities.add(new SimpleGrantedAuthority(r.getValue()));
     }
 
     return authorities;
