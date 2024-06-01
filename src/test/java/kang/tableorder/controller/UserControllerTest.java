@@ -235,6 +235,35 @@ class UserControllerTest {
   }
 
   @Test
+  @DisplayName("UpdateSuccessAndSignInSuccessWithNewPassword")
+  void updateSuccessAndSignInSuccessWithNewPassword() throws Exception {
+    // given
+    userService.signUp(signUpRequest);
+
+    UserDto.SignIn.Response response = userService.signIn(signInRequest);
+
+    UserDto.Update.Request updateRequest = UserDto.Update.Request.builder()
+        .password("test1234")
+        .newPassword("test5678")
+        .newNickname("testNewNickname")
+        .newPhoneNumber("010-1234-5678")
+        .build();
+
+    userService.updateUser(response.getToken(), updateRequest);
+
+    signInRequest.setPassword(updateRequest.getNewPassword());
+
+    // when
+    // then
+    mockMvc.perform(post("/signin")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(signInRequest)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.email").value(signInRequest.getEmail()))
+        .andExpect(jsonPath("$.role[0]").value(signUpRequest.getRole().get(0).toString()));
+  }
+
+  @Test
   @DisplayName("UpdateFailWrongPassword")
   void updateFailWrongPassword() throws Exception {
     // given
