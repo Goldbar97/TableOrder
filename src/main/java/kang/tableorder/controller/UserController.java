@@ -22,7 +22,7 @@ public class UserController {
 
   // 회원가입
   @PostMapping("/signup")
-  public ResponseEntity<Object> signUp(
+  public ResponseEntity<?> signUp(
       @Valid @RequestBody UserDto.SignUp.Request form) {
     UserDto.SignUp.Response signedUp = userService.signUp(form);
 
@@ -31,7 +31,7 @@ public class UserController {
 
   // 로그인
   @PostMapping("/signin")
-  public ResponseEntity<Object> signIn(
+  public ResponseEntity<?> signIn(
       @Valid @RequestBody UserDto.SignIn.Request form) {
 
     UserDto.SignIn.Response signedIn = userService.signIn(form);
@@ -41,7 +41,7 @@ public class UserController {
 
   // 회원 READ
   @GetMapping("/user")
-  public ResponseEntity<Object> readUser(
+  public ResponseEntity<?> readUser(
       @RequestHeader(AUTH) String header,
       @RequestBody String password) {
 
@@ -52,7 +52,7 @@ public class UserController {
 
   // 회원 UPDATE
   @PutMapping("/user/update")
-  public ResponseEntity<Object> updateUser(
+  public ResponseEntity<?> updateUser(
       @RequestHeader(AUTH) String header,
       @Valid @RequestBody UserDto.Update.Request form) {
 
@@ -63,7 +63,7 @@ public class UserController {
 
   // 회원 DELETE
   @DeleteMapping("/user/delete")
-  public ResponseEntity<Object> deleteUser(
+  public ResponseEntity<?> deleteUser(
       @RequestHeader(AUTH) String header,
       @RequestBody String password) {
 

@@ -48,7 +48,7 @@ public class MenuService {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_MENU);
     }
 
-    MenuEntity menuEntity = MenuDto.Create.Request.toEntity(form);
+    MenuEntity menuEntity = form.toEntity();
     menuEntity.setRestaurantEntity(restaurantEntity);
 
     MenuEntity saved = menuRepository.save(menuEntity);

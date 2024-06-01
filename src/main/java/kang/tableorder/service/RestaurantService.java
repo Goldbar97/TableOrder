@@ -33,7 +33,7 @@ public class RestaurantService {
     UserEntity userEntity = userRepository.findByEmail(email)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
 
-    RestaurantEntity restaurantEntity = RestaurantDto.Create.Request.toEntity(form);
+    RestaurantEntity restaurantEntity = form.toEntity();
     restaurantEntity.setUserEntity(userEntity);
 
     RestaurantEntity saved = restaurantRepository.save(restaurantEntity);
@@ -99,6 +99,7 @@ public class RestaurantService {
     UserEntity userEntity = userRepository.findByEmail(email)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
 
+    // 점주가 사용자와 일치하는 지 확인
     RestaurantEntity restaurantEntity = restaurantRepository.findByUserEntity(userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 

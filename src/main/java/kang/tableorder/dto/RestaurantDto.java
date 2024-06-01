@@ -26,12 +26,12 @@ public class RestaurantDto {
       @NotBlank(message = "PhoneNumber cannot be blank")
       private String phoneNumber;
 
-      public static RestaurantEntity toEntity(RestaurantDto.Create.Request form) {
+      public RestaurantEntity toEntity() {
         return RestaurantEntity.builder()
-            .name(form.getName())
-            .location(form.getLocation())
-            .description(form.getDescription())
-            .phoneNumber(form.getPhoneNumber())
+            .name(this.name)
+            .location(this.location)
+            .description(this.description)
+            .phoneNumber(this.phoneNumber)
             .build();
       }
     }

@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_NICKNAME);
     }
 
-    UserEntity userEntity = UserDto.SignUp.Request.toEntity(form);
+    UserEntity userEntity = form.toEntity();
 
     // 비밀번호 인코딩
     userEntity.setPassword(passwordEncoder.encode(form.getPassword()));

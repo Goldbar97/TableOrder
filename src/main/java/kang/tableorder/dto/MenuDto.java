@@ -89,8 +89,8 @@ public class MenuDto {
       private Integer spiciness;
       private Boolean isAvailable;
 
-      public static MenuDto.Create.Response toDto(MenuEntity menuEntity) {
-        return Create.Response.builder()
+      public static MenuDto.Update.Response toDto(MenuEntity menuEntity) {
+        return MenuDto.Update.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
             .name(menuEntity.getName())
@@ -136,15 +136,15 @@ public class MenuDto {
       @NotNull(message = "IsAvailable cannot be blank")
       private Boolean isAvailable;
 
-      public static MenuEntity toEntity(MenuDto.Create.Request form) {
+      public MenuEntity toEntity() {
         return MenuEntity.builder()
-            .category(form.getCategory())
-            .name(form.getName())
-            .imageUrl(form.getImageUrl())
-            .price(form.getPrice())
-            .description(form.getDescription())
-            .spiciness(form.getSpiciness())
-            .isAvailable(form.getIsAvailable())
+            .category(this.category)
+            .name(this.name)
+            .imageUrl(this.imageUrl)
+            .price(this.price)
+            .description(this.description)
+            .spiciness(this.spiciness)
+            .isAvailable(this.isAvailable)
             .build();
       }
     }
@@ -164,7 +164,7 @@ public class MenuDto {
       private Boolean isAvailable;
 
       public static MenuDto.Create.Response toDto(MenuEntity menuEntity) {
-        return Response.builder()
+        return MenuDto.Create.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
             .name(menuEntity.getName())
