@@ -38,10 +38,6 @@ public class OrderEntity {
   @JoinColumn(name = "user_id")
   private UserEntity userEntity;
 
-  @ManyToOne
-  @JoinColumn(name = "guest_id")
-  private GuestEntity guestEntity;
-
   @CreatedDate
   private LocalDateTime createdAt;
 
