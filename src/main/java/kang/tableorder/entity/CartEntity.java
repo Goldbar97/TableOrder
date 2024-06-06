@@ -37,10 +37,6 @@ public class CartEntity {
   @JoinColumn(name = "user_id")
   private UserEntity userEntity;
 
-  @OneToOne
-  @JoinColumn(name = "guest_id")
-  private GuestEntity guestEntity;
-
   @Column(nullable = false)
   private Integer totalPrice;
 
