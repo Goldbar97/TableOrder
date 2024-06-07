@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import kang.tableorder.entity.MenuEntity;
+import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.type.MenuCategory;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class MenuDto {
       private Boolean isAvailable;
 
       public static MenuDto.Read.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Read.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
@@ -90,6 +92,7 @@ public class MenuDto {
       private Boolean isAvailable;
 
       public static MenuDto.Update.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Update.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
@@ -122,7 +125,7 @@ public class MenuDto {
       private String imageUrl;
 
       @NotNull(message = "Price cannot be blank")
-      @Min(value = 1, message = "Price must be higher than 0")
+      @Min(value = 0, message = "Price cannot be negative")
       private Integer price;
 
       @NotBlank(message = "Description cannot be blank")
@@ -136,8 +139,10 @@ public class MenuDto {
       @NotNull(message = "IsAvailable cannot be blank")
       private Boolean isAvailable;
 
-      public MenuEntity toEntity() {
+      public MenuEntity toEntity(RestaurantEntity restaurantEntity) {
+
         return MenuEntity.builder()
+            .restaurantEntity(restaurantEntity)
             .category(this.category)
             .name(this.name)
             .imageUrl(this.imageUrl)
@@ -164,6 +169,7 @@ public class MenuDto {
       private Boolean isAvailable;
 
       public static MenuDto.Create.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Create.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())

@@ -1,27 +1,21 @@
 package kang.tableorder.entity;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @AllArgsConstructor
-@Builder
 @Entity(name = "CART")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
-@NoArgsConstructor
 @Setter
 public class CartEntity {
 
@@ -29,17 +23,14 @@ public class CartEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToOne
-  @JoinColumn(name = "tables_id")
-  private TablesEntity tablesEntity;
+  @OneToMany(mappedBy = "cartEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<CartItemEntity> cartItemEntities;
 
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity userEntity;
+  private int totalPrice;
 
-  @Column(nullable = false)
-  private Integer totalPrice;
+  public CartEntity() {
 
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
+    cartItemEntities = new ArrayList<>();
+    totalPrice = 0;
+  }
 }

@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
 import lombok.Builder;
@@ -19,8 +20,10 @@ public class TablesDto {
       private String tabletMacId;
 
       public TablesEntity toEntity(RestaurantEntity restaurantEntity) {
+
         return TablesEntity.builder()
             .restaurantEntity(restaurantEntity)
+            .cartEntity(new CartEntity())
             .number(this.number)
             .tabletMacId(this.tabletMacId)
             .build();
@@ -37,6 +40,7 @@ public class TablesDto {
       private String tabletMacId;
 
       public static TablesDto.Create.Response toDto(TablesEntity tablesEntity) {
+
         return TablesDto.Create.Response.builder()
             .id(tablesEntity.getId())
             .number(tablesEntity.getNumber())
@@ -62,6 +66,7 @@ public class TablesDto {
       private String tabletMacId;
 
       public static TablesDto.Read.Response toDto(TablesEntity tablesEntity) {
+
         return TablesDto.Read.Response.builder()
             .id(tablesEntity.getId())
             .number(tablesEntity.getNumber())
@@ -92,6 +97,7 @@ public class TablesDto {
       private String tabletMacId;
 
       public static TablesDto.Update.Response toDto(TablesEntity tablesEntity) {
+
         return TablesDto.Update.Response.builder()
             .id(tablesEntity.getId())
             .number(tablesEntity.getNumber())

@@ -15,6 +15,7 @@ public class CustomExceptionHandler {
 
   @ExceptionHandler(CustomException.class)
   protected ResponseEntity<CustomErrorResponse> handleCustomException(CustomException e) {
+
     CustomErrorResponse response = CustomErrorResponse.builder()
         .code(e.getErrorCode().getStatus().value())
         .message(e.getErrorCode().getValue())

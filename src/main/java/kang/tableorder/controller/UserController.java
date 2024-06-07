@@ -5,6 +5,7 @@ import kang.tableorder.dto.UserDto;
 import kang.tableorder.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private final String AUTH = "Authorization";
 
   // 회원가입
   @PostMapping("/signup")
   public ResponseEntity<?> signUp(
       @Valid @RequestBody UserDto.SignUp.Request form) {
+
     UserDto.SignUp.Response signedUp = userService.signUp(form);
 
     return ResponseEntity.ok(signedUp);
@@ -42,34 +43,34 @@ public class UserController {
   // 회원 READ
   @GetMapping("/user")
   public ResponseEntity<?> readUser(
-      @RequestHeader(AUTH) String header,
-      @RequestBody String password) {
+      @RequestHeader("Authorization") String header,
+      @RequestBody UserDto.Read.Request form) {
 
-    UserDto.Read.Response info = userService.readUser(header, password);
+    UserDto.Read.Response info = userService.readUser(form);
 
     return ResponseEntity.ok(info);
   }
 
   // 회원 UPDATE
-  @PutMapping("/user/update")
+  @PutMapping("/user")
   public ResponseEntity<?> updateUser(
-      @RequestHeader(AUTH) String header,
+      @RequestHeader("Authorization") String header,
       @Valid @RequestBody UserDto.Update.Request form) {
 
-    UserDto.Update.Response updated = userService.updateUser(header, form);
+    UserDto.Update.Response updated = userService.updateUser(form);
 
     return ResponseEntity.ok(updated);
   }
 
   // 회원 DELETE
-  @DeleteMapping("/user/delete")
+  @DeleteMapping("/user")
   public ResponseEntity<?> deleteUser(
-      @RequestHeader(AUTH) String header,
-      @RequestBody String password) {
+      @RequestHeader("Authorization") String header,
+      @RequestBody UserDto.Delete.Request form) {
 
-    boolean deleted = userService.deleteUser(header, password);
+    userService.deleteUser(form);
 
-    return ResponseEntity.ok(deleted);
+    return ResponseEntity.ok("삭제되었습니다.");
   }
 
 
