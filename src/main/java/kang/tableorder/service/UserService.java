@@ -1,5 +1,6 @@
 package kang.tableorder.service;
 
+import kang.tableorder.component.UserEntityGetter;
 import kang.tableorder.dto.UserDetailsDto;
 import kang.tableorder.dto.UserDto;
 import kang.tableorder.entity.UserEntity;
@@ -12,15 +13,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-  private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final TokenProvider tokenProvider;
+  private final UserEntityGetter userEntityGetter;
+  private final UserRepository userRepository;
 
   // 회원가입
   public UserDto.SignUp.Response signUp(UserDto.SignUp.Request form) {
@@ -39,9 +40,8 @@ public class UserService implements UserDetailsService {
 
     // 비밀번호 인코딩
     userEntity.setPassword(passwordEncoder.encode(form.getPassword()));
-    UserEntity saved = userRepository.save(userEntity);
 
-    return UserDto.SignUp.Response.toDto(userEntity);
+    return UserDto.SignUp.Response.toDto(userRepository.save(userEntity));
   }
 
   // 로그인
@@ -63,14 +63,12 @@ public class UserService implements UserDetailsService {
 
 
   // 사용자 본인 조회
-  public UserDto.Read.Response readUser(String header, String password) {
-    String email = tokenProvider.getEmail(header);
+  public UserDto.Read.Response readUser(UserDto.Read.Request form) {
 
-    UserEntity userEntity = userRepository.findByEmail(email)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
+    UserEntity userEntity = userEntityGetter.getUserEntity();
 
     // 비밀번호 확인
-    if (!passwordEncoder.matches(password, userEntity.getPassword())) {
+    if (!passwordEncoder.matches(form.getPassword(), userEntity.getPassword())) {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
@@ -78,28 +76,25 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 정보 수정
-  public UserDto.Update.Response updateUser(String header, UserDto.Update.Request form) {
-    String email = tokenProvider.getEmail(header);
+  public UserDto.Update.Response updateUser(UserDto.Update.Request form) {
 
-    UserEntity userEntity = userRepository.findByEmail(email)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
+    UserEntity userEntity = userEntityGetter.getUserEntity();
 
     // 비밀번호 확인
     if (!passwordEncoder.matches(form.getPassword(), userEntity.getPassword())) {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
-    if (StringUtils.hasText(form.getNewNickname())) {
-      userEntity.setNickname(form.getNewNickname());
+    // 현재 비밀번호와 새 비밀번호 중복 확인
+    if (form.getPassword().equals(form.getNewPassword())) {
+      throw new CustomException(ErrorCode.ALREADY_USING_PASSWORD);
     }
 
-    if (StringUtils.hasText(form.getNewPhoneNumber())) {
-      userEntity.setPhoneNumber(form.getNewPhoneNumber());
-    }
+    userEntity.setNickname(form.getNewNickname());
 
-    if (StringUtils.hasText(form.getNewPassword())) {
-      userEntity.setPassword(passwordEncoder.encode(form.getNewPassword()));
-    }
+    userEntity.setPhoneNumber(form.getNewPhoneNumber());
+
+    userEntity.setPassword(passwordEncoder.encode(form.getNewPassword()));
 
     UserEntity updated = userRepository.save(userEntity);
 
@@ -107,24 +102,21 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 탈퇴
-  public boolean deleteUser(String header, String password) {
-    String email = tokenProvider.getEmail(header);
+  public void deleteUser(UserDto.Delete.Request form) {
 
-    UserEntity userEntity = userRepository.findByEmail(email)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
+    UserEntity userEntity = userEntityGetter.getUserEntity();
 
     // 비밀번호 확인
-    if (!passwordEncoder.matches(password, userEntity.getPassword())) {
+    if (!passwordEncoder.matches(form.getPassword(), userEntity.getPassword())) {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
     userRepository.delete(userEntity);
-
-    return true;
   }
 
   @Override
   public UserDetails loadUserByUsername(String email) throws CustomException {
+
     UserEntity userEntity = userRepository.findByEmail(email)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
 

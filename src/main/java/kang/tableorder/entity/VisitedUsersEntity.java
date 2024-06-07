@@ -18,7 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Builder
 @Entity(name = "VISITED_USERS")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @Setter
@@ -29,13 +28,9 @@ public class VisitedUsersEntity {
   private Integer id;
 
   @ManyToOne
-  @JoinColumn(name = "restaurant_id")
-  private RestaurantEntity restaurantEntity;
-
-  @ManyToOne
   @JoinColumn(name = "user_id")
   private UserEntity userEntity;
 
   @Column(nullable = false)
-  private Integer visitedCount;
+  private int visitedCount;
 }

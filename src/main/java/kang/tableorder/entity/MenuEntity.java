@@ -43,13 +43,13 @@ public class MenuEntity {
   private String imageUrl;
 
   @Column(nullable = false)
-  private Integer price;
+  private int price;
 
   @Column(nullable = false)
   private String description;
 
   @Column(nullable = false)
-  private Integer spiciness;
+  private int spiciness;
 
   @Column(nullable = false)
   private Boolean isAvailable;

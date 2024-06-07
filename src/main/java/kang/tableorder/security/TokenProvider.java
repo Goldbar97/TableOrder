@@ -26,6 +26,7 @@ public class TokenProvider {
   private String secretKey;
 
   public String generateToken(String email, List<UserRole> role) {
+
     Date now = new Date();
     Date expirationDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
@@ -39,14 +40,17 @@ public class TokenProvider {
   }
 
   public String getEmail(String token) {
+
     return parseClaims(token).getSubject();
   }
 
   public List<UserRole> getRole(String token) {
+
     return (List<UserRole>) parseClaims(token).get(KEY_ROLES);
   }
 
   public boolean validateToken(String token) {
+
     if (!StringUtils.hasText(token)) {
       return false;
     }
@@ -56,11 +60,13 @@ public class TokenProvider {
   }
 
   private SecretKey getSignKey(String secretKey) {
+
     byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
   private Claims parseClaims(String token) {
+
     try {
       if (token.startsWith(BEARER)) {
         token = token.substring(BEARER.length());

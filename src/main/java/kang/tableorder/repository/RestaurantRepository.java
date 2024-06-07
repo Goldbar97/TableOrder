@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Integer> {
 
-  boolean existsByIdIsNotNull();
+  Optional<RestaurantEntity> findByIdAndUserEntity(Integer restaurantId, UserEntity userEntity);
 
-  Optional<RestaurantEntity> findByUserEntity(UserEntity userEntity);
-
-  Optional<RestaurantEntity> findBy();
+  boolean existsByUserEntity(UserEntity userEntity);
 }

@@ -20,49 +20,81 @@ import org.springframework.web.bind.annotation.RestController;
 public class TablesController {
 
   private final TablesService tablesService;
-  private final String AUTH = "Authorization";
 
+  // 테이블
   @PreAuthorize("hasRole('OWNER')")
-  @PostMapping("/restaurant/tables/create")
+  @PostMapping("/restaurants/{restaurantId}/tables")
   public ResponseEntity<?> createTables(
-      @RequestHeader(AUTH) String header,
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
       @RequestBody TablesDto.Create.Request form) {
 
-    TablesDto.Create.Response saved = tablesService.createTables(header, form);
+    TablesDto.Create.Response saved = tablesService.createTables(restaurantId, form);
 
     return ResponseEntity.ok(saved);
   }
 
+  // 테이블 리스트 읽기
   @PreAuthorize("hasRole('OWNER')")
-  @GetMapping("/restaurant/tables")
-  public ResponseEntity<?> readTables(
-      @RequestHeader(AUTH) String header) {
+  @GetMapping("/restaurants/{restaurantId}/tables")
+  public ResponseEntity<?> readTablesList(
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId) {
 
-    List<TablesDto.Read.Response> tablesList = tablesService.readTables(header);
+    List<TablesDto.Read.Response> tablesList = tablesService.readTablesList(restaurantId);
 
     return ResponseEntity.ok(tablesList);
   }
 
+  // 테이블 읽기
   @PreAuthorize("hasRole('OWNER')")
-  @PutMapping("/restaurant/tables/{tablesId}")
+  @GetMapping("/restaurants/{restaurantId}/tables/{tablesId}")
+  public ResponseEntity<?> readTables(
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
+      @PathVariable Integer tablesId) {
+
+    TablesDto.Read.Response tables = tablesService.readTables(restaurantId, tablesId);
+
+    return ResponseEntity.ok(tables);
+  }
+
+  // 테이블 수정
+  @PreAuthorize("hasRole('OWNER')")
+  @PutMapping("/restaurants/{restaurantId}/tables/{tablesId}")
   public ResponseEntity<?> updateTables(
-      @RequestHeader(AUTH) String header,
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
       @PathVariable Integer tablesId,
       @RequestBody TablesDto.Update.Request form) {
 
-    TablesDto.Update.Response updated = tablesService.updateTables(header, tablesId, form);
+    TablesDto.Update.Response updated = tablesService.updateTables(restaurantId, tablesId, form);
 
     return ResponseEntity.ok(updated);
   }
 
+  // 테이블 삭제
   @PreAuthorize("hasRole('OWNER')")
-  @DeleteMapping("/restaurant/tables/{tablesId}")
+  @DeleteMapping("/restaurants/{restaurantId}/tables/{tablesId}")
   public ResponseEntity<?> deleteTables(
-      @RequestHeader(AUTH) String header,
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
       @PathVariable Integer tablesId) {
 
-    boolean deleted = tablesService.deleteTables(header, tablesId);
+    tablesService.deleteTables(restaurantId, tablesId);
 
-    return ResponseEntity.ok(deleted);
+    return ResponseEntity.ok("삭제되었습니다.");
+  }
+
+  // 테이블 리스트 삭제
+  @PreAuthorize("hasRole('OWNER')")
+  @DeleteMapping("/restaurants/{restaurantId}/tables")
+  public ResponseEntity<?> deleteTablesList(
+      @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId) {
+
+    tablesService.deleteTablesList(restaurantId);
+
+    return ResponseEntity.ok("삭제되었습니다.");
   }
 }

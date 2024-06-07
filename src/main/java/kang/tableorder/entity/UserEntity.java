@@ -1,13 +1,18 @@
 package kang.tableorder.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 import kang.tableorder.type.UserRole;
@@ -33,6 +38,12 @@ public class UserEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private CartEntity cartEntity;
+
+  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<RestaurantEntity> restaurantEntities;
+
   @Column(nullable = false)
   private String email;
 
@@ -50,6 +61,7 @@ public class UserEntity {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @Column(name = "role", nullable = false)
+  @Enumerated(EnumType.STRING)
   private List<UserRole> role;
 
   @CreatedDate

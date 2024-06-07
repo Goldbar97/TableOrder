@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.List;
 import kang.tableorder.entity.UserEntity;
 import kang.tableorder.type.UserRole;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Getter
 @RequiredArgsConstructor
 public class UserDetailsDto implements UserDetails {
 
@@ -17,6 +19,7 @@ public class UserDetailsDto implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
+
     List<GrantedAuthority> authorities = new ArrayList<>();
 
     for (UserRole role : userEntity.getRole()) {
@@ -28,31 +31,37 @@ public class UserDetailsDto implements UserDetails {
 
   @Override
   public String getPassword() {
+
     return userEntity.getPassword();
   }
 
   @Override
   public String getUsername() {
+
     return userEntity.getEmail();
   }
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+
+    return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+
+    return true;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+
+    return true;
   }
 
   @Override
   public boolean isEnabled() {
-    return false;
+
+    return true;
   }
 }

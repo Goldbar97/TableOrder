@@ -1,13 +1,11 @@
 package kang.tableorder.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,13 +28,11 @@ public class CartItemEntity {
   @JoinColumn(name = "cart_id")
   private CartEntity cartEntity;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "menu_id")
   private MenuEntity menuEntity;
 
-  @Column(nullable = false)
-  private Integer count;
+  private int count;
 
-  @Column(nullable = false)
-  private Integer totalPrice;
+  private int totalPrice;
 }

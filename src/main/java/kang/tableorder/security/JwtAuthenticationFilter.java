@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final AuthenticationService authenticationService;
 
   private String resolveTokenFromRequest(HttpServletRequest request) {
+
     String token = request.getHeader(TOKEN_HEADER);
 
     if (!ObjectUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
