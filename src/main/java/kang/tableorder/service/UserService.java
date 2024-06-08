@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
   public UserDto.SignIn.Response signIn(UserDto.SignIn.Request form) {
 
     // 이메일로 가입한 회원 존재 여부
-    UserEntity userEntity = userRepository.findByEmail(form.getEmail())
+    UserEntity userEntity = userRepository.findByEmailWithRole(form.getEmail())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
 
     // 비밀번호 확인
@@ -117,7 +117,7 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws CustomException {
 
-    UserEntity userEntity = userRepository.findByEmail(email)
+    UserEntity userEntity = userRepository.findByEmailWithRole(email)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_USER));
 
     return new UserDetailsDto(userEntity);
