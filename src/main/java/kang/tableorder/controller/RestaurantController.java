@@ -43,7 +43,7 @@ public class RestaurantController {
     return ResponseEntity.ok(info);
   }
 
-  // 매장 리스트 READ
+  // 매장 READ
   @GetMapping("/restaurants/{restaurantId}")
   public ResponseEntity<?> readRestaurant(
       @PathVariable Integer restaurantId) {
