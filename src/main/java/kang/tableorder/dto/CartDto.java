@@ -1,5 +1,7 @@
 package kang.tableorder.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import kang.tableorder.entity.CartItemEntity;
 import lombok.Builder;
@@ -14,6 +16,10 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @Min(value = 1, message = "Count minimum is 1")
+      private int count;
+
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
 
@@ -28,6 +34,7 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
 
@@ -47,7 +54,10 @@ public class CartDto {
     @Setter
     public static class Request {
 
-      private Integer count;
+      @Min(value = 1, message = "Count minimum is 1")
+      private int count;
+
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
 
@@ -58,9 +68,9 @@ public class CartDto {
 
       private Integer id;
       private String menuName;
-      private Integer menuPrice;
-      private Integer count;
-      private Integer totalPrice;
+      private int menuPrice;
+      private int count;
+      private int totalPrice;
 
       public static CartDto.Update.Response toDto(CartItemEntity cartItemEntity) {
 
@@ -81,6 +91,7 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
 

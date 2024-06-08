@@ -20,9 +20,9 @@ public class CartItemDto {
 
       private Integer id;
       private String menuName;
-      private Integer menuPrice;
-      private Integer count;
-      private Integer totalPrice;
+      private int menuPrice;
+      private int count;
+      private int totalPrice;
 
       public static CartItemDto.Read.Response toDto(CartItemEntity cartItemEntity) {
 

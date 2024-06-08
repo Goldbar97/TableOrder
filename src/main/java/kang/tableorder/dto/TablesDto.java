@@ -1,5 +1,7 @@
 package kang.tableorder.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
@@ -16,7 +18,10 @@ public class TablesDto {
     @Setter
     public static class Request {
 
-      private Integer number;
+      @Min(value = 0, message = "Number minimum is 0")
+      private int number;
+
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
 
       public TablesEntity toEntity(RestaurantEntity restaurantEntity) {
@@ -36,7 +41,7 @@ public class TablesDto {
     public static class Response {
 
       private Integer id;
-      private Integer number;
+      private int number;
       private String tabletMacId;
 
       public static TablesDto.Create.Response toDto(TablesEntity tablesEntity) {
@@ -62,7 +67,7 @@ public class TablesDto {
     public static class Response {
 
       private Integer id;
-      private Integer number;
+      private int number;
       private String tabletMacId;
 
       public static TablesDto.Read.Response toDto(TablesEntity tablesEntity) {
@@ -83,7 +88,10 @@ public class TablesDto {
     @Setter
     public static class Request {
 
-      private Integer number;
+      @Min(value = 0, message = "Number minimum is 0")
+      private int number;
+
+      @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
 
@@ -93,7 +101,7 @@ public class TablesDto {
     public static class Response {
 
       private Integer id;
-      private Integer number;
+      private int number;
       private String tabletMacId;
 
       public static TablesDto.Update.Response toDto(TablesEntity tablesEntity) {
