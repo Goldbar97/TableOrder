@@ -17,6 +17,7 @@ public enum ErrorCode {
   ALREADY_USING_PASSWORD(HttpStatus.CONFLICT, "이미 사용중인 비밀번호입니다."),
   NOT_AVAILABLE(HttpStatus.LOCKED, "매장 사정으로 판매 일시 중지된 메뉴입니다."),
   NO_MENU(HttpStatus.NO_CONTENT, "없는 메뉴입니다."),
+  NO_ORDER(HttpStatus.NO_CONTENT, "없는 주문입니다."),
   NO_RESTAURANT(HttpStatus.NO_CONTENT, "매장을 먼저 등록해 주세요."),
   NO_TABLES(HttpStatus.NO_CONTENT, "없는 테이블입니다."),
   NO_USER(HttpStatus.NO_CONTENT, "없는 계정입니다."),
