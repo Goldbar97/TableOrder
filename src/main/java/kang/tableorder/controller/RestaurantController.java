@@ -27,7 +27,7 @@ public class RestaurantController {
   @PostMapping("/restaurants")
   public ResponseEntity<?> createRestaurant(
       @RequestHeader("Authorization") String header,
-      @RequestBody RestaurantDto.Create.Request form) {
+      @Valid @RequestBody RestaurantDto.Create.Request form) {
 
     RestaurantDto.Create.Response saved = restaurantService.createRestaurant(form);
 
