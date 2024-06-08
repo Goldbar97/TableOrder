@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import kang.tableorder.entity.MenuEntity;
+import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.type.MenuCategory;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,12 +30,13 @@ public class MenuDto {
       private MenuCategory category;
       private String name;
       private String imageUrl;
-      private Integer price;
+      private int price;
       private String description;
-      private Integer spiciness;
+      private int spiciness;
       private Boolean isAvailable;
 
       public static MenuDto.Read.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Read.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
@@ -57,20 +59,23 @@ public class MenuDto {
 
       private MenuCategory category;
 
+      @NotBlank(message = "Name cannot be blank")
       @Pattern(regexp = "^[a-zA-Z0-9가-힣 ]*$",
           message = "Invalid characters")
       private String name;
 
+      @NotBlank(message = "ImageUrl cannot be blank")
       private String imageUrl;
 
-      @Min(value = 1, message = "Price must be higher than 0")
-      private Integer price;
+      @Min(value = 0, message = "Price minimum is 0")
+      private int price;
 
+      @NotBlank(message = "Description cannot be blank")
       private String description;
 
-      @Min(value = 0, message = "Minimum spiciness is 0")
-      @Max(value = 4, message = "Maximum spiciness is 4")
-      private Integer spiciness;
+      @Min(value = 0, message = "Spiciness minimum is 0")
+      @Max(value = 4, message = "Spiciness maximum is 4")
+      private int spiciness;
 
       private Boolean isAvailable;
     }
@@ -84,12 +89,13 @@ public class MenuDto {
       private MenuCategory category;
       private String name;
       private String imageUrl;
-      private Integer price;
+      private int price;
       private String description;
-      private Integer spiciness;
+      private int spiciness;
       private Boolean isAvailable;
 
       public static MenuDto.Update.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Update.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
@@ -118,26 +124,26 @@ public class MenuDto {
           message = "Invalid characters")
       private String name;
 
-      @NotBlank(message = "Image cannot be blank")
+      @NotBlank(message = "ImageUrl cannot be blank")
       private String imageUrl;
 
-      @NotNull(message = "Price cannot be blank")
-      @Min(value = 1, message = "Price must be higher than 0")
-      private Integer price;
+      @Min(value = 0, message = "Price minimum is 0")
+      private int price;
 
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
-      @NotNull(message = "Spiciness cannot be blank")
-      @Min(value = 0, message = "Minimum spiciness is 0")
-      @Max(value = 4, message = "Maximum spiciness is 4")
-      private Integer spiciness;
+      @Min(value = 0, message = "Spiciness minimum is 0")
+      @Max(value = 4, message = "Spiciness maximum is 4")
+      private int spiciness;
 
-      @NotNull(message = "IsAvailable cannot be blank")
+      @NotNull(message = "IsAvailable cannot be null")
       private Boolean isAvailable;
 
-      public MenuEntity toEntity() {
+      public MenuEntity toEntity(RestaurantEntity restaurantEntity) {
+
         return MenuEntity.builder()
+            .restaurantEntity(restaurantEntity)
             .category(this.category)
             .name(this.name)
             .imageUrl(this.imageUrl)
@@ -158,12 +164,13 @@ public class MenuDto {
       private MenuCategory category;
       private String name;
       private String imageUrl;
-      private Integer price;
+      private int price;
       private String description;
-      private Integer spiciness;
+      private int spiciness;
       private Boolean isAvailable;
 
       public static MenuDto.Create.Response toDto(MenuEntity menuEntity) {
+
         return MenuDto.Create.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())

@@ -32,10 +32,6 @@ public class OwnerReviewEntity {
   private Integer id;
 
   @ManyToOne
-  @JoinColumn(name = "restaurant_id")
-  private RestaurantEntity restaurantEntity;
-
-  @ManyToOne
   @JoinColumn(name = "customer_review_id")
   private CustomerReviewEntity customerReviewEntity;
 

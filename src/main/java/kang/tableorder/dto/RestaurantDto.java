@@ -2,6 +2,7 @@ package kang.tableorder.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import kang.tableorder.entity.RestaurantEntity;
+import kang.tableorder.entity.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ public class RestaurantDto {
 
   public static class Create {
 
+    @Builder
     @Getter
     @Setter
     public static class Request {
@@ -26,8 +28,10 @@ public class RestaurantDto {
       @NotBlank(message = "PhoneNumber cannot be blank")
       private String phoneNumber;
 
-      public RestaurantEntity toEntity() {
+      public RestaurantEntity toEntity(UserEntity userEntity) {
+
         return RestaurantEntity.builder()
+            .userEntity(userEntity)
             .name(this.name)
             .location(this.location)
             .description(this.description)
@@ -48,6 +52,7 @@ public class RestaurantDto {
       private String phoneNumber;
 
       public static RestaurantDto.Create.Response toDto(RestaurantEntity restaurantEntity) {
+
         return RestaurantDto.Create.Response.builder()
             .id(restaurantEntity.getId())
             .name(restaurantEntity.getName())
@@ -77,6 +82,7 @@ public class RestaurantDto {
       private String phoneNumber;
 
       public static RestaurantDto.Read.Response toDto(RestaurantEntity restaurantEntity) {
+
         return RestaurantDto.Read.Response.builder()
             .id(restaurantEntity.getId())
             .name(restaurantEntity.getName())
@@ -94,9 +100,16 @@ public class RestaurantDto {
     @Setter
     public static class Request {
 
+      @NotBlank(message = "Name cannot be blank")
       private String name;
+
+      @NotBlank(message = "Location cannot be blank")
       private String location;
+
+      @NotBlank(message = "Description cannot be blank")
       private String description;
+
+      @NotBlank(message = "PhoneNumber cannot be blank")
       private String phoneNumber;
     }
 
@@ -112,6 +125,7 @@ public class RestaurantDto {
       private String phoneNumber;
 
       public static RestaurantDto.Update.Response toDto(RestaurantEntity restaurantEntity) {
+
         return RestaurantDto.Update.Response.builder()
             .id(restaurantEntity.getId())
             .name(restaurantEntity.getName())
@@ -122,5 +136,4 @@ public class RestaurantDto {
       }
     }
   }
-
 }

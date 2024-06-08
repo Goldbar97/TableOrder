@@ -39,7 +39,13 @@ public class SecurityConfig {
             SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(e -> {
           e
-              .requestMatchers("/signup", "/signin", "/user")
+              .requestMatchers("/signup", "/signin")
+              .permitAll();
+          e
+              .requestMatchers("/cart/**")
+              .permitAll();
+          e
+              .requestMatchers("/restaurants/**")
               .permitAll();
           e
               .anyRequest()
