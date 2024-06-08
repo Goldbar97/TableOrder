@@ -1,5 +1,6 @@
 package kang.tableorder.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import kang.tableorder.dto.TablesDto;
 import kang.tableorder.service.TablesService;
@@ -27,7 +28,7 @@ public class TablesController {
   public ResponseEntity<?> createTables(
       @RequestHeader("Authorization") String header,
       @PathVariable Integer restaurantId,
-      @RequestBody TablesDto.Create.Request form) {
+      @Valid  @RequestBody TablesDto.Create.Request form) {
 
     TablesDto.Create.Response saved = tablesService.createTables(restaurantId, form);
 
@@ -66,7 +67,7 @@ public class TablesController {
       @RequestHeader("Authorization") String header,
       @PathVariable Integer restaurantId,
       @PathVariable Integer tablesId,
-      @RequestBody TablesDto.Update.Request form) {
+      @Valid @RequestBody TablesDto.Update.Request form) {
 
     TablesDto.Update.Response updated = tablesService.updateTables(restaurantId, tablesId, form);
 

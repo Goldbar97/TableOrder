@@ -5,7 +5,6 @@ import kang.tableorder.dto.UserDto;
 import kang.tableorder.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +43,7 @@ public class UserController {
   @GetMapping("/user")
   public ResponseEntity<?> readUser(
       @RequestHeader("Authorization") String header,
-      @RequestBody UserDto.Read.Request form) {
+      @Valid @RequestBody UserDto.Read.Request form) {
 
     UserDto.Read.Response info = userService.readUser(form);
 
@@ -66,7 +65,7 @@ public class UserController {
   @DeleteMapping("/user")
   public ResponseEntity<?> deleteUser(
       @RequestHeader("Authorization") String header,
-      @RequestBody UserDto.Delete.Request form) {
+      @Valid @RequestBody UserDto.Delete.Request form) {
 
     userService.deleteUser(form);
 

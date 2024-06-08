@@ -1,5 +1,6 @@
 package kang.tableorder.controller;
 
+import jakarta.validation.Valid;
 import kang.tableorder.dto.CartDto;
 import kang.tableorder.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class CartController {
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Integer restaurantId,
       @PathVariable Integer menuId,
-      @RequestBody CartDto.Create.Request form) {
+      @Valid @RequestBody CartDto.Create.Request form) {
 
     cartService.addMenuToCart(restaurantId, menuId, form);
 
@@ -36,7 +37,7 @@ public class CartController {
   @GetMapping("/cart")
   public ResponseEntity<?> readMenuListInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @RequestBody CartDto.Read.Request form) {
+      @Valid @RequestBody CartDto.Read.Request form) {
 
     CartDto.Read.Response cartItemsList = cartService.readMenuListInCart(form);
 
@@ -48,7 +49,7 @@ public class CartController {
   public ResponseEntity<?> updateMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Integer cartItemId,
-      @RequestBody CartDto.Update.Request form) {
+      @Valid @RequestBody CartDto.Update.Request form) {
 
     CartDto.Update.Response updated = cartService.updateMenuInCart(cartItemId, form);
 
@@ -60,7 +61,7 @@ public class CartController {
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Integer cartItemId,
-      @RequestBody CartDto.Delete.Request form) {
+      @Valid @RequestBody CartDto.Delete.Request form) {
 
     cartService.deleteMenuInCart(cartItemId, form);
 
@@ -71,7 +72,7 @@ public class CartController {
   @DeleteMapping("/cart")
   public ResponseEntity<?> deleteAllMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @RequestBody CartDto.Delete.Request form) {
+      @Valid @RequestBody CartDto.Delete.Request form) {
 
     cartService.deleteAllMenuInCart(form);
 
