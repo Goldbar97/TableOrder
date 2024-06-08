@@ -1,6 +1,7 @@
 package kang.tableorder.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -17,10 +18,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @AllArgsConstructor
 @Builder
 @Entity(name = "`ORDER`")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @Setter
@@ -30,7 +33,7 @@ public class OrderEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "tables_id")
   private TablesEntity tablesEntity;
 

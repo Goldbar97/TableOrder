@@ -25,7 +25,7 @@ public class OrderItemEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "menu_id")
   private MenuEntity menuEntity;
 
@@ -33,7 +33,7 @@ public class OrderItemEntity {
   @JoinColumn(name = "order_id")
   private OrderEntity orderEntity;
 
-  private Integer count;
+  private int count;
 
-  private Integer totalPrice;
+  private int totalPrice;
 }

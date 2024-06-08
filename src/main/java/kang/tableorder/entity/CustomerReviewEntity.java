@@ -32,10 +32,6 @@ public class CustomerReviewEntity {
   private Integer id;
 
   @ManyToOne
-  @JoinColumn(name = "restaurant_id")
-  private RestaurantEntity restaurantEntity;
-
-  @ManyToOne
   @JoinColumn(name = "menu_id")
   private MenuEntity menuEntity;
 
@@ -47,7 +43,7 @@ public class CustomerReviewEntity {
   private String description;
 
   @Column(nullable = false)
-  private Integer rating;
+  private int rating;
 
   @CreatedDate
   private LocalDateTime createdAt;
