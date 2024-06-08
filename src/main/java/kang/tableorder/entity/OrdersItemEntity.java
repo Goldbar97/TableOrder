@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +14,11 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Builder
-@Entity(name = "ORDER_ITEM")
+@Entity(name = "ORDERS_ITEM")
 @Getter
 @NoArgsConstructor
 @Setter
-public class OrderItemEntity {
+public class OrdersItemEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +30,7 @@ public class OrderItemEntity {
 
   @ManyToOne
   @JoinColumn(name = "order_id")
-  private OrderEntity orderEntity;
+  private OrdersEntity ordersEntity;
 
   private int count;
 

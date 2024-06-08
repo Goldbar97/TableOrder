@@ -1,16 +1,20 @@
 package kang.tableorder.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import kang.tableorder.type.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,28 +26,40 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @AllArgsConstructor
 @Builder
-@Entity(name = "`ORDER`")
+@Entity(name = "ORDERS")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @Setter
-public class OrderEntity {
+public class OrdersEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @Builder.Default
+  @OneToMany(mappedBy = "ordersEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<OrdersItemEntity> orderItemEntities = new ArrayList<>();
+
   @ManyToOne
-  @JoinColumn(name = "tables_id")
+  @JoinColumn(name = "restaurant_id", nullable = false)
+  private RestaurantEntity restaurantEntity;
+
+  @ManyToOne
+  @JoinColumn(name = "tables_id", nullable = false)
   private TablesEntity tablesEntity;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = true)
   private UserEntity userEntity;
+
+  @Builder.Default
+  private int totalPrice = 0;
 
   @CreatedDate
   private LocalDateTime createdAt;
 
+  @Builder.Default
   @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  private OrderStatus status = OrderStatus.PENDING;
 }
