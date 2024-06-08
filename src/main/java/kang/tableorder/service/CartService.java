@@ -1,6 +1,5 @@
 package kang.tableorder.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
 import kang.tableorder.dto.CartDto;
@@ -28,16 +27,7 @@ public class CartService {
   // 카트 아이템 추가
   public void addMenuToCart(Integer restaurantId, Integer menuId, CartDto.Create.Request form) {
 
-    CartEntity cartEntity;
-
-    // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
-    if (userEntityGetter.isGuest()) {
-      cartEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
-          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
-          .getCartEntity();
-    } else {
-      cartEntity = userEntityGetter.getUserEntity().getCartEntity();
-    }
+    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
     MenuEntity menuEntity = menuRepository.findByIdAndRestaurantEntityIdAndIsAvailableIsTrue(
             menuId, restaurantId)
@@ -51,8 +41,8 @@ public class CartService {
     CartItemEntity cartItemEntity = CartItemEntity.builder()
         .cartEntity(cartEntity)
         .menuEntity(menuEntity)
-        .count(1)
-        .totalPrice(menuEntity.getPrice())
+        .count(form.getCount())
+        .totalPrice(menuEntity.getPrice() * form.getCount())
         .build();
 
     cartItemRepository.save(cartItemEntity);
@@ -61,32 +51,13 @@ public class CartService {
   // 카트 아이템 리스트 조회
   public CartDto.Read.Response readMenuListInCart(CartDto.Read.Request form) {
 
-    CartEntity cartEntity;
-
-    // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
-    if (userEntityGetter.isGuest()) {
-      cartEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
-          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
-          .getCartEntity();
-    } else {
-      cartEntity = userEntityGetter.getUserEntity().getCartEntity();
-    }
-
-    List<CartItemDto.Read.Response> cartItems = new ArrayList<>();
+    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
     List<CartItemEntity> cartItemEntities = cartItemRepository.findAllByCartEntity(cartEntity);
 
-    int totalPrice = 0;
-
-    for (CartItemEntity cartItem : cartItemEntities) {
-      cartItems.add(CartItemDto.Read.Response.toDto(cartItem));
-
-      totalPrice += cartItem.getTotalPrice();
-    }
-
     return CartDto.Read.Response.builder()
-        .cartItems(cartItems)
-        .totalPrice(totalPrice)
+        .cartItems(cartItemEntities.stream().map(CartItemDto.Read.Response::toDto).toList())
+        .totalPrice(cartItemEntities.stream().mapToInt(CartItemEntity::getTotalPrice).sum())
         .build();
   }
 
@@ -94,16 +65,7 @@ public class CartService {
   public CartDto.Update.Response updateMenuInCart(Integer cartItemId,
       CartDto.Update.Request form) {
 
-    CartEntity cartEntity;
-
-    // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
-    if (userEntityGetter.isGuest()) {
-      cartEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
-          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
-          .getCartEntity();
-    } else {
-      cartEntity = userEntityGetter.getUserEntity().getCartEntity();
-    }
+    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
     CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(cartItemId, cartEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_MENU));
@@ -121,39 +83,28 @@ public class CartService {
   // 카트 아이템 삭제
   public void deleteMenuInCart(Integer cartItemId, CartDto.Delete.Request form) {
 
-    CartEntity cartEntity;
+    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
-    // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
-    if (userEntityGetter.isGuest()) {
-      cartEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
-          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
-          .getCartEntity();
-    } else {
-      cartEntity = userEntityGetter.getUserEntity().getCartEntity();
-    }
-
-    CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(cartItemId, cartEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_MENU));
-
-    cartItemRepository.delete(cartItemEntity);
+    cartItemRepository.deleteByIdAndCartEntity(cartItemId, cartEntity);
   }
 
   // 카트 비우기
   public void deleteAllMenuInCart(CartDto.Delete.Request form) {
 
-    CartEntity cartEntity;
+    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
-    // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
+    cartItemRepository.deleteAllByCartEntity(cartEntity);
+  }
+
+  // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
+  private CartEntity getCartEntity(String tabletMacId) {
+
     if (userEntityGetter.isGuest()) {
-      cartEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
+      return tablesRepository.findByTabletMacId(tabletMacId)
           .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
           .getCartEntity();
     } else {
-      cartEntity = userEntityGetter.getUserEntity().getCartEntity();
+      return userEntityGetter.getUserEntity().getCartEntity();
     }
-
-    List<CartItemEntity> allItems = cartItemRepository.findAllByCartEntity(cartEntity);
-
-    cartItemRepository.deleteAll(allItems);
   }
 }
