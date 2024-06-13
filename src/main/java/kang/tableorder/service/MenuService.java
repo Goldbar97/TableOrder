@@ -45,7 +45,7 @@ public class MenuService {
 
   // 메뉴 리스트 조회
   // TODO: 각 메뉴의 리뷰 하나씩 포함하기
-  public List<MenuDto.Read.Response> readMenus(Integer restaurantId, int page, int size) {
+  public List<MenuDto.Read.Response> readMenuList(Integer restaurantId, int page, int size) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

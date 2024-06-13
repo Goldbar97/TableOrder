@@ -34,7 +34,7 @@ public class RestaurantService {
   }
 
   // 매장 리스트 정보 읽기
-  public List<RestaurantDto.Read.Response> readRestaurantsList() {
+  public List<RestaurantDto.Read.Response> readRestaurantList() {
 
     List<RestaurantEntity> restaurantEntities = restaurantRepository.findAll();
 
