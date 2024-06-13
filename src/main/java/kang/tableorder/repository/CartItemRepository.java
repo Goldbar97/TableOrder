@@ -6,8 +6,8 @@ import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.CartItemEntity;
 import kang.tableorder.entity.MenuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,10 +19,12 @@ public interface CartItemRepository extends JpaRepository<CartItemEntity, Intege
 
   boolean existsByCartEntityAndMenuEntity(CartEntity cartEntity, MenuEntity menuEntity);
 
+  @Modifying
   @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.cartEntity = :cartEntity")
-  void deleteAllByCartEntity(@Param("cartEntity") CartEntity cartEntity);
+  void deleteAllByCartEntity(CartEntity cartEntity);
 
+  @Modifying
   @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.id = :id AND CI.cartEntity = :cartEntity")
-  void deleteByIdAndCartEntity(@Param("id") Integer id, @Param("cartEntity") CartEntity cartEntity);
+  void deleteByIdAndCartEntity(Integer id, CartEntity cartEntity);
 
 }

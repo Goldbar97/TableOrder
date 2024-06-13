@@ -5,6 +5,7 @@ import kang.tableorder.dto.CartDto;
 import kang.tableorder.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,8 @@ public class CartController {
   private final CartService cartService;
 
   // 카트에 메뉴 추가
-  @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/cart")
+  @Transactional
+  @PostMapping("/restaurants/{restaurantId}/menu/{menuId}")
   public ResponseEntity<?> addMenuToCart(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Integer restaurantId,
@@ -57,6 +59,7 @@ public class CartController {
   }
 
   // 카트 아이템 삭제
+  @Transactional
   @DeleteMapping("/cart/{cartItemId}")
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
@@ -69,6 +72,7 @@ public class CartController {
   }
 
   // 카트 비우기
+  @Transactional
   @DeleteMapping("/cart")
   public ResponseEntity<?> deleteAllMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
