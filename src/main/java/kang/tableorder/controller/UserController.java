@@ -5,6 +5,7 @@ import kang.tableorder.dto.UserDto;
 import kang.tableorder.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ public class UserController {
   private final UserService userService;
 
   // 회원가입
+  @Transactional
   @PostMapping("/signup")
   public ResponseEntity<?> signUp(
       @Valid @RequestBody UserDto.SignUp.Request form) {
@@ -30,6 +32,7 @@ public class UserController {
   }
 
   // 로그인
+  @Transactional
   @PostMapping("/signin")
   public ResponseEntity<?> signIn(
       @Valid @RequestBody UserDto.SignIn.Request form) {
@@ -51,6 +54,7 @@ public class UserController {
   }
 
   // 회원 UPDATE
+  @Transactional
   @PutMapping("/user")
   public ResponseEntity<?> updateUser(
       @RequestHeader("Authorization") String header,
@@ -62,6 +66,7 @@ public class UserController {
   }
 
   // 회원 DELETE
+  @Transactional
   @DeleteMapping("/user")
   public ResponseEntity<?> deleteUser(
       @RequestHeader("Authorization") String header,
