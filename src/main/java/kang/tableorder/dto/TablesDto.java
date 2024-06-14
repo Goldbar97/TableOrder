@@ -28,7 +28,7 @@ public class TablesDto {
 
         return TablesEntity.builder()
             .restaurantEntity(restaurantEntity)
-            .cartEntity(new CartEntity())
+            .cartEntity(CartEntity.builder().build())
             .number(this.number)
             .tabletMacId(this.tabletMacId)
             .build();
