@@ -56,9 +56,11 @@ public class MenuController {
   @GetMapping("/{menuId}")
   public ResponseEntity<?> readMenu(
       @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId) {
+      @PathVariable Integer menuId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size) {
 
-    MenuDto.Read.Response menu = menuService.readMenu(restaurantId, menuId);
+    MenuDto.Read.Response menu = menuService.readMenu(restaurantId, menuId, page, size);
 
     return ResponseEntity.ok(menu);
   }
