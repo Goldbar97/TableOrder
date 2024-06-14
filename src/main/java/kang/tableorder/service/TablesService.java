@@ -29,7 +29,7 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     // 번호 중복 확인
     if (tablesRepository.existsByNumberAndRestaurantEntity(form.getNumber(), restaurantEntity)) {
@@ -53,7 +53,7 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
         restaurantEntity);
@@ -68,7 +68,7 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
             restaurantEntity)
@@ -85,7 +85,7 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
             restaurantEntity)
@@ -122,13 +122,9 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
-            restaurantEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
-
-    tablesRepository.delete(tablesEntity);
+    tablesRepository.deleteByIdAndRestaurantEntity(tablesId, restaurantEntity);
   }
 
   // 테이블 리스트 삭제
@@ -138,11 +134,8 @@ public class TablesService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
-        restaurantEntity);
-
-    tablesRepository.deleteAll(tablesEntities);
+    tablesRepository.deleteAllByRestaurantEntity(restaurantEntity);
   }
 }
