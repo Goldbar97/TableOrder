@@ -45,7 +45,8 @@ public class CustomerReviewService {
     return customerReviewEntities.stream().map(CustomerReviewDto.Read.Response::toDto).toList();
   }
 
-  public CustomerReviewDto.Read.Response readReview(Integer reviewId) {
+  public CustomerReviewDto.Read.Response readReview(Integer restaurantId, Integer menuId,
+      Integer reviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

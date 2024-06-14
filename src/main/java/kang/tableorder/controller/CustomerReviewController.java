@@ -38,7 +38,7 @@ public class CustomerReviewController {
     return ResponseEntity.ok(saved);
   }
 
-  @GetMapping("/reviews")
+  @GetMapping("/user/reviews")
   public ResponseEntity<?> readReviewList(
       @RequestHeader("Authorization") String header) {
 
@@ -47,12 +47,15 @@ public class CustomerReviewController {
     return ResponseEntity.ok(info);
   }
 
-  @GetMapping("/reviews/{reviewId}")
+  @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> readReview(
       @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
+      @PathVariable Integer menuId,
       @PathVariable Integer reviewId) {
 
-    CustomerReviewDto.Read.Response info = customerReviewService.readReview(reviewId);
+    CustomerReviewDto.Read.Response info = customerReviewService.readReview(restaurantId, menuId,
+        reviewId);
 
     return ResponseEntity.ok(info);
   }
