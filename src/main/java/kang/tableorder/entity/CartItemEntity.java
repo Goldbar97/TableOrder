@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @AllArgsConstructor
 @Builder
@@ -30,6 +32,7 @@ public class CartItemEntity {
 
   @ManyToOne
   @JoinColumn(name = "menu_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private MenuEntity menuEntity;
 
   private int count;
