@@ -16,6 +16,7 @@ public enum ErrorCode {
   ALREADY_EXISTS_TABLETS_MAC_ID(HttpStatus.CONFLICT, "이미 사용중인 태블릿 MAC 번호입니다."),
   ALREADY_USING_PASSWORD(HttpStatus.CONFLICT, "이미 사용중인 비밀번호입니다."),
   NOT_AVAILABLE(HttpStatus.LOCKED, "매장 사정으로 판매 일시 중지된 메뉴입니다."),
+  NO_CART_ITEM(HttpStatus.NOT_FOUND, "없는 항목입니다."),
   NO_MENU(HttpStatus.NOT_FOUND, "없는 메뉴입니다."),
   NO_ORDER(HttpStatus.NOT_FOUND, "없는 주문입니다."),
   NO_RESTAURANT(HttpStatus.NOT_FOUND, "매장을 먼저 등록해 주세요."),
