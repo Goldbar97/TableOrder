@@ -24,7 +24,6 @@ public class OrderController {
 
   private final OrderService orderService;
 
-  @Transactional
   @PostMapping
   public ResponseEntity<?> createOrder(
       @RequestHeader(value = "Authorization", required = false) String header,
