@@ -58,7 +58,7 @@ public class RestaurantService {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     restaurantEntity.setName(form.getName());
 

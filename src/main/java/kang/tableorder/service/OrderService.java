@@ -10,31 +10,39 @@ import kang.tableorder.entity.OrdersItemEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
 import kang.tableorder.entity.UserEntity;
+import kang.tableorder.entity.VisitedUsersEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.CartItemRepository;
+import kang.tableorder.repository.CartRepository;
 import kang.tableorder.repository.OrdersRepository;
 import kang.tableorder.repository.RestaurantRepository;
 import kang.tableorder.repository.TablesRepository;
+import kang.tableorder.repository.VisitedUsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
-  private final UserEntityGetter userEntityGetter;
-  private final TablesRepository tablesRepository;
+  private final CartItemRepository cartItemRepository;
+  private final CartRepository cartRepository;
   private final OrdersRepository ordersRepository;
   private final RestaurantRepository restaurantRepository;
-  private final CartItemRepository cartItemRepository;
+  private final TablesRepository tablesRepository;
+  private final UserEntityGetter userEntityGetter;
+  private final VisitedUsersRepository visitedUsersRepository;
 
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
+  @Transactional
   public OrderDto.Create.Response createOrder(Integer restaurantId, OrderDto.Create.Request form) {
 
     CartEntity cartEntity;
-    UserEntity userEntity = null;
+    UserEntity userEntity;
+    VisitedUsersEntity visitedUsersEntity = null;
 
     RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
@@ -44,37 +52,53 @@ public class OrderService {
 
     // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
     if (userEntityGetter.isGuest()) {
+      userEntity = null;
       cartEntity = tablesEntity.getCartEntity();
     } else {
       userEntity = userEntityGetter.getUserEntity();
       cartEntity = userEntity.getCartEntity();
     }
 
-    List<CartItemEntity> cartItems = cartEntity.getCartItemEntities();
+    if (userEntity != null) {
+      visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntity(
+              userEntity, restaurantEntity)
+          .orElseGet(() -> VisitedUsersEntity.builder()
+              .userEntity(userEntity)
+              .restaurantEntity(restaurantEntity)
+              .visitedCount(0)
+              .build());
+    }
+
+    List<CartItemEntity> cartItems = cartItemRepository.findAllByCartEntity(cartEntity);
+
+    if (cartItems.isEmpty()) {
+      throw new CustomException(ErrorCode.NO_CART_ITEM);
+    }
 
     OrdersEntity ordersEntity = OrdersEntity.builder()
         .restaurantEntity(restaurantEntity)
         .tablesEntity(tablesEntity)
         .userEntity(userEntity)
+        .totalPrice(cartEntity.getTotalPrice())
+        .visitedCount(visitedUsersEntity != null ? visitedUsersEntity.getVisitedCount() : 0)
         .build();
 
-    int totalPrice = cartItems.stream()
-        .map(cartItem -> {
-          OrdersItemEntity orderItem = OrdersItemEntity.builder()
-              .menuEntity(cartItem.getMenuEntity())
-              .ordersEntity(ordersEntity)
-              .count(cartItem.getCount())
-              .totalPrice(cartItem.getTotalPrice())
-              .build();
-          ordersEntity.getOrderItemEntities().add(orderItem);
-          return cartItem.getTotalPrice();
-        }).mapToInt(Integer::intValue).sum();
-
-    ordersEntity.setTotalPrice(totalPrice);
+    cartItems.forEach(cartItem -> {
+      OrdersItemEntity.builder()
+          .menuEntity(cartItem.getMenuEntity())
+          .ordersEntity(ordersEntity)
+          .count(cartItem.getCount())
+          .totalPrice(cartItem.getTotalPrice())
+          .build();
+    });
 
     OrdersEntity saved = ordersRepository.save(ordersEntity);
 
     cartItemRepository.deleteAll(cartItems);
+
+    cartEntity.setTotalPrice(0);
+
+    cartRepository.save(cartEntity);
 
     return OrderDto.Create.Response.toDto(saved);
   }
