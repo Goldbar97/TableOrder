@@ -20,11 +20,13 @@ public interface CartItemRepository extends JpaRepository<CartItemEntity, Intege
   boolean existsByCartEntityAndMenuEntity(CartEntity cartEntity, MenuEntity menuEntity);
 
   @Modifying
-  @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.cartEntity = :cartEntity")
+  @Query(value = "DELETE FROM CART_ITEM ci WHERE ci.cartEntity = :cartEntity")
   void deleteAllByCartEntity(CartEntity cartEntity);
 
   @Modifying
-  @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.id = :id AND CI.cartEntity = :cartEntity")
+  @Query(value = "DELETE FROM CART_ITEM ci WHERE ci.id = :id AND ci.cartEntity = :cartEntity")
   void deleteByIdAndCartEntity(Integer id, CartEntity cartEntity);
 
+  @Query("SELECT COALESCE(SUM(ci.totalPrice), 0) FROM CART_ITEM ci WHERE ci.cartEntity = :cartEntity")
+  int findTotalPriceByCartEntity(CartEntity cartEntity);
 }
