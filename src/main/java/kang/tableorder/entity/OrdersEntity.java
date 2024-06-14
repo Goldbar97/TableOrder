@@ -21,6 +21,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -43,10 +45,12 @@ public class OrdersEntity {
 
   @ManyToOne
   @JoinColumn(name = "restaurant_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private RestaurantEntity restaurantEntity;
 
   @ManyToOne
   @JoinColumn(name = "tables_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private TablesEntity tablesEntity;
 
   @ManyToOne
@@ -55,6 +59,9 @@ public class OrdersEntity {
 
   @Builder.Default
   private int totalPrice = 0;
+
+  @Builder.Default
+  private int visitedCount = 0;
 
   @CreatedDate
   private LocalDateTime createdAt;

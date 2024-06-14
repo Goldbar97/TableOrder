@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @AllArgsConstructor
 @Builder
@@ -27,7 +29,13 @@ public class VisitedUsersEntity {
 
   @ManyToOne
   @JoinColumn(name = "user_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private UserEntity userEntity;
+
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private RestaurantEntity restaurantEntity;
 
   @Column(nullable = false)
   private int visitedCount;

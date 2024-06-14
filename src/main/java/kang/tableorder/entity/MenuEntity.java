@@ -1,6 +1,5 @@
 package kang.tableorder.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,14 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 import kang.tableorder.type.MenuCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @AllArgsConstructor
 @Builder
@@ -33,10 +32,8 @@ public class MenuEntity {
 
   @ManyToOne
   @JoinColumn(name = "restaurant_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private RestaurantEntity restaurantEntity;
-
-  @OneToMany(mappedBy = "menuEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<CustomerReviewEntity> customerReviewEntities;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
