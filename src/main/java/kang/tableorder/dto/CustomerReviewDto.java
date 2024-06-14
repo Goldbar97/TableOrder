@@ -43,6 +43,8 @@ public class CustomerReviewDto {
     public static class Response {
 
       private Integer id;
+      private Integer restaurantId;
+      private Integer menuId;
       private String menuName;
       private String userNickname;
       private int rating;
@@ -53,6 +55,8 @@ public class CustomerReviewDto {
 
         return CustomerReviewDto.Create.Response.builder()
             .id(customerReviewEntity.getId())
+            .restaurantId(customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
+            .menuId(customerReviewEntity.getMenuEntity().getId())
             .menuName(customerReviewEntity.getMenuEntity().getName())
             .userNickname(customerReviewEntity.getUserEntity().getNickname())
             .rating(customerReviewEntity.getRating())
@@ -74,8 +78,11 @@ public class CustomerReviewDto {
     public static class Response {
 
       private Integer id;
+      private Integer restaurantId;
+      private Integer menuId;
       private String menuName;
       private String userNickname;
+      private String description;
       private int rating;
       private LocalDateTime createdAt;
       private LocalDateTime updatedAt;
@@ -85,8 +92,11 @@ public class CustomerReviewDto {
 
         return CustomerReviewDto.Read.Response.builder()
             .id(customerReviewEntity.getId())
+            .restaurantId(customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
+            .menuId(customerReviewEntity.getMenuEntity().getId())
             .menuName(customerReviewEntity.getMenuEntity().getName())
             .userNickname(customerReviewEntity.getUserEntity().getNickname())
+            .description(customerReviewEntity.getDescription())
             .rating(customerReviewEntity.getRating())
             .createdAt(customerReviewEntity.getCreatedAt())
             .updatedAt(customerReviewEntity.getUpdatedAt())
