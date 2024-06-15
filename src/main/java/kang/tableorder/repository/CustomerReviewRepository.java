@@ -13,19 +13,29 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerReviewRepository extends JpaRepository<CustomerReviewEntity, Integer> {
 
-  Optional<CustomerReviewEntity> findByIdAndUserEntityId(Integer id, Integer userEntityId);
+  Optional<CustomerReviewEntity> findByIdAndUserEntity(Integer id, UserEntity userEntity);
 
   @Modifying
   @Query("DELETE FROM CUSTOMER_REVIEW cr "
       + "WHERE cr.id = :id "
+      + "AND cr.restaurantEntity.id = :restaurantId "
+      + "AND cr.menuEntity.id = :menuId "
       + "AND cr.userEntity = :userEntity")
-  void deleteByIdAndUserEntity(Integer id, UserEntity userEntity);
+  void deleteByAllId(Integer id, Integer restaurantId, Integer menuId, UserEntity userEntity);
 
-  List<CustomerReviewEntity> findAllByUserEntityId(Integer userEntityId);
+  List<CustomerReviewEntity> findAllByUserEntity(UserEntity userEntity);
 
-  Optional<CustomerReviewEntity> findTop1ByMenuEntityOrderByCreatedAtDesc(MenuEntity menuEntity);
+  CustomerReviewEntity findTop1ByMenuEntityOrderByCreatedAtDesc(MenuEntity menuEntity);
 
   Page<CustomerReviewEntity> findAllByMenuEntity(MenuEntity menuEntity, Pageable pageable);
 
   Optional<CustomerReviewEntity> findByIdAndMenuEntity(Integer id, MenuEntity menuEntity);
+
+  @Query("SELECT c FROM CUSTOMER_REVIEW c "
+      + "WHERE c.id = :id "
+      + "AND c.restaurantEntity.id = :restaurantId "
+      + "AND c.menuEntity.id = :menuId "
+      + "AND c.userEntity = :userEntity")
+  Optional<CustomerReviewEntity> findByAllId(Integer id, Integer restaurantId, Integer menuId,
+      UserEntity userEntity);
 }
