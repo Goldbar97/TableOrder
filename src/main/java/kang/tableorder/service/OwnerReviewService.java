@@ -28,8 +28,8 @@ public class OwnerReviewService {
   private final OwnerReviewRepository ownerReviewRepository;
 
   //
-  public OwnerReviewDto.Create.Response createReview(Integer restaurantId, Integer menuId,
-      Integer reviewId, OwnerReviewDto.Create.Request form) {
+  public OwnerReviewDto.Create.Response createReview(Long restaurantId, Long menuId,
+      Long reviewId, OwnerReviewDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -64,8 +64,8 @@ public class OwnerReviewService {
     return ownerReviewEntities.stream().map(OwnerReviewDto.Read.Response::toDto).toList();
   }
 
-  public OwnerReviewDto.Read.Response readReview(Integer restaurantId, Integer menuId,
-      Integer reviewId, Integer ownerReviewId) {
+  public OwnerReviewDto.Read.Response readReview(Long restaurantId, Long menuId,
+      Long reviewId, Long ownerReviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -76,8 +76,8 @@ public class OwnerReviewService {
     return OwnerReviewDto.Read.Response.toDto(ownerReviewEntity);
   }
 
-  public OwnerReviewDto.Update.Response updateReview(Integer restaurantId, Integer menuId,
-      Integer reviewId, Integer ownerReviewId, OwnerReviewDto.Update.Request form) {
+  public OwnerReviewDto.Update.Response updateReview(Long restaurantId, Long menuId,
+      Long reviewId, Long ownerReviewId, OwnerReviewDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -92,8 +92,8 @@ public class OwnerReviewService {
     return OwnerReviewDto.Update.Response.toDto(updated);
   }
 
-  public void deleteReview(Integer restaurantId, Integer menuId, Integer reviewId,
-      Integer ownerReviewId) {
+  public void deleteReview(Long restaurantId, Long menuId, Long reviewId,
+      Long ownerReviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

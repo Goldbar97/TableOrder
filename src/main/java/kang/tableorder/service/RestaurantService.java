@@ -42,7 +42,7 @@ public class RestaurantService {
   }
 
   // 매장 정보 읽기
-  public RestaurantDto.Read.Response readRestaurant(Integer restaurantId) {
+  public RestaurantDto.Read.Response readRestaurant(Long restaurantId) {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
@@ -51,7 +51,7 @@ public class RestaurantService {
   }
 
   // 매장 정보 수정
-  public RestaurantDto.Update.Response updateRestaurant(Integer restaurantId,
+  public RestaurantDto.Update.Response updateRestaurant(Long restaurantId,
       RestaurantDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -74,7 +74,7 @@ public class RestaurantService {
   }
 
   // 매장 삭제
-  public void deleteRestaurant(Integer restaurantId) {
+  public void deleteRestaurant(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

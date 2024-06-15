@@ -22,7 +22,7 @@ public class TablesService {
   private final UserEntityGetter userEntityGetter;
 
   // 테이블 등록
-  public TablesDto.Create.Response createTables(Integer restaurantId,
+  public TablesDto.Create.Response createTables(Long restaurantId,
       TablesDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -47,7 +47,7 @@ public class TablesService {
   }
 
   // 테이블 리스트 조회
-  public List<TablesDto.Read.Response> readTablesList(Integer restaurantId) {
+  public List<TablesDto.Read.Response> readTablesList(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -62,7 +62,7 @@ public class TablesService {
   }
 
   // 테이블 조회
-  public TablesDto.Read.Response readTables(Integer restaurantId, Integer tablesId) {
+  public TablesDto.Read.Response readTables(Long restaurantId, Long tablesId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -78,7 +78,7 @@ public class TablesService {
   }
 
   // 테이블 수정
-  public TablesDto.Update.Response updateTables(Integer restaurantId, Integer tablesId,
+  public TablesDto.Update.Response updateTables(Long restaurantId, Long tablesId,
       TablesDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -116,7 +116,7 @@ public class TablesService {
   }
 
   // 테이블 삭제
-  public void deleteTables(Integer restaurantId, Integer tablesId) {
+  public void deleteTables(Long restaurantId, Long tablesId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -128,7 +128,7 @@ public class TablesService {
   }
 
   // 테이블 리스트 삭제
-  public void deleteTablesList(Integer restaurantId) {
+  public void deleteTablesList(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

@@ -11,11 +11,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItemEntity, Integer> {
+public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
 
   List<CartItemEntity> findAllByCartEntity(CartEntity cartEntity);
 
-  Optional<CartItemEntity> findByIdAndCartEntity(Integer id, CartEntity cartEntity);
+  Optional<CartItemEntity> findByIdAndCartEntity(Long id, CartEntity cartEntity);
 
   boolean existsByCartEntityAndMenuEntity(CartEntity cartEntity, MenuEntity menuEntity);
 
@@ -25,7 +25,7 @@ public interface CartItemRepository extends JpaRepository<CartItemEntity, Intege
 
   @Modifying
   @Query(value = "DELETE FROM CART_ITEM ci WHERE ci.id = :id AND ci.cartEntity = :cartEntity")
-  void deleteByIdAndCartEntity(Integer id, CartEntity cartEntity);
+  void deleteByIdAndCartEntity(Long id, CartEntity cartEntity);
 
   @Query("SELECT COALESCE(SUM(ci.totalPrice), 0) FROM CART_ITEM ci WHERE ci.cartEntity = :cartEntity")
   int findTotalPriceByCartEntity(CartEntity cartEntity);

@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrdersRepository extends JpaRepository<OrdersEntity, Integer> {
+public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
-  Optional<OrdersEntity> findByIdAndRestaurantEntityId(Integer orderId, Integer restaurantId);
+  Optional<OrdersEntity> findByIdAndRestaurantEntityId(Long orderId, Long restaurantId);
 
-  List<OrdersEntity> findByRestaurantEntityIdAndRestaurantEntityUserEntity(Integer restaurantId,
+  List<OrdersEntity> findByRestaurantEntityIdAndRestaurantEntityUserEntity(Long restaurantId,
       UserEntity userEntity);
 
-  Optional<OrdersEntity> findByIdAndRestaurantEntityIdAndRestaurantEntityUserEntity(Integer orderId,
-      Integer restaurantId, UserEntity userEntity);
+  Optional<OrdersEntity> findByIdAndRestaurantEntityIdAndRestaurantEntityUserEntity(Long orderId,
+      Long restaurantId, UserEntity userEntity);
 }

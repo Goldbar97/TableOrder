@@ -21,7 +21,7 @@ public class CustomerReviewService {
   private final MenuRepository menuRepository;
   private final CustomerReviewRepository customerReviewRepository;
 
-  public CustomerReviewDto.Create.Response createReview(Integer restaurantId, Integer menuId,
+  public CustomerReviewDto.Create.Response createReview(Long restaurantId, Long menuId,
       CustomerReviewDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -45,8 +45,8 @@ public class CustomerReviewService {
     return customerReviewEntities.stream().map(CustomerReviewDto.Read.Response::toDto).toList();
   }
 
-  public CustomerReviewDto.Read.Response readReview(Integer restaurantId, Integer menuId,
-      Integer reviewId) {
+  public CustomerReviewDto.Read.Response readReview(Long restaurantId, Long menuId,
+      Long reviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -57,8 +57,8 @@ public class CustomerReviewService {
     return CustomerReviewDto.Read.Response.toDto(customerReviewEntity);
   }
 
-  public CustomerReviewDto.Update.Response updateReview(Integer restaurantId, Integer menuId,
-      Integer reviewId, CustomerReviewDto.Update.Request form) {
+  public CustomerReviewDto.Update.Response updateReview(Long restaurantId, Long menuId,
+      Long reviewId, CustomerReviewDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -75,7 +75,7 @@ public class CustomerReviewService {
     return CustomerReviewDto.Update.Response.toDto(updated);
   }
 
-  public void deleteReview(Integer restaurantId, Integer menuId, Integer reviewId) {
+  public void deleteReview(Long restaurantId, Long menuId, Long reviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

@@ -40,7 +40,7 @@ public class OwnerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private LocalDateTime createdAt;
 
       public static OwnerReviewDto.Create.Response toDto(OwnerReviewEntity ownerReviewEntity) {
@@ -64,10 +64,10 @@ public class OwnerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer restaurantId;
-      private Integer menuId;
-      private Integer customerReviewId;
+      private Long id;
+      private Long restaurantId;
+      private Long menuId;
+      private Long customerReviewId;
       private String userNickname;
       private String description;
       private LocalDateTime createdAt;
@@ -104,10 +104,10 @@ public class OwnerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer restaurantId;
-      private Integer menuId;
-      private Integer customerReviewId;
+      private Long id;
+      private Long restaurantId;
+      private Long menuId;
+      private Long customerReviewId;
       private String userNickname;
       private String description;
       private LocalDateTime createdAt;

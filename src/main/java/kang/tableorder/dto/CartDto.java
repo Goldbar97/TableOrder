@@ -44,7 +44,7 @@ public class CartDto {
     public static class Response {
 
       List<CartItemDto.Read.Response> cartItems;
-      Integer totalPrice;
+      int totalPrice;
     }
   }
 
@@ -66,7 +66,7 @@ public class CartDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String menuName;
       private int menuPrice;
       private int count;

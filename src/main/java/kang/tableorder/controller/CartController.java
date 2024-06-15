@@ -26,8 +26,8 @@ public class CartController {
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}")
   public ResponseEntity<?> addMenuToCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
       @Valid @RequestBody CartDto.Create.Request form) {
 
     cartService.addMenuToCart(restaurantId, menuId, form);
@@ -50,7 +50,7 @@ public class CartController {
   @PutMapping("/cart/{cartItemId}")
   public ResponseEntity<?> updateMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer cartItemId,
+      @PathVariable Long cartItemId,
       @Valid @RequestBody CartDto.Update.Request form) {
 
     CartDto.Update.Response updated = cartService.updateMenuInCart(cartItemId, form);
@@ -63,7 +63,7 @@ public class CartController {
   @DeleteMapping("/cart/{cartItemId}")
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer cartItemId,
+      @PathVariable Long cartItemId,
       @Valid @RequestBody CartDto.Delete.Request form) {
 
     cartService.deleteMenuInCart(cartItemId, form);

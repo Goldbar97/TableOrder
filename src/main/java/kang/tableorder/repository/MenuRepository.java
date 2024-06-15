@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
+public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
 
-  Optional<MenuEntity> findByIdAndRestaurantEntity(Integer menuId,
+  Optional<MenuEntity> findByIdAndRestaurantEntity(Long menuId,
       RestaurantEntity restaurantEntity);
 
-  Optional<MenuEntity> findByIdAndRestaurantEntityIdAndIsAvailableIsTrue(Integer menuId,
-      Integer restaurantId);
+  Optional<MenuEntity> findByIdAndRestaurantEntityIdAndIsAvailableIsTrue(Long menuId,
+      Long restaurantId);
 
   Page<MenuEntity> findAllByRestaurantEntityAndIsAvailableIsTrue(RestaurantEntity restaurantEntity,
       Pageable pageable);
@@ -24,5 +24,5 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
   @Modifying
   @Query("DELETE FROM MENU m WHERE m.id = :id AND m.restaurantEntity = :restaurantEntity")
-  void deleteByIdAndRestaurantEntity(Integer id, RestaurantEntity restaurantEntity);
+  void deleteByIdAndRestaurantEntity(Long id, RestaurantEntity restaurantEntity);
 }

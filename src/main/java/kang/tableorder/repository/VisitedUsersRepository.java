@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VisitedUsersRepository extends JpaRepository<VisitedUsersEntity, Integer> {
+public interface VisitedUsersRepository extends JpaRepository<VisitedUsersEntity, Long> {
 
   Optional<VisitedUsersEntity> findByUserEntityAndRestaurantEntity(UserEntity userEntity,
       RestaurantEntity restaurantEntity);

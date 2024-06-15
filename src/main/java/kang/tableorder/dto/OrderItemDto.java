@@ -18,7 +18,7 @@ public class OrderItemDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String menuName;
       private int count;
       private int totalPrice;

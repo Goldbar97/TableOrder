@@ -45,7 +45,7 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String name;
       private String location;
       private String description;
@@ -75,8 +75,8 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer userId;
+      private Long id;
+      private Long userId;
       private String userName;
       private String userPhoneNumber;
       private String name;
@@ -124,7 +124,7 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String name;
       private String location;
       private String description;

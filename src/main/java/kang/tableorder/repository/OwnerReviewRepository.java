@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OwnerReviewRepository extends JpaRepository<OwnerReviewEntity, Integer> {
+public interface OwnerReviewRepository extends JpaRepository<OwnerReviewEntity, Long> {
 
   List<OwnerReviewEntity> findAllByUserEntity(UserEntity userEntity);
 
@@ -21,8 +21,8 @@ public interface OwnerReviewRepository extends JpaRepository<OwnerReviewEntity, 
       + "AND o.menuEntity.id = :menuId "
       + "AND o.customerReviewEntity.id = :customerReviewId "
       + "AND o.userEntity = :userEntity")
-  Optional<OwnerReviewEntity> findByAllId(Integer id, Integer restaurantId, Integer menuId,
-      Integer customerReviewId, UserEntity userEntity);
+  Optional<OwnerReviewEntity> findByAllId(Long id, Long restaurantId, Long menuId,
+      Long customerReviewId, UserEntity userEntity);
 
   @Modifying
   @Query("DELETE FROM OWNER_REVIEW o "
@@ -31,6 +31,6 @@ public interface OwnerReviewRepository extends JpaRepository<OwnerReviewEntity, 
       + "AND o.menuEntity.id = :menuId "
       + "AND o.customerReviewEntity.id = :customerReviewId "
       + "AND o.userEntity = :userEntity")
-  void deleteByAllId(Integer id, Integer restaurantId, Integer menuId, Integer customerReviewId,
+  void deleteByAllId(Long id, Long restaurantId, Long menuId, Long customerReviewId,
       UserEntity userEntity);
 }

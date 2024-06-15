@@ -31,7 +31,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;
@@ -117,7 +117,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;
@@ -192,7 +192,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;

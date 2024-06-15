@@ -37,7 +37,7 @@ public class OrdersEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Builder.Default
   @OneToMany(mappedBy = "ordersEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
