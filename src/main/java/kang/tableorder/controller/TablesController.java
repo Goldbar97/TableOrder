@@ -7,6 +7,7 @@ import kang.tableorder.service.TablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,21 +15,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@PreAuthorize("hasRole('OWNER')")
+@RequestMapping("/restaurants/{restaurantId}/tables")
 @RequiredArgsConstructor
 public class TablesController {
 
   private final TablesService tablesService;
 
   // 테이블
-  @PreAuthorize("hasRole('OWNER')")
-  @PostMapping("/restaurants/{restaurantId}/tables")
+  @Transactional
+  @PostMapping
   public ResponseEntity<?> createTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @Valid  @RequestBody TablesDto.Create.Request form) {
+      @PathVariable Long restaurantId,
+      @Valid @RequestBody TablesDto.Create.Request form) {
 
     TablesDto.Create.Response saved = tablesService.createTables(restaurantId, form);
 
@@ -36,11 +40,10 @@ public class TablesController {
   }
 
   // 테이블 리스트 읽기
-  @PreAuthorize("hasRole('OWNER')")
-  @GetMapping("/restaurants/{restaurantId}/tables")
+  @GetMapping
   public ResponseEntity<?> readTablesList(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     List<TablesDto.Read.Response> tablesList = tablesService.readTablesList(restaurantId);
 
@@ -48,12 +51,11 @@ public class TablesController {
   }
 
   // 테이블 읽기
-  @PreAuthorize("hasRole('OWNER')")
-  @GetMapping("/restaurants/{restaurantId}/tables/{tablesId}")
+  @GetMapping("/{tablesId}")
   public ResponseEntity<?> readTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId) {
 
     TablesDto.Read.Response tables = tablesService.readTables(restaurantId, tablesId);
 
@@ -61,12 +63,12 @@ public class TablesController {
   }
 
   // 테이블 수정
-  @PreAuthorize("hasRole('OWNER')")
-  @PutMapping("/restaurants/{restaurantId}/tables/{tablesId}")
+  @Transactional
+  @PutMapping("/{tablesId}")
   public ResponseEntity<?> updateTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId,
       @Valid @RequestBody TablesDto.Update.Request form) {
 
     TablesDto.Update.Response updated = tablesService.updateTables(restaurantId, tablesId, form);
@@ -75,12 +77,12 @@ public class TablesController {
   }
 
   // 테이블 삭제
-  @PreAuthorize("hasRole('OWNER')")
-  @DeleteMapping("/restaurants/{restaurantId}/tables/{tablesId}")
+  @Transactional
+  @DeleteMapping("/{tablesId}")
   public ResponseEntity<?> deleteTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId) {
 
     tablesService.deleteTables(restaurantId, tablesId);
 
@@ -88,11 +90,11 @@ public class TablesController {
   }
 
   // 테이블 리스트 삭제
-  @PreAuthorize("hasRole('OWNER')")
-  @DeleteMapping("/restaurants/{restaurantId}/tables")
+  @Transactional
+  @DeleteMapping
   public ResponseEntity<?> deleteTablesList(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     tablesService.deleteTablesList(restaurantId);
 

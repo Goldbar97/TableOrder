@@ -4,6 +4,7 @@ import kang.tableorder.dto.UserDetailsDto;
 import kang.tableorder.entity.UserEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,8 @@ public class UserEntityGetter {
 
   public boolean isGuest() {
 
-    return !SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    return authentication == null || !authentication.isAuthenticated();
   }
 }

@@ -5,9 +5,9 @@ import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Integer> {
+public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
 
-  Optional<RestaurantEntity> findByIdAndUserEntity(Integer restaurantId, UserEntity userEntity);
+  Optional<RestaurantEntity> findByIdAndUserEntity(Long restaurantId, UserEntity userEntity);
 
   boolean existsByUserEntity(UserEntity userEntity);
 }

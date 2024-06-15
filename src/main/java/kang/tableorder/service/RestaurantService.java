@@ -34,7 +34,7 @@ public class RestaurantService {
   }
 
   // 매장 리스트 정보 읽기
-  public List<RestaurantDto.Read.Response> readRestaurantsList() {
+  public List<RestaurantDto.Read.Response> readRestaurantList() {
 
     List<RestaurantEntity> restaurantEntities = restaurantRepository.findAll();
 
@@ -42,7 +42,7 @@ public class RestaurantService {
   }
 
   // 매장 정보 읽기
-  public RestaurantDto.Read.Response readRestaurant(Integer restaurantId) {
+  public RestaurantDto.Read.Response readRestaurant(Long restaurantId) {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
@@ -51,14 +51,14 @@ public class RestaurantService {
   }
 
   // 매장 정보 수정
-  public RestaurantDto.Update.Response updateRestaurant(Integer restaurantId,
+  public RestaurantDto.Update.Response updateRestaurant(Long restaurantId,
       RestaurantDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
     RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
             userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
+        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     restaurantEntity.setName(form.getName());
 
@@ -74,7 +74,7 @@ public class RestaurantService {
   }
 
   // 매장 삭제
-  public void deleteRestaurant(Integer restaurantId) {
+  public void deleteRestaurant(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

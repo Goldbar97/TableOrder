@@ -6,32 +6,34 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @AllArgsConstructor
 @Builder
-@Entity(name = "ORDER_ITEM")
+@Entity(name = "ORDERS_ITEM")
 @Getter
 @NoArgsConstructor
 @Setter
-public class OrderItemEntity {
+public class OrdersItemEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @ManyToOne
   @JoinColumn(name = "menu_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private MenuEntity menuEntity;
 
   @ManyToOne
   @JoinColumn(name = "order_id")
-  private OrderEntity orderEntity;
+  private OrdersEntity ordersEntity;
 
   private int count;
 

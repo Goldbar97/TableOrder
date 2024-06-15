@@ -6,23 +6,27 @@ import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.CartItemEntity;
 import kang.tableorder.entity.MenuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItemEntity, Integer> {
+public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
 
   List<CartItemEntity> findAllByCartEntity(CartEntity cartEntity);
 
-  Optional<CartItemEntity> findByIdAndCartEntity(Integer id, CartEntity cartEntity);
+  Optional<CartItemEntity> findByIdAndCartEntity(Long id, CartEntity cartEntity);
 
   boolean existsByCartEntityAndMenuEntity(CartEntity cartEntity, MenuEntity menuEntity);
 
-  @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.cartEntity = :cartEntity")
-  void deleteAllByCartEntity(@Param("cartEntity") CartEntity cartEntity);
+  @Modifying
+  @Query(value = "DELETE FROM CART_ITEM ci WHERE ci.cartEntity = :cartEntity")
+  void deleteAllByCartEntity(CartEntity cartEntity);
 
-  @Query(value = "DELETE FROM CART_ITEM CI WHERE CI.id = :id AND CI.cartEntity = :cartEntity")
-  void deleteByIdAndCartEntity(@Param("id") Integer id, @Param("cartEntity") CartEntity cartEntity);
+  @Modifying
+  @Query(value = "DELETE FROM CART_ITEM ci WHERE ci.id = :id AND ci.cartEntity = :cartEntity")
+  void deleteByIdAndCartEntity(Long id, CartEntity cartEntity);
 
+  @Query("SELECT COALESCE(SUM(ci.totalPrice), 0) FROM CART_ITEM ci WHERE ci.cartEntity = :cartEntity")
+  int findTotalPriceByCartEntity(CartEntity cartEntity);
 }

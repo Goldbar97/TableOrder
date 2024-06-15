@@ -5,6 +5,7 @@ import kang.tableorder.dto.CartDto;
 import kang.tableorder.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +22,12 @@ public class CartController {
   private final CartService cartService;
 
   // 카트에 메뉴 추가
-  @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/cart")
+  @Transactional
+  @PostMapping("/restaurants/{restaurantId}/menu/{menuId}")
   public ResponseEntity<?> addMenuToCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
       @Valid @RequestBody CartDto.Create.Request form) {
 
     cartService.addMenuToCart(restaurantId, menuId, form);
@@ -48,7 +50,7 @@ public class CartController {
   @PutMapping("/cart/{cartItemId}")
   public ResponseEntity<?> updateMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer cartItemId,
+      @PathVariable Long cartItemId,
       @Valid @RequestBody CartDto.Update.Request form) {
 
     CartDto.Update.Response updated = cartService.updateMenuInCart(cartItemId, form);
@@ -57,10 +59,11 @@ public class CartController {
   }
 
   // 카트 아이템 삭제
+  @Transactional
   @DeleteMapping("/cart/{cartItemId}")
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer cartItemId,
+      @PathVariable Long cartItemId,
       @Valid @RequestBody CartDto.Delete.Request form) {
 
     cartService.deleteMenuInCart(cartItemId, form);
@@ -69,6 +72,7 @@ public class CartController {
   }
 
   // 카트 비우기
+  @Transactional
   @DeleteMapping("/cart")
   public ResponseEntity<?> deleteAllMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,

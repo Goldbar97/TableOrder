@@ -10,6 +10,7 @@ import kang.tableorder.entity.MenuEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.CartItemRepository;
+import kang.tableorder.repository.CartRepository;
 import kang.tableorder.repository.MenuRepository;
 import kang.tableorder.repository.TablesRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,13 @@ import org.springframework.stereotype.Service;
 public class CartService {
 
   private final CartItemRepository cartItemRepository;
+  private final CartRepository cartRepository;
   private final MenuRepository menuRepository;
   private final TablesRepository tablesRepository;
   private final UserEntityGetter userEntityGetter;
 
   // 카트 아이템 추가
-  public void addMenuToCart(Integer restaurantId, Integer menuId, CartDto.Create.Request form) {
+  public void addMenuToCart(Long restaurantId, Long menuId, CartDto.Create.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
@@ -46,6 +48,10 @@ public class CartService {
         .build();
 
     cartItemRepository.save(cartItemEntity);
+
+    cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
+
+    cartRepository.save(cartEntity);
   }
 
   // 카트 아이템 리스트 조회
@@ -57,12 +63,12 @@ public class CartService {
 
     return CartDto.Read.Response.builder()
         .cartItems(cartItemEntities.stream().map(CartItemDto.Read.Response::toDto).toList())
-        .totalPrice(cartItemEntities.stream().mapToInt(CartItemEntity::getTotalPrice).sum())
+        .totalPrice(cartEntity.getTotalPrice())
         .build();
   }
 
   // 카트 아이템 수정
-  public CartDto.Update.Response updateMenuInCart(Integer cartItemId,
+  public CartDto.Update.Response updateMenuInCart(Long cartItemId,
       CartDto.Update.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
@@ -77,15 +83,23 @@ public class CartService {
 
     CartItemEntity updated = cartItemRepository.save(cartItemEntity);
 
+    cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
+
+    cartRepository.save(cartEntity);
+
     return CartDto.Update.Response.toDto(updated);
   }
 
   // 카트 아이템 삭제
-  public void deleteMenuInCart(Integer cartItemId, CartDto.Delete.Request form) {
+  public void deleteMenuInCart(Long cartItemId, CartDto.Delete.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
     cartItemRepository.deleteByIdAndCartEntity(cartItemId, cartEntity);
+
+    cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
+
+    cartRepository.save(cartEntity);
   }
 
   // 카트 비우기
@@ -94,6 +108,10 @@ public class CartService {
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
     cartItemRepository.deleteAllByCartEntity(cartEntity);
+
+    cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
+
+    cartRepository.save(cartEntity);
   }
 
   // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
