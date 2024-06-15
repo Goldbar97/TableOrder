@@ -1,5 +1,7 @@
 package kang.tableorder.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import kang.tableorder.dto.CustomerReviewDto;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "손님 리뷰", description = "손님 리뷰 관련 API")
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('CUSTOMER')")
@@ -25,6 +28,7 @@ public class CustomerReviewController {
   private final CustomerReviewService customerReviewService;
 
   // 리뷰 추가
+  @Operation(summary = "손님 리뷰 추가", description = "토큰, 매장ID, 메뉴ID, 리뷰 정보를 받고 리뷰를 추가합니다.")
   @Transactional
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews")
   public ResponseEntity<?> createReview(
@@ -40,6 +44,7 @@ public class CustomerReviewController {
   }
 
   // 리뷰 리스트 조회
+  @Operation(summary = "리뷰 리스트 조회", description = "토큰을 받고 자신의 모든 리뷰를 조회합니다.")
   @GetMapping("/customer/reviews")
   public ResponseEntity<?> readReviewList(
       @RequestHeader("Authorization") String header) {
@@ -50,6 +55,7 @@ public class CustomerReviewController {
   }
 
   // 리뷰 조회
+  @Operation(summary = "리뷰 조회", description = "토큰, 매장ID, 메뉴ID, 리뷰ID 를 받고 리뷰를 조회합니다.")
   @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> readReview(
       @RequestHeader("Authorization") String header,
@@ -64,6 +70,7 @@ public class CustomerReviewController {
   }
 
   // 리뷰 수정
+  @Operation(summary = "리뷰 수정", description = "토큰, 매장ID, 메뉴ID, 리뷰ID, 리뷰 정보를 받고 리뷰를 수정합니다.")
   @Transactional
   @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> updateReview(
@@ -80,6 +87,7 @@ public class CustomerReviewController {
   }
 
   // 리뷰 삭제
+  @Operation(summary = "리뷰 삭제", description = "토큰, 매장ID, 메뉴ID, 리뷰ID 를 받고 리뷰를 삭제합니다.")
   @Transactional
   @DeleteMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> deleteReview(

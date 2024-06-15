@@ -1,5 +1,7 @@
 package kang.tableorder.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import kang.tableorder.dto.RestaurantDto;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "매장", description = "매장 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/restaurants")
@@ -26,6 +29,7 @@ public class RestaurantController {
   private final RestaurantService restaurantService;
 
   // 매장 CREATE
+  @Operation(summary = "매장 추가", description = "토큰, 매장 정보를 받고 매장을 추가합니다.")
   @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PostMapping
@@ -39,6 +43,7 @@ public class RestaurantController {
   }
 
   // 매장 리스트 READ
+  @Operation(summary = "매장 리스트 조회", description = "전체 매장을 조회합니다.")
   @GetMapping
   public ResponseEntity<?> readRestaurantList() {
 
@@ -48,6 +53,7 @@ public class RestaurantController {
   }
 
   // 매장 READ
+  @Operation(summary = "매장 조회", description = "매장ID 를 받고 해당 매장을 조회합니다.")
   @GetMapping("/{restaurantId}")
   public ResponseEntity<?> readRestaurant(
       @PathVariable Long restaurantId) {
@@ -58,6 +64,7 @@ public class RestaurantController {
   }
 
   // 매장 UPDATE
+  @Operation(summary = "매장 수정", description = "토큰, 매장ID, 매장 정보를 받고 매장을 수정합니다.")
   @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/{restaurantId}")
@@ -72,6 +79,7 @@ public class RestaurantController {
   }
 
   // 매장 DELETE
+  @Operation(summary = "매장 삭제", description = "토큰, 매장ID 를 받고 해당 매장을 삭제합니다.")
   @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @DeleteMapping("/{restaurantId}")

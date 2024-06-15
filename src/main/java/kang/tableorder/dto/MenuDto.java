@@ -8,8 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.Collections;
 import java.util.List;
-import kang.tableorder.dto.CustomerReviewDto.Read;
-import kang.tableorder.dto.CustomerReviewDto.Read.Response;
 import kang.tableorder.entity.CustomerReviewEntity;
 import kang.tableorder.entity.MenuEntity;
 import kang.tableorder.entity.RestaurantEntity;
@@ -216,5 +214,4 @@ public class MenuDto {
       }
     }
   }
-
 }
