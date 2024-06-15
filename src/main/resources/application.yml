@@ -15,4 +15,14 @@ spring:
     password: mariadb
 
   jwt:
-    secret: c2VvbmdqdW4ta2FuZy1qd3Qtc2VjcmV0LWtleS1nZW5lcmF0b3ItZm9yLWdlbmVyYWwtcHJvamVjdA==
+    secret: ${jwt.secret}
+
+  iamport:
+    secret: ${iamport.secret}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  use-fqn: true
