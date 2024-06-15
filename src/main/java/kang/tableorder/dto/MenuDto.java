@@ -6,7 +6,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.Collections;
 import java.util.List;
+import kang.tableorder.dto.CustomerReviewDto.Read;
+import kang.tableorder.dto.CustomerReviewDto.Read.Response;
 import kang.tableorder.entity.CustomerReviewEntity;
 import kang.tableorder.entity.MenuEntity;
 import kang.tableorder.entity.RestaurantEntity;
@@ -41,7 +44,7 @@ public class MenuDto {
       public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
           CustomerReviewEntity customerReviewEntity) {
 
-        return MenuDto.Read.Response.builder()
+        MenuDto.Read.Response response = MenuDto.Read.Response.builder()
             .id(menuEntity.getId())
             .category(menuEntity.getCategory())
             .name(menuEntity.getName())
@@ -50,8 +53,16 @@ public class MenuDto {
             .description(menuEntity.getDescription())
             .spiciness(menuEntity.getSpiciness())
             .isAvailable(menuEntity.getIsAvailable())
-            .customerReview(List.of(CustomerReviewDto.Read.Response.toDto(customerReviewEntity)))
             .build();
+
+        if (customerReviewEntity == null) {
+          response.setCustomerReview(Collections.emptyList());
+        } else {
+          response.setCustomerReview(
+              List.of(CustomerReviewDto.Read.Response.toDto(customerReviewEntity)));
+        }
+
+        return response;
       }
 
       public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
