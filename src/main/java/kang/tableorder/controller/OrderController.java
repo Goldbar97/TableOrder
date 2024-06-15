@@ -24,6 +24,7 @@ public class OrderController {
 
   private final OrderService orderService;
 
+  // 주문 추가
   @PostMapping
   public ResponseEntity<?> createOrder(
       @RequestHeader(value = "Authorization", required = false) String header,
@@ -35,6 +36,7 @@ public class OrderController {
     return ResponseEntity.ok(saved);
   }
 
+  // 주문 조회
   @GetMapping("/{orderId}")
   public ResponseEntity<?> readOrder(
       @RequestHeader(value = "Authorization", required = false) String header,
@@ -47,6 +49,7 @@ public class OrderController {
     return ResponseEntity.ok(info);
   }
 
+  // 주문 리스트 조회
   @PreAuthorize("hasRole('OWNER')")
   @GetMapping
   public ResponseEntity<?> readOrderList(
@@ -58,6 +61,7 @@ public class OrderController {
     return ResponseEntity.ok(info);
   }
 
+  // 주문 수정
   @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/{orderId}")
