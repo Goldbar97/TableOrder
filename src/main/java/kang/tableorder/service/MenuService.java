@@ -2,6 +2,7 @@ package kang.tableorder.service;
 
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.dto.CustomerReviewDto;
 import kang.tableorder.dto.CustomerReviewDto.Read.Response;
 import kang.tableorder.dto.MenuDto;
 import kang.tableorder.entity.CustomerReviewEntity;
@@ -60,8 +61,7 @@ public class MenuService {
         restaurantEntity, pageable);
 
     return menuEntities.getContent().stream().map(e -> {
-      CustomerReviewEntity topReview = customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(
-          e).orElseGet(CustomerReviewEntity::new);
+      CustomerReviewEntity topReview = customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(e);
       return MenuDto.Read.Response.toDto(e, topReview);
     }).toList();
   }
@@ -81,7 +81,8 @@ public class MenuService {
     Page<CustomerReviewEntity> customerReviewEntities = customerReviewRepository.findAllByMenuEntity(
         menuEntity, pageable);
 
-    List<Response> list = customerReviewEntities.stream().map(Response::toDto).toList();
+    List<CustomerReviewDto.Read.Response> list = customerReviewEntities.stream()
+        .map(CustomerReviewDto.Read.Response::toDto).toList();
 
     return MenuDto.Read.Response.toDto(menuEntity, list);
   }
