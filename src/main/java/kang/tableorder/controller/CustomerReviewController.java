@@ -24,6 +24,7 @@ public class CustomerReviewController {
 
   private final CustomerReviewService customerReviewService;
 
+  // 리뷰 추가
   @Transactional
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews")
   public ResponseEntity<?> createReview(
@@ -38,7 +39,8 @@ public class CustomerReviewController {
     return ResponseEntity.ok(saved);
   }
 
-  @GetMapping("/user/reviews")
+  // 리뷰 리스트 조회
+  @GetMapping("/customer/reviews")
   public ResponseEntity<?> readReviewList(
       @RequestHeader("Authorization") String header) {
 
@@ -47,6 +49,7 @@ public class CustomerReviewController {
     return ResponseEntity.ok(info);
   }
 
+  // 리뷰 조회
   @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> readReview(
       @RequestHeader("Authorization") String header,
@@ -60,25 +63,32 @@ public class CustomerReviewController {
     return ResponseEntity.ok(info);
   }
 
+  // 리뷰 수정
   @Transactional
-  @PutMapping("/reviews/{reviewId}")
+  @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> updateReview(
       @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
+      @PathVariable Integer menuId,
       @PathVariable Integer reviewId,
       @Valid @RequestBody CustomerReviewDto.Update.Request form) {
 
-    CustomerReviewDto.Update.Response updated = customerReviewService.updateReview(reviewId, form);
+    CustomerReviewDto.Update.Response updated = customerReviewService.updateReview(restaurantId,
+        menuId, reviewId, form);
 
     return ResponseEntity.ok(updated);
   }
 
+  // 리뷰 삭제
   @Transactional
-  @DeleteMapping("/reviews/{reviewId}")
+  @DeleteMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> deleteReview(
       @RequestHeader("Authorization") String header,
+      @PathVariable Integer restaurantId,
+      @PathVariable Integer menuId,
       @PathVariable Integer reviewId) {
 
-    customerReviewService.deleteReview(reviewId);
+    customerReviewService.deleteReview(restaurantId, menuId, reviewId);
 
     return ResponseEntity.ok("삭제되었습니다.");
   }

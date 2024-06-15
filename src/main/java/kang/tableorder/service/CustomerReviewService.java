@@ -39,8 +39,8 @@ public class CustomerReviewService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    List<CustomerReviewEntity> customerReviewEntities = customerReviewRepository.findAllByUserEntityId(
-        userEntity.getId());
+    List<CustomerReviewEntity> customerReviewEntities = customerReviewRepository.findAllByUserEntity(
+        userEntity);
 
     return customerReviewEntities.stream().map(CustomerReviewDto.Read.Response::toDto).toList();
   }
@@ -50,20 +50,20 @@ public class CustomerReviewService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    CustomerReviewEntity customerReviewEntity = customerReviewRepository.findByIdAndUserEntityId(
-            reviewId, userEntity.getId())
+    CustomerReviewEntity customerReviewEntity = customerReviewRepository.findByAllId(reviewId,
+            restaurantId, menuId, userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_REVIEW));
 
     return CustomerReviewDto.Read.Response.toDto(customerReviewEntity);
   }
 
-  public CustomerReviewDto.Update.Response updateReview(Integer reviewId,
-      CustomerReviewDto.Update.Request form) {
+  public CustomerReviewDto.Update.Response updateReview(Integer restaurantId, Integer menuId,
+      Integer reviewId, CustomerReviewDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    CustomerReviewEntity customerReviewEntity = customerReviewRepository.findByIdAndUserEntityId(
-            reviewId, userEntity.getId())
+    CustomerReviewEntity customerReviewEntity = customerReviewRepository.findByAllId(reviewId,
+            restaurantId, menuId, userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_MENU));
 
     customerReviewEntity.setDescription(form.getDescription());
@@ -75,10 +75,10 @@ public class CustomerReviewService {
     return CustomerReviewDto.Update.Response.toDto(updated);
   }
 
-  public void deleteReview(Integer reviewId) {
+  public void deleteReview(Integer restaurantId, Integer menuId, Integer reviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    customerReviewRepository.deleteByIdAndUserEntity(reviewId, userEntity);
+    customerReviewRepository.deleteByAllId(reviewId, restaurantId, menuId, userEntity);
   }
 }
