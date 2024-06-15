@@ -30,7 +30,7 @@ public class MenuService {
   private final CustomerReviewRepository customerReviewRepository;
 
   // 메뉴 등록
-  public MenuDto.Create.Response createMenu(Integer restaurantId, MenuDto.Create.Request form) {
+  public MenuDto.Create.Response createMenu(Long restaurantId, MenuDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -50,7 +50,7 @@ public class MenuService {
 
   // 메뉴 리스트 조회
   // TODO: 각 메뉴의 리뷰 하나씩 포함하기
-  public List<MenuDto.Read.Response> readMenuList(Integer restaurantId, int page, int size) {
+  public List<MenuDto.Read.Response> readMenuList(Long restaurantId, int page, int size) {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
@@ -68,7 +68,7 @@ public class MenuService {
 
   // 메뉴 자세히 조회
   // TODO: 해당 메뉴의 모든 리뷰 조회 가능
-  public MenuDto.Read.Response readMenu(Integer restaurantId, Integer menuId, int page, int size) {
+  public MenuDto.Read.Response readMenu(Long restaurantId, Long menuId, int page, int size) {
 
     RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
@@ -88,7 +88,7 @@ public class MenuService {
   }
 
   // 메뉴 수정
-  public MenuDto.Update.Response updateMenu(Integer restaurantId, Integer menuId,
+  public MenuDto.Update.Response updateMenu(Long restaurantId, Long menuId,
       MenuDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -120,7 +120,7 @@ public class MenuService {
   }
 
   // 메뉴 삭제
-  public void deleteMenu(Integer restaurantId, Integer menuId) {
+  public void deleteMenu(Long restaurantId, Long menuId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

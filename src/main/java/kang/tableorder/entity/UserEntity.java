@@ -35,7 +35,7 @@ public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   private CartEntity cartEntity;

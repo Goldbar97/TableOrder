@@ -50,7 +50,7 @@ public class RestaurantController {
   // 매장 READ
   @GetMapping("/{restaurantId}")
   public ResponseEntity<?> readRestaurant(
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     RestaurantDto.Read.Response info = restaurantService.readRestaurant(restaurantId);
 
@@ -63,7 +63,7 @@ public class RestaurantController {
   @PutMapping("/{restaurantId}")
   public ResponseEntity<?> updateRestaurant(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
+      @PathVariable Long restaurantId,
       @Valid @RequestBody RestaurantDto.Update.Request form) {
 
     RestaurantDto.Update.Response updated = restaurantService.updateRestaurant(restaurantId, form);
@@ -77,7 +77,7 @@ public class RestaurantController {
   @DeleteMapping("/{restaurantId}")
   public ResponseEntity<?> deleteRestaurant(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     restaurantService.deleteRestaurant(restaurantId);
 

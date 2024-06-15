@@ -27,7 +27,7 @@ public class CartService {
   private final UserEntityGetter userEntityGetter;
 
   // 카트 아이템 추가
-  public void addMenuToCart(Integer restaurantId, Integer menuId, CartDto.Create.Request form) {
+  public void addMenuToCart(Long restaurantId, Long menuId, CartDto.Create.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
@@ -68,7 +68,7 @@ public class CartService {
   }
 
   // 카트 아이템 수정
-  public CartDto.Update.Response updateMenuInCart(Integer cartItemId,
+  public CartDto.Update.Response updateMenuInCart(Long cartItemId,
       CartDto.Update.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
@@ -91,7 +91,7 @@ public class CartService {
   }
 
   // 카트 아이템 삭제
-  public void deleteMenuInCart(Integer cartItemId, CartDto.Delete.Request form) {
+  public void deleteMenuInCart(Long cartItemId, CartDto.Delete.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 

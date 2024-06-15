@@ -29,9 +29,9 @@ public class OwnerReviewController {
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews")
   public ResponseEntity<?> createReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId,
       @Valid @RequestBody OwnerReviewDto.Create.Request form) {
 
     OwnerReviewDto.Create.Response saved = ownerReviewService.createReview(restaurantId, menuId,
@@ -54,10 +54,10 @@ public class OwnerReviewController {
   @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews/{ownerReviewId}")
   public ResponseEntity<?> readReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId,
-      @PathVariable Integer ownerReviewId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId,
+      @PathVariable Long ownerReviewId) {
 
     OwnerReviewDto.Read.Response info = ownerReviewService.readReview(restaurantId, menuId,
         reviewId, ownerReviewId);
@@ -69,10 +69,10 @@ public class OwnerReviewController {
   @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews/{ownerReviewId}")
   public ResponseEntity<?> updateReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId,
-      @PathVariable Integer ownerReviewId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId,
+      @PathVariable Long ownerReviewId,
       @Valid @RequestBody OwnerReviewDto.Update.Request form) {
 
     OwnerReviewDto.Update.Response updated = ownerReviewService.updateReview(restaurantId, menuId,
@@ -85,10 +85,10 @@ public class OwnerReviewController {
   @DeleteMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews/{ownerReviewId}")
   public ResponseEntity<?> deleteReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId,
-      @PathVariable Integer ownerReviewId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId,
+      @PathVariable Long ownerReviewId) {
 
     ownerReviewService.deleteReview(restaurantId, menuId, reviewId, ownerReviewId);
 

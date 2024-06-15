@@ -40,7 +40,7 @@ public class TablesDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private int number;
       private String tabletMacId;
 
@@ -66,7 +66,7 @@ public class TablesDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private int number;
       private String tabletMacId;
 
@@ -100,7 +100,7 @@ public class TablesDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private int number;
       private String tabletMacId;
 

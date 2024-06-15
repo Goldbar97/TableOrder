@@ -38,7 +38,7 @@ public class OrderService {
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
   @Transactional
-  public OrderDto.Create.Response createOrder(Integer restaurantId, OrderDto.Create.Request form) {
+  public OrderDto.Create.Response createOrder(Long restaurantId, OrderDto.Create.Request form) {
 
     CartEntity cartEntity;
     UserEntity userEntity;
@@ -104,7 +104,7 @@ public class OrderService {
   }
 
   // 주문 조회
-  public OrderDto.Read.Response readOrder(Integer restaurantId, Integer orderId,
+  public OrderDto.Read.Response readOrder(Long restaurantId, Long orderId,
       OrderDto.Read.Request form) {
 
     OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityId(orderId,
@@ -115,7 +115,7 @@ public class OrderService {
   }
 
   // 주문 리스트 조회
-  public List<OrderDto.Read.Response> readOrderList(Integer restaurantId) {
+  public List<OrderDto.Read.Response> readOrderList(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -126,7 +126,7 @@ public class OrderService {
   }
 
   // 주문 수정
-  public OrderDto.Update.Response updateOrder(Integer restaurantId, Integer orderId,
+  public OrderDto.Update.Response updateOrder(Long restaurantId, Long orderId,
       OrderDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();

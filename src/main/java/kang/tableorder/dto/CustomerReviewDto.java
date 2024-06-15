@@ -42,9 +42,9 @@ public class CustomerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer restaurantId;
-      private Integer menuId;
+      private Long id;
+      private Long restaurantId;
+      private Long menuId;
       private String menuName;
       private String userNickname;
       private int rating;
@@ -77,9 +77,9 @@ public class CustomerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer restaurantId;
-      private Integer menuId;
+      private Long id;
+      private Long restaurantId;
+      private Long menuId;
       private String menuName;
       private String userNickname;
       private String description;
@@ -124,7 +124,7 @@ public class CustomerReviewDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String menuName;
       private String userNickname;
       private int rating;

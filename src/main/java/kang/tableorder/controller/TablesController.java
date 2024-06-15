@@ -31,7 +31,7 @@ public class TablesController {
   @PostMapping
   public ResponseEntity<?> createTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
+      @PathVariable Long restaurantId,
       @Valid @RequestBody TablesDto.Create.Request form) {
 
     TablesDto.Create.Response saved = tablesService.createTables(restaurantId, form);
@@ -43,7 +43,7 @@ public class TablesController {
   @GetMapping
   public ResponseEntity<?> readTablesList(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     List<TablesDto.Read.Response> tablesList = tablesService.readTablesList(restaurantId);
 
@@ -54,8 +54,8 @@ public class TablesController {
   @GetMapping("/{tablesId}")
   public ResponseEntity<?> readTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId) {
 
     TablesDto.Read.Response tables = tablesService.readTables(restaurantId, tablesId);
 
@@ -67,8 +67,8 @@ public class TablesController {
   @PutMapping("/{tablesId}")
   public ResponseEntity<?> updateTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId,
       @Valid @RequestBody TablesDto.Update.Request form) {
 
     TablesDto.Update.Response updated = tablesService.updateTables(restaurantId, tablesId, form);
@@ -81,8 +81,8 @@ public class TablesController {
   @DeleteMapping("/{tablesId}")
   public ResponseEntity<?> deleteTables(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer tablesId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId) {
 
     tablesService.deleteTables(restaurantId, tablesId);
 
@@ -94,7 +94,7 @@ public class TablesController {
   @DeleteMapping
   public ResponseEntity<?> deleteTablesList(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     tablesService.deleteTablesList(restaurantId);
 

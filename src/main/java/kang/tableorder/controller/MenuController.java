@@ -32,7 +32,7 @@ public class MenuController {
   @PostMapping
   public ResponseEntity<?> createMenu(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
+      @PathVariable Long restaurantId,
       @Valid @RequestBody MenuDto.Create.Request form) {
 
     MenuDto.Create.Response saved = menuService.createMenu(restaurantId, form);
@@ -43,7 +43,7 @@ public class MenuController {
   // 메뉴 리스트 READ
   @GetMapping
   public ResponseEntity<?> readMenuList(
-      @PathVariable Integer restaurantId,
+      @PathVariable Long restaurantId,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
 
@@ -55,8 +55,8 @@ public class MenuController {
   // 메뉴 READ
   @GetMapping("/{menuId}")
   public ResponseEntity<?> readMenu(
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
 
@@ -71,8 +71,8 @@ public class MenuController {
   @PutMapping("/{menuId}")
   public ResponseEntity<?> updateMenu(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
       @Valid @RequestBody MenuDto.Update.Request form) {
 
     MenuDto.Update.Response updated = menuService.updateMenu(restaurantId, menuId, form);
@@ -87,8 +87,8 @@ public class MenuController {
   @DeleteMapping("/{menuId}")
   public ResponseEntity<?> deleteMenu(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId) {
 
     menuService.deleteMenu(restaurantId, menuId);
 

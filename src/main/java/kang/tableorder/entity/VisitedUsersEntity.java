@@ -25,7 +25,7 @@ public class VisitedUsersEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

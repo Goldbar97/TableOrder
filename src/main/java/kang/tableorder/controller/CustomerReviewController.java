@@ -29,8 +29,8 @@ public class CustomerReviewController {
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews")
   public ResponseEntity<?> createReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
       @Valid @RequestBody CustomerReviewDto.Create.Request form) {
 
     CustomerReviewDto.Create.Response saved = customerReviewService.createReview(restaurantId,
@@ -53,9 +53,9 @@ public class CustomerReviewController {
   @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> readReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId) {
 
     CustomerReviewDto.Read.Response info = customerReviewService.readReview(restaurantId, menuId,
         reviewId);
@@ -68,9 +68,9 @@ public class CustomerReviewController {
   @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> updateReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId,
       @Valid @RequestBody CustomerReviewDto.Update.Request form) {
 
     CustomerReviewDto.Update.Response updated = customerReviewService.updateReview(restaurantId,
@@ -84,9 +84,9 @@ public class CustomerReviewController {
   @DeleteMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> deleteReview(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer menuId,
-      @PathVariable Integer reviewId) {
+      @PathVariable Long restaurantId,
+      @PathVariable Long menuId,
+      @PathVariable Long reviewId) {
 
     customerReviewService.deleteReview(restaurantId, menuId, reviewId);
 

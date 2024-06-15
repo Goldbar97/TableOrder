@@ -28,7 +28,7 @@ public class OrderController {
   @PostMapping
   public ResponseEntity<?> createOrder(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer restaurantId,
+      @PathVariable Long restaurantId,
       @Valid @RequestBody OrderDto.Create.Request form) {
 
     OrderDto.Create.Response saved = orderService.createOrder(restaurantId, form);
@@ -40,8 +40,8 @@ public class OrderController {
   @GetMapping("/{orderId}")
   public ResponseEntity<?> readOrder(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer orderId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long orderId,
       @Valid @RequestBody OrderDto.Read.Request form) {
 
     OrderDto.Read.Response info = orderService.readOrder(restaurantId, orderId, form);
@@ -54,7 +54,7 @@ public class OrderController {
   @GetMapping
   public ResponseEntity<?> readOrderList(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId) {
+      @PathVariable Long restaurantId) {
 
     List<OrderDto.Read.Response> info = orderService.readOrderList(restaurantId);
 
@@ -67,8 +67,8 @@ public class OrderController {
   @PutMapping("/{orderId}")
   public ResponseEntity<?> updateOrder(
       @RequestHeader("Authorization") String header,
-      @PathVariable Integer restaurantId,
-      @PathVariable Integer orderId,
+      @PathVariable Long restaurantId,
+      @PathVariable Long orderId,
       @Valid @RequestBody OrderDto.Update.Request form) {
 
     OrderDto.Update.Response updated = orderService.updateOrder(restaurantId, orderId, form);

@@ -18,7 +18,7 @@ public class CartItemDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String menuName;
       private int menuPrice;
       private int count;

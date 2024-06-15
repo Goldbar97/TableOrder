@@ -66,8 +66,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -114,8 +114,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private List<UserRole> role;
       private String token;
@@ -150,8 +150,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -209,8 +209,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
