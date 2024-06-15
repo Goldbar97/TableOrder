@@ -6,6 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.Collections;
+import java.util.List;
+import kang.tableorder.dto.CustomerReviewDto.Read;
+import kang.tableorder.dto.CustomerReviewDto.Read.Response;
+import kang.tableorder.entity.CustomerReviewEntity;
 import kang.tableorder.entity.MenuEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.type.MenuCategory;
@@ -26,7 +31,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;
@@ -34,8 +39,34 @@ public class MenuDto {
       private String description;
       private int spiciness;
       private Boolean isAvailable;
+      private List<CustomerReviewDto.Read.Response> customerReview;
 
-      public static MenuDto.Read.Response toDto(MenuEntity menuEntity) {
+      public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
+          CustomerReviewEntity customerReviewEntity) {
+
+        MenuDto.Read.Response response = MenuDto.Read.Response.builder()
+            .id(menuEntity.getId())
+            .category(menuEntity.getCategory())
+            .name(menuEntity.getName())
+            .imageUrl(menuEntity.getImageUrl())
+            .price(menuEntity.getPrice())
+            .description(menuEntity.getDescription())
+            .spiciness(menuEntity.getSpiciness())
+            .isAvailable(menuEntity.getIsAvailable())
+            .build();
+
+        if (customerReviewEntity == null) {
+          response.setCustomerReview(Collections.emptyList());
+        } else {
+          response.setCustomerReview(
+              List.of(CustomerReviewDto.Read.Response.toDto(customerReviewEntity)));
+        }
+
+        return response;
+      }
+
+      public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
+          List<CustomerReviewDto.Read.Response> list) {
 
         return MenuDto.Read.Response.builder()
             .id(menuEntity.getId())
@@ -46,6 +77,7 @@ public class MenuDto {
             .description(menuEntity.getDescription())
             .spiciness(menuEntity.getSpiciness())
             .isAvailable(menuEntity.getIsAvailable())
+            .customerReview(list)
             .build();
       }
     }
@@ -85,7 +117,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;
@@ -160,7 +192,7 @@ public class MenuDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private MenuCategory category;
       private String name;
       private String imageUrl;

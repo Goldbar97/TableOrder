@@ -45,7 +45,7 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String name;
       private String location;
       private String description;
@@ -75,7 +75,10 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
+      private Long userId;
+      private String userName;
+      private String userPhoneNumber;
       private String name;
       private String location;
       private String description;
@@ -85,6 +88,9 @@ public class RestaurantDto {
 
         return RestaurantDto.Read.Response.builder()
             .id(restaurantEntity.getId())
+            .userId(restaurantEntity.getUserEntity().getId())
+            .userName(restaurantEntity.getUserEntity().getName())
+            .userPhoneNumber(restaurantEntity.getUserEntity().getPhoneNumber())
             .name(restaurantEntity.getName())
             .location(restaurantEntity.getLocation())
             .description(restaurantEntity.getDescription())
@@ -118,7 +124,7 @@ public class RestaurantDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String name;
       private String location;
       private String description;

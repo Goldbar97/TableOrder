@@ -28,7 +28,7 @@ public class OrderDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private String restaurantName;
       private int tablesNumber;
       private String userNickname;
@@ -68,7 +68,7 @@ public class OrderDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private List<OrderItemDto.Read.Response> orderItems;
       private int tablesNumber;
       private String userNickname;
@@ -110,7 +110,7 @@ public class OrderDto {
     @Setter
     public static class Response {
 
-      private Integer id;
+      private Long id;
       private List<OrderItemDto.Read.Response> orderItems;
       private int tablesNumber;
       private String userNickname;

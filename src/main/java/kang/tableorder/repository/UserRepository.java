@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
   @Query(value = "SELECT u FROM USER u LEFT JOIN FETCH u.role WHERE u.email = :email")
   Optional<UserEntity> findByEmailWithRole(@Param("email") String email);

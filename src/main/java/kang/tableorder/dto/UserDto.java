@@ -50,7 +50,7 @@ public class UserDto {
       public UserEntity toEntity() {
 
         return UserEntity.builder()
-            .cartEntity(new CartEntity())
+            .cartEntity(CartEntity.builder().build())
             .email(this.email)
             .password(this.password)
             .name(this.name)
@@ -66,8 +66,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -114,8 +114,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private List<UserRole> role;
       private String token;
@@ -150,8 +150,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -209,8 +209,8 @@ public class UserDto {
     @Setter
     public static class Response {
 
-      private Integer id;
-      private Integer cartId;
+      private Long id;
+      private Long cartId;
       private String email;
       private String name;
       private String nickname;
