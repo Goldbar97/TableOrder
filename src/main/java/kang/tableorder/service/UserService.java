@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
 
   // 회원가입
+  @Transactional
   public UserDto.SignUp.Response signUp(UserDto.SignUp.Request form) {
 
     // 이메일 존재 여부
@@ -45,6 +47,7 @@ public class UserService implements UserDetailsService {
   }
 
   // 로그인
+  @Transactional
   public UserDto.SignIn.Response signIn(UserDto.SignIn.Request form) {
 
     // 이메일로 가입한 회원 존재 여부
@@ -76,6 +79,7 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 정보 수정
+  @Transactional
   public UserDto.Update.Response updateUser(UserDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -102,6 +106,7 @@ public class UserService implements UserDetailsService {
   }
 
   // 사용자 탈퇴
+  @Transactional
   public void deleteUser(UserDto.Delete.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();

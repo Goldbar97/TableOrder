@@ -10,6 +10,7 @@ import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class RestaurantService {
   private final UserEntityGetter userEntityGetter;
 
   // 매장 등록
+  @Transactional
   public RestaurantDto.Create.Response createRestaurant(RestaurantDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -51,6 +53,7 @@ public class RestaurantService {
   }
 
   // 매장 정보 수정
+  @Transactional
   public RestaurantDto.Update.Response updateRestaurant(Long restaurantId,
       RestaurantDto.Update.Request form) {
 
@@ -74,6 +77,7 @@ public class RestaurantService {
   }
 
   // 매장 삭제
+  @Transactional
   public void deleteRestaurant(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();

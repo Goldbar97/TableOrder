@@ -15,6 +15,7 @@ import kang.tableorder.repository.MenuRepository;
 import kang.tableorder.repository.TablesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class CartService {
   private final UserEntityGetter userEntityGetter;
 
   // 카트 아이템 추가
+  @Transactional
   public void addMenuToCart(Long restaurantId, Long menuId, CartDto.Create.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
@@ -68,6 +70,7 @@ public class CartService {
   }
 
   // 카트 아이템 수정
+  @Transactional
   public CartDto.Update.Response updateMenuInCart(Long cartItemId,
       CartDto.Update.Request form) {
 
@@ -91,6 +94,7 @@ public class CartService {
   }
 
   // 카트 아이템 삭제
+  @Transactional
   public void deleteMenuInCart(Long cartItemId, CartDto.Delete.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
@@ -103,6 +107,7 @@ public class CartService {
   }
 
   // 카트 비우기
+  @Transactional
   public void deleteAllMenuInCart(CartDto.Delete.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());

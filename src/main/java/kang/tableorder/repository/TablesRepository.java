@@ -16,17 +16,23 @@ public interface TablesRepository extends JpaRepository<TablesEntity, Long> {
 
   Optional<TablesEntity> findByIdAndRestaurantEntity(Long id, RestaurantEntity restaurantEntity);
 
+  Optional<TablesEntity> findByIdAndRestaurantEntityIdAndTabletMacId(Long id,
+      Long restaurantEntityId, String tabletMacId);
+
   Optional<TablesEntity> findByTabletMacId(String tabletMacId);
+
+  Optional<TablesEntity> findByRestaurantEntityIdAndTabletMacId(Long restaurantEntityId,
+      String tabletMacId);
 
   boolean existsByNumberAndRestaurantEntity(int number, RestaurantEntity restaurantEntity);
 
   boolean existsByTabletMacId(String tabletMacId);
 
   @Modifying
-  @Query("DELETE FROM TABLES t WHERE t.id = :id AND t.restaurantEntity = :restaurantEntity")
-  void deleteByIdAndRestaurantEntity(Long id, RestaurantEntity restaurantEntity);
-
-  @Modifying
   @Query("DELETE FROM TABLES t WHERE t.restaurantEntity = :restaurantEntity")
   void deleteAllByRestaurantEntity(RestaurantEntity restaurantEntity);
+
+  @Modifying
+  @Query("DELETE FROM TABLES t WHERE t.id = :id AND t.restaurantEntity = :restaurantEntity")
+  void deleteByIdAndRestaurantEntity(Long id, RestaurantEntity restaurantEntity);
 }

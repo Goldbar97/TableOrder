@@ -2,7 +2,6 @@ package kang.tableorder.repository;
 
 import java.util.List;
 import java.util.Optional;
-import javax.swing.text.html.Option;
 import kang.tableorder.entity.OwnerReviewEntity;
 import kang.tableorder.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
