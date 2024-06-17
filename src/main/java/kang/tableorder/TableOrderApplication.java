@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@PropertySource("classpath:secret.properties")
 public class TableOrderApplication {
 
   public static void main(String[] args) {

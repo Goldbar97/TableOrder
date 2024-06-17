@@ -9,7 +9,6 @@ import kang.tableorder.service.TablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,6 @@ public class TablesController {
 
   // 테이블
   @Operation(summary = "테이블 추가", description = "토큰, 매장ID, 테이블 정보를 받고 테이블을 추가합니다.")
-  @Transactional
   @PostMapping
   public ResponseEntity<?> createTables(
       @RequestHeader("Authorization") String header,
@@ -71,7 +69,6 @@ public class TablesController {
 
   // 테이블 수정
   @Operation(summary = "테이블 수정", description = "토큰, 매장ID, 테이블ID 를 받고 해당 테이블을 수정합니다.")
-  @Transactional
   @PutMapping("/{tablesId}")
   public ResponseEntity<?> updateTables(
       @RequestHeader("Authorization") String header,
@@ -86,7 +83,6 @@ public class TablesController {
 
   // 테이블 삭제
   @Operation(summary = "테이블 삭제", description = "토큰, 매장ID, 테이블ID 를 받고 해당 테이블을 삭제합니다.")
-  @Transactional
   @DeleteMapping("/{tablesId}")
   public ResponseEntity<?> deleteTables(
       @RequestHeader("Authorization") String header,
@@ -100,7 +96,6 @@ public class TablesController {
 
   // 테이블 리스트 삭제
   @Operation(summary = "테이블 전부 삭제", description = "토큰, 매장ID 를 받고 전체 테이블을 삭제합니다.")
-  @Transactional
   @DeleteMapping
   public ResponseEntity<?> deleteTablesList(
       @RequestHeader("Authorization") String header,

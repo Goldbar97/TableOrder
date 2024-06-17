@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,9 +20,11 @@ public class CustomerReviewDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "3")
       @Min(value = 1, message = "Rating minimum is 1")
       @Max(value = 5, message = "Rating maximum is 5")
       private int rating;
@@ -48,18 +51,20 @@ public class CustomerReviewDto {
       private String menuName;
       private String userNickname;
       private int rating;
+      private int visitedCount;
       private LocalDateTime createdAt;
 
       public static CustomerReviewDto.Create.Response toDto(
-          CustomerReviewEntity customerReviewEntity) {
+          CustomerReviewEntity customerReviewEntity, int visitedCount) {
 
-        return CustomerReviewDto.Create.Response.builder()
+        return Response.builder()
             .id(customerReviewEntity.getId())
             .restaurantId(customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
             .menuId(customerReviewEntity.getMenuEntity().getId())
             .menuName(customerReviewEntity.getMenuEntity().getName())
             .userNickname(customerReviewEntity.getUserEntity().getNickname())
             .rating(customerReviewEntity.getRating())
+            .visitedCount(visitedCount)
             .createdAt(customerReviewEntity.getCreatedAt())
             .build();
       }
@@ -111,9 +116,11 @@ public class CustomerReviewDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testNewDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "5")
       @Min(value = 1, message = "Rating minimum is 1")
       @Max(value = 5, message = "Rating maximum is 5")
       private int rating;

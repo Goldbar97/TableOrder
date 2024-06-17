@@ -10,4 +10,6 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
   Optional<RestaurantEntity> findByIdAndUserEntity(Long restaurantId, UserEntity userEntity);
 
   boolean existsByUserEntity(UserEntity userEntity);
+
+  boolean existsByIdAndUserEntity(Long id, UserEntity userEntity);
 }

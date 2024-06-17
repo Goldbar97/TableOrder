@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,10 @@ public class OrdersEntity {
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = true)
   private UserEntity userEntity;
+
+  @ManyToOne
+  @JoinColumn(name = "account_id", nullable = true)
+  private AccountEntity accountEntity;
 
   @Builder.Default
   private int totalPrice = 0;

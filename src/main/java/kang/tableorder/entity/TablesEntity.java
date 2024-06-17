@@ -3,6 +3,7 @@ package kang.tableorder.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +38,10 @@ public class TablesEntity {
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "cart_id")
   private CartEntity cartEntity;
+
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "account_id")
+  private AccountEntity accountEntity;
 
   @Column(nullable = false)
   private int number;

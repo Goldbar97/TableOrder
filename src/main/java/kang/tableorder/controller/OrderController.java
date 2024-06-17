@@ -9,7 +9,6 @@ import kang.tableorder.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,7 +68,6 @@ public class OrderController {
 
   // 주문 수정
   @Operation(summary = "주문 수정", description = "토큰, 매장ID, 주문ID, 주문 정보를 받고 주문을 수정합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/{orderId}")
   public ResponseEntity<?> updateOrder(
@@ -83,4 +81,29 @@ public class OrderController {
     return ResponseEntity.ok(updated);
   }
 
+  // 결제
+  @PostMapping("/{orderId}/payment")
+  public ResponseEntity<?> performPayment(
+      @RequestHeader(value = "Authorization", required = false) String header,
+      @PathVariable Long restaurantId,
+      @PathVariable Long orderId,
+      @RequestBody OrderDto.Payment.Request form) {
+
+    orderService.performPayment(restaurantId, orderId, form);
+
+    return ResponseEntity.ok("결제되었습니다.");
+  }
+
+  // 환불
+  @PreAuthorize("hasRole('OWNER')")
+  @PutMapping("/{orderId}/payment")
+  public ResponseEntity<?> refundPayment(
+      @RequestHeader("Authorization") String header,
+      @PathVariable Long restaurantId,
+      @PathVariable Long orderId) {
+
+    orderService.refundPayment(restaurantId, orderId);
+
+    return ResponseEntity.ok("환불되었습니다.");
+  }
 }

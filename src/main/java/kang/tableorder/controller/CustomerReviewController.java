@@ -9,7 +9,6 @@ import kang.tableorder.service.CustomerReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +28,6 @@ public class CustomerReviewController {
 
   // 리뷰 추가
   @Operation(summary = "손님 리뷰 추가", description = "토큰, 매장ID, 메뉴ID, 리뷰 정보를 받고 리뷰를 추가합니다.")
-  @Transactional
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews")
   public ResponseEntity<?> createReview(
       @RequestHeader("Authorization") String header,
@@ -71,7 +69,6 @@ public class CustomerReviewController {
 
   // 리뷰 수정
   @Operation(summary = "리뷰 수정", description = "토큰, 매장ID, 메뉴ID, 리뷰ID, 리뷰 정보를 받고 리뷰를 수정합니다.")
-  @Transactional
   @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> updateReview(
       @RequestHeader("Authorization") String header,
@@ -88,7 +85,6 @@ public class CustomerReviewController {
 
   // 리뷰 삭제
   @Operation(summary = "리뷰 삭제", description = "토큰, 매장ID, 메뉴ID, 리뷰ID 를 받고 리뷰를 삭제합니다.")
-  @Transactional
   @DeleteMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}")
   public ResponseEntity<?> deleteReview(
       @RequestHeader("Authorization") String header,

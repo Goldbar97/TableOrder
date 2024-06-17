@@ -8,10 +8,13 @@ import kang.tableorder.entity.TablesEntity;
 import kang.tableorder.entity.UserEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
+import kang.tableorder.repository.AccountRepository;
+import kang.tableorder.repository.CartRepository;
 import kang.tableorder.repository.RestaurantRepository;
 import kang.tableorder.repository.TablesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +23,11 @@ public class TablesService {
   private final RestaurantRepository restaurantRepository;
   private final TablesRepository tablesRepository;
   private final UserEntityGetter userEntityGetter;
+  private final CartRepository cartRepository;
+  private final AccountRepository accountRepository;
 
   // 테이블 등록
+  @Transactional
   public TablesDto.Create.Response createTables(Long restaurantId,
       TablesDto.Create.Request form) {
 
@@ -78,6 +84,7 @@ public class TablesService {
   }
 
   // 테이블 수정
+  @Transactional
   public TablesDto.Update.Response updateTables(Long restaurantId, Long tablesId,
       TablesDto.Update.Request form) {
 
@@ -116,6 +123,7 @@ public class TablesService {
   }
 
   // 테이블 삭제
+  @Transactional
   public void deleteTables(Long restaurantId, Long tablesId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -124,10 +132,19 @@ public class TablesService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    tablesRepository.deleteByIdAndRestaurantEntity(tablesId, restaurantEntity);
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+            restaurantEntity)
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+
+    cartRepository.delete(tablesEntity.getCartEntity());
+
+    accountRepository.delete(tablesEntity.getAccountEntity());
+
+    tablesRepository.delete(tablesEntity);
   }
 
   // 테이블 리스트 삭제
+  @Transactional
   public void deleteTablesList(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -136,6 +153,15 @@ public class TablesService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    tablesRepository.deleteAllByRestaurantEntity(restaurantEntity);
+    List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
+        restaurantEntity);
+
+    tablesEntities.stream().forEach(e -> {
+      cartRepository.delete(e.getCartEntity());
+
+      accountRepository.delete(e.getAccountEntity());
+
+      tablesRepository.delete(e);
+    });
   }
 }

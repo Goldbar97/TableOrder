@@ -33,6 +33,7 @@ public class OrdersItemEntity {
 
   @ManyToOne
   @JoinColumn(name = "order_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private OrdersEntity ordersEntity;
 
   private int count;

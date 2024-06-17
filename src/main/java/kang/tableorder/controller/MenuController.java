@@ -9,7 +9,6 @@ import kang.tableorder.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,6 @@ public class MenuController {
 
   // 메뉴 CREATE
   @Operation(summary = "메뉴 추가", description = "토큰, 매장ID, 메뉴 정보를 받고 메뉴를 추가합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PostMapping
   public ResponseEntity<?> createMenu(
@@ -73,7 +71,6 @@ public class MenuController {
 
   // 메뉴 UPDATE
   @Operation(summary = "메뉴 수정", description = "토큰, 매장ID, 메뉴ID, 메뉴 정보를 받고 메뉴를 수정합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/{menuId}")
   public ResponseEntity<?> updateMenu(
@@ -90,7 +87,6 @@ public class MenuController {
 
   // 메뉴 DELETE
   @Operation(summary = "메뉴 삭제", description = "토큰, 매장ID, 메뉴ID 를 받고 메뉴를 삭제합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @DeleteMapping("/{menuId}")
   public ResponseEntity<?> deleteMenu(
