@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,29 +22,35 @@ public class UserDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "test@naver.com")
       @Email(message = "Email is invalid")
       @NotBlank(message = "Email cannot be blank")
       private String email;
 
+      @Schema(defaultValue = "test1234")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")
       private String password;
 
+      @Schema(defaultValue = "testName")
       @NotBlank(message = "Name cannot be blank")
       @Pattern(regexp = "^[a-zA-Z가-힣]*$", message = "Name is invalid")
       private String name;
 
+      @Schema(defaultValue = "testNickname")
       @NotBlank(message = "Nickname cannot be blank")
       @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$",
           message = "Invalid characters")
       private String nickname;
 
+      @Schema(defaultValue = "010-1234-5678")
       @NotBlank(message = "PhoneNumber cannot be blank")
       @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
           message = "PhoneNumber is invalid")
       private String phoneNumber;
 
+      @Schema(defaultValue = "[\"CUSTOMER\"]")
       @NotNull(message = "Role cannot be null")
       private List<UserRole> role;
 
@@ -99,10 +106,12 @@ public class UserDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "test@naver.com")
       @Email(message = "Email is invalid")
       @NotBlank(message = "Email cannot be blank")
       private String email;
 
+      @Schema(defaultValue = "test1234")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")
@@ -139,6 +148,7 @@ public class UserDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "test1234")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")
@@ -183,21 +193,25 @@ public class UserDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "test1234")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")
       private String password;
 
+      @Schema(defaultValue = "test5678")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")
       private String newPassword;
 
+      @Schema(defaultValue = "testNewNickname")
       @NotBlank(message = "Nickname cannot be blank")
       @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$",
           message = "Nickname is invalid")
       private String newNickname;
 
+      @Schema(defaultValue = "010-5678-1234")
       @NotBlank(message = "PhoneNumber cannot be blank")
       @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
           message = "PhoneNumber is invalid")
@@ -242,6 +256,7 @@ public class UserDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "test5678")
       @NotBlank(message = "Password cannot be blank")
       @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
           message = "Password is invalid")

@@ -1,7 +1,9 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import kang.tableorder.entity.AccountEntity;
 import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
@@ -18,9 +20,11 @@ public class TablesDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "1")
       @Min(value = 0, message = "Number minimum is 0")
       private int number;
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
 
@@ -29,6 +33,7 @@ public class TablesDto {
         return TablesEntity.builder()
             .restaurantEntity(restaurantEntity)
             .cartEntity(CartEntity.builder().build())
+            .accountEntity(AccountEntity.builder().build())
             .number(this.number)
             .tabletMacId(this.tabletMacId)
             .build();
@@ -88,9 +93,11 @@ public class TablesDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "2")
       @Min(value = 0, message = "Number minimum is 0")
       private int number;
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }

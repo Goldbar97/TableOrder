@@ -54,6 +54,8 @@ public class CustomerReviewEntity {
   @Column(nullable = false)
   private int rating;
 
+  private int visitedCount;
+
   @CreatedDate
   private LocalDateTime createdAt;
 

@@ -48,6 +48,10 @@ public class SecurityConfig {
               .requestMatchers("/restaurants/**")
               .permitAll();
           e
+              .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**",
+                  "/v3/api-docs/**", "/webjars/**")
+              .permitAll();
+          e
               .anyRequest()
               .authenticated();
         })

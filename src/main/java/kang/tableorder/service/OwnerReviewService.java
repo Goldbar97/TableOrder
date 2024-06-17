@@ -16,6 +16,7 @@ import kang.tableorder.repository.OwnerReviewRepository;
 import kang.tableorder.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,8 @@ public class OwnerReviewService {
   private final MenuRepository menuRepository;
   private final OwnerReviewRepository ownerReviewRepository;
 
-  //
+  // 리뷰 추가
+  @Transactional
   public OwnerReviewDto.Create.Response createReview(Long restaurantId, Long menuId,
       Long reviewId, OwnerReviewDto.Create.Request form) {
 
@@ -69,13 +71,16 @@ public class OwnerReviewService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    OwnerReviewEntity ownerReviewEntity = ownerReviewRepository.findByAllId(ownerReviewId, restaurantId,
+    OwnerReviewEntity ownerReviewEntity = ownerReviewRepository.findByAllId(ownerReviewId,
+            restaurantId,
             menuId, reviewId, userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_REVIEW));
 
     return OwnerReviewDto.Read.Response.toDto(ownerReviewEntity);
   }
 
+  // 리뷰 수정
+  @Transactional
   public OwnerReviewDto.Update.Response updateReview(Long restaurantId, Long menuId,
       Long reviewId, Long ownerReviewId, OwnerReviewDto.Update.Request form) {
 
@@ -92,6 +97,8 @@ public class OwnerReviewService {
     return OwnerReviewDto.Update.Response.toDto(updated);
   }
 
+  // 리뷰 삭제
+  @Transactional
   public void deleteReview(Long restaurantId, Long menuId, Long reviewId,
       Long ownerReviewId) {
 

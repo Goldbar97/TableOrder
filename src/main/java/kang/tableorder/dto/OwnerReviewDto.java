@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import kang.tableorder.entity.CustomerReviewEntity;
@@ -19,6 +20,7 @@ public class OwnerReviewDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
@@ -95,6 +97,7 @@ public class OwnerReviewDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testNewDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
     }

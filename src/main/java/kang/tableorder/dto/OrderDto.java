@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class OrderDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
@@ -59,6 +61,7 @@ public class OrderDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
@@ -101,6 +104,7 @@ public class OrderDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "ACCEPTED")
       @NotNull(message = "Status cannot be null")
       private OrderStatus status;
     }
@@ -134,6 +138,22 @@ public class OrderDto {
             .status(ordersEntity.getStatus())
             .build();
       }
+    }
+  }
+
+  public static class Payment {
+
+    @Getter
+    @Setter
+    public static class Request {
+
+      @Schema(defaultValue = "testTabletMacId")
+      @NotBlank(message = "TabletMacId cannot be blank")
+      private String tabletMacId;
+    }
+
+    public static class Response {
+
     }
   }
 }

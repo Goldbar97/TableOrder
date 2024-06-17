@@ -1,5 +1,6 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
@@ -16,9 +17,11 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "1")
       @Min(value = 1, message = "Count minimum is 1")
       private int count;
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
@@ -34,6 +37,7 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
@@ -54,9 +58,11 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "2")
       @Min(value = 1, message = "Count minimum is 1")
       private int count;
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
@@ -91,6 +97,7 @@ public class CartDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
