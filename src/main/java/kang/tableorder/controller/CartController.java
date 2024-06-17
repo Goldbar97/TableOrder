@@ -7,7 +7,6 @@ import kang.tableorder.dto.CartDto;
 import kang.tableorder.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +25,6 @@ public class CartController {
 
   // 카트에 메뉴 추가
   @Operation(summary = "장바구니 담기", description = "토큰(비필수), 매장ID, 메뉴ID, 카트 정보를 받고 회원/비회원 장바구니에 메뉴를 담습니다.")
-  @Transactional
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}")
   public ResponseEntity<?> addMenuToCart(
       @RequestHeader(value = "Authorization", required = false) String header,
@@ -66,7 +64,6 @@ public class CartController {
 
   // 카트 아이템 삭제
   @Operation(summary = "장바구니 요소 삭제", description = "토큰(비필수), 아이템ID, 카트 정보를 받고 장바구니에 담긴 메뉴를 삭제합니다.")
-  @Transactional
   @DeleteMapping("/cart/{cartItemId}")
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
@@ -80,7 +77,6 @@ public class CartController {
 
   // 카트 비우기
   @Operation(summary = "장바구니 비우기", description = "토큰(비필수), 카트 정보를 받고 장바구니를 비웁니다.")
-  @Transactional
   @DeleteMapping("/cart")
   public ResponseEntity<?> deleteAllMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,

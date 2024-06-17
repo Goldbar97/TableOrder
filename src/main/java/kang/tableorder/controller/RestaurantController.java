@@ -9,7 +9,6 @@ import kang.tableorder.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ public class RestaurantController {
 
   // 매장 CREATE
   @Operation(summary = "매장 추가", description = "토큰, 매장 정보를 받고 매장을 추가합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PostMapping
   public ResponseEntity<?> createRestaurant(
@@ -65,7 +63,6 @@ public class RestaurantController {
 
   // 매장 UPDATE
   @Operation(summary = "매장 수정", description = "토큰, 매장ID, 매장 정보를 받고 매장을 수정합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @PutMapping("/{restaurantId}")
   public ResponseEntity<?> updateRestaurant(
@@ -80,7 +77,6 @@ public class RestaurantController {
 
   // 매장 DELETE
   @Operation(summary = "매장 삭제", description = "토큰, 매장ID 를 받고 해당 매장을 삭제합니다.")
-  @Transactional
   @PreAuthorize("hasRole('OWNER')")
   @DeleteMapping("/{restaurantId}")
   public ResponseEntity<?> deleteRestaurant(

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
   @Bean
   public OpenAPI openAPI() {
 
@@ -18,7 +19,7 @@ public class SwaggerConfig {
             .version("v.0.0.1")
             .contact(new Contact()
                 .email("ehrm1357@gmail.com")
-                .url("https://www.google.com"))
+                .url("https://github.com/Goldbar97/TableOrder"))
         );
   }
 }

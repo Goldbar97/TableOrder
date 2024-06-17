@@ -1,6 +1,7 @@
 package kang.tableorder.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -87,26 +88,33 @@ public class MenuDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "TYPE1")
       private MenuCategory category;
 
+      @Schema(defaultValue = "testNewName")
       @NotBlank(message = "Name cannot be blank")
       @Pattern(regexp = "^[a-zA-Z0-9가-힣 ]*$",
           message = "Invalid characters")
       private String name;
 
+      @Schema(defaultValue = "testNewImageUrl")
       @NotBlank(message = "ImageUrl cannot be blank")
       private String imageUrl;
 
+      @Schema(defaultValue = "20000")
       @Min(value = 0, message = "Price minimum is 0")
       private int price;
 
+      @Schema(defaultValue = "testNewDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "4")
       @Min(value = 0, message = "Spiciness minimum is 0")
       @Max(value = 4, message = "Spiciness maximum is 4")
       private int spiciness;
 
+      @Schema(defaultValue = "true")
       private Boolean isAvailable;
     }
 
@@ -146,27 +154,34 @@ public class MenuDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "TYPE1")
       @NotNull(message = "Category cannot be null")
       private MenuCategory category;
 
+      @Schema(defaultValue = "testName")
       @NotBlank(message = "Name cannot be blank")
       @Pattern(regexp = "^[a-zA-Z0-9가-힣 ]*$",
           message = "Invalid characters")
       private String name;
 
+      @Schema(defaultValue = "testImageUrl")
       @NotBlank(message = "ImageUrl cannot be blank")
       private String imageUrl;
 
+      @Schema(defaultValue = "10000")
       @Min(value = 0, message = "Price minimum is 0")
       private int price;
 
+      @Schema(defaultValue = "testDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "0")
       @Min(value = 0, message = "Spiciness minimum is 0")
       @Max(value = 4, message = "Spiciness maximum is 4")
       private int spiciness;
 
+      @Schema(defaultValue = "true")
       @NotNull(message = "IsAvailable cannot be null")
       private Boolean isAvailable;
 

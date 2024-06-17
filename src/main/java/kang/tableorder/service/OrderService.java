@@ -3,6 +3,7 @@ package kang.tableorder.service;
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
 import kang.tableorder.dto.OrderDto;
+import kang.tableorder.entity.AccountEntity;
 import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.CartItemEntity;
 import kang.tableorder.entity.OrdersEntity;
@@ -13,12 +14,15 @@ import kang.tableorder.entity.UserEntity;
 import kang.tableorder.entity.VisitedUsersEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
+import kang.tableorder.repository.AccountRepository;
 import kang.tableorder.repository.CartItemRepository;
 import kang.tableorder.repository.CartRepository;
 import kang.tableorder.repository.OrdersRepository;
+import kang.tableorder.repository.OrdersitemRepository;
 import kang.tableorder.repository.RestaurantRepository;
 import kang.tableorder.repository.TablesRepository;
 import kang.tableorder.repository.VisitedUsersRepository;
+import kang.tableorder.type.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +38,8 @@ public class OrderService {
   private final TablesRepository tablesRepository;
   private final UserEntityGetter userEntityGetter;
   private final VisitedUsersRepository visitedUsersRepository;
+  private final AccountRepository accountRepository;
+  private final OrdersitemRepository ordersItemRepository;
 
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
@@ -60,13 +66,14 @@ public class OrderService {
     }
 
     if (userEntity != null) {
-      visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntity(
-              userEntity, restaurantEntity)
-          .orElseGet(() -> VisitedUsersEntity.builder()
+      visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
+              userEntity, restaurantId)
+          .orElseGet(() -> visitedUsersRepository.save(VisitedUsersEntity.builder()
               .userEntity(userEntity)
               .restaurantEntity(restaurantEntity)
               .visitedCount(0)
-              .build());
+              .build())
+          );
     }
 
     List<CartItemEntity> cartItems = cartItemRepository.findAllByCartEntity(cartEntity);
@@ -84,12 +91,14 @@ public class OrderService {
         .build();
 
     cartItems.forEach(cartItem -> {
-      OrdersItemEntity.builder()
+      OrdersItemEntity ordersItemEntity = OrdersItemEntity.builder()
           .menuEntity(cartItem.getMenuEntity())
           .ordersEntity(ordersEntity)
           .count(cartItem.getCount())
           .totalPrice(cartItem.getTotalPrice())
           .build();
+
+      ordersItemRepository.save(ordersItemEntity);
     });
 
     OrdersEntity saved = ordersRepository.save(ordersEntity);
@@ -126,6 +135,7 @@ public class OrderService {
   }
 
   // 주문 수정
+  @Transactional
   public OrderDto.Update.Response updateOrder(Long restaurantId, Long orderId,
       OrderDto.Update.Request form) {
 
@@ -138,5 +148,89 @@ public class OrderService {
     ordersEntity.setStatus(form.getStatus());
 
     return OrderDto.Update.Response.toDto(ordersRepository.save(ordersEntity));
+  }
+
+  // 결제
+  @Transactional
+  public void performPayment(Long restaurantId, Long orderId,
+      OrderDto.Payment.Request form) {
+
+    AccountEntity accountEntity = getAccountEntity(restaurantId, form.getTabletMacId());
+
+    OrdersEntity ordersEntity = ordersRepository.findById(orderId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
+
+    if (ordersEntity.getStatus() == OrderStatus.ACCEPTED) {
+      if (accountEntity.getBalance() >= ordersEntity.getTotalPrice()) {
+        accountEntity.setBalance(accountEntity.getBalance() - ordersEntity.getTotalPrice());
+
+        accountRepository.save(accountEntity);
+
+        if (!userEntityGetter.isGuest()) {
+          UserEntity userEntity = userEntityGetter.getUserEntity();
+
+          VisitedUsersEntity visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
+                  userEntity, restaurantId)
+              .orElseThrow(() -> new CustomException(ErrorCode.NOT_AVAILABLE));
+
+          visitedUsersEntity.setVisitedCount(visitedUsersEntity.getVisitedCount() + 1);
+
+          visitedUsersRepository.save(visitedUsersEntity);
+        }
+
+        ordersEntity.setStatus(OrderStatus.COMPLETED);
+
+        ordersEntity.setAccountEntity(accountEntity);
+
+        ordersRepository.save(ordersEntity);
+      } else {
+        throw new CustomException(ErrorCode.NOT_ENOUGH_BALANCE);
+      }
+    } else {
+      throw new CustomException(ErrorCode.NOT_AVAILABLE_ORDER);
+    }
+  }
+
+  // 환불
+  @Transactional
+  public void refundPayment(Long restaurantId, Long orderId) {
+
+    UserEntity userEntity = userEntityGetter.getUserEntity();
+
+    if (!restaurantRepository.existsByIdAndUserEntity(restaurantId, userEntity)) {
+      throw new CustomException(ErrorCode.WRONG_OWNER);
+    }
+
+    OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityId(orderId,
+            restaurantId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
+
+    if (ordersEntity.getStatus() == OrderStatus.COMPLETED) {
+      AccountEntity accountEntity = ordersEntity.getAccountEntity();
+
+      accountEntity.setBalance(accountEntity.getBalance() + ordersEntity.getTotalPrice());
+
+      accountRepository.save(accountEntity);
+
+      ordersEntity.setStatus(OrderStatus.REFUNDED);
+
+      ordersRepository.save(ordersEntity);
+    } else {
+      throw new CustomException(ErrorCode.NOT_AVAILABLE);
+    }
+  }
+
+  private AccountEntity getAccountEntity(Long restaurantId, String tabletMacId) {
+
+    if (userEntityGetter.isGuest()) {
+      TablesEntity tablesEntity = tablesRepository.findByRestaurantEntityIdAndTabletMacId(
+              restaurantId, tabletMacId)
+          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+
+      return tablesEntity.getAccountEntity();
+    } else {
+      return accountRepository.findByUserEntity(userEntityGetter.getUserEntity())
+          .orElseThrow(() -> new CustomException(ErrorCode.NO_ACCOUNT));
+    }
   }
 }

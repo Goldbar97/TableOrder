@@ -9,7 +9,6 @@ import kang.tableorder.service.OwnerReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +28,6 @@ public class OwnerReviewController {
 
   // 리뷰 추가
   @Operation(summary = "점장 리뷰 추가", description = "토큰, 매장ID, 메뉴ID, 손님리뷰ID, 리뷰 정보를 받고 리뷰를 추가합니다.")
-  @Transactional
   @PostMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews")
   public ResponseEntity<?> createReview(
       @RequestHeader("Authorization") String header,

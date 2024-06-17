@@ -1,6 +1,8 @@
 package kang.tableorder.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.UserEntity;
 import lombok.Builder;
@@ -16,16 +18,22 @@ public class RestaurantDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testName")
       @NotBlank(message = "Name cannot be blank")
       private String name;
 
+      @Schema(defaultValue = "testLocation")
       @NotBlank(message = "Location cannot be blank")
       private String location;
 
+      @Schema(defaultValue = "testDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "010-1234-5678")
       @NotBlank(message = "PhoneNumber cannot be blank")
+      @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
+          message = "PhoneNumber is invalid")
       private String phoneNumber;
 
       public RestaurantEntity toEntity(UserEntity userEntity) {
@@ -106,16 +114,22 @@ public class RestaurantDto {
     @Setter
     public static class Request {
 
+      @Schema(defaultValue = "testNewName")
       @NotBlank(message = "Name cannot be blank")
       private String name;
 
+      @Schema(defaultValue = "testNewLocation")
       @NotBlank(message = "Location cannot be blank")
       private String location;
 
+      @Schema(defaultValue = "testNewDescription")
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
+      @Schema(defaultValue = "010-5678-1234")
       @NotBlank(message = "PhoneNumber cannot be blank")
+      @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
+          message = "PhoneNumber is invalid")
       private String phoneNumber;
     }
 

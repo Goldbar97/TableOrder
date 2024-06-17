@@ -1,11 +1,12 @@
 package kang.tableorder.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,30 +14,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @AllArgsConstructor
 @Builder
-@Entity(name = "CART_ITEM")
+@Entity(name = "ACCOUNT")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @Setter
-public class CartItemEntity {
+public class AccountEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "cart_id")
+  @OneToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private CartEntity cartEntity;
+  private UserEntity userEntity;
 
-  @ManyToOne
-  @JoinColumn(name = "menu_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private MenuEntity menuEntity;
+  @Builder.Default
+  private int balance = 0;
 
-  private int count;
-
-  private int totalPrice;
+  @CreatedDate
+  private LocalDateTime createdAt;
 }

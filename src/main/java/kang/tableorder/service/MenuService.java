@@ -3,7 +3,6 @@ package kang.tableorder.service;
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
 import kang.tableorder.dto.CustomerReviewDto;
-import kang.tableorder.dto.CustomerReviewDto.Read.Response;
 import kang.tableorder.dto.MenuDto;
 import kang.tableorder.entity.CustomerReviewEntity;
 import kang.tableorder.entity.MenuEntity;
@@ -19,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +30,7 @@ public class MenuService {
   private final CustomerReviewRepository customerReviewRepository;
 
   // 메뉴 등록
+  @Transactional
   public MenuDto.Create.Response createMenu(Long restaurantId, MenuDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -61,7 +62,8 @@ public class MenuService {
         restaurantEntity, pageable);
 
     return menuEntities.getContent().stream().map(e -> {
-      CustomerReviewEntity topReview = customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(e);
+      CustomerReviewEntity topReview = customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(
+          e);
       return MenuDto.Read.Response.toDto(e, topReview);
     }).toList();
   }
@@ -88,6 +90,7 @@ public class MenuService {
   }
 
   // 메뉴 수정
+  @Transactional
   public MenuDto.Update.Response updateMenu(Long restaurantId, Long menuId,
       MenuDto.Update.Request form) {
 
@@ -120,6 +123,7 @@ public class MenuService {
   }
 
   // 메뉴 삭제
+  @Transactional
   public void deleteMenu(Long restaurantId, Long menuId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
