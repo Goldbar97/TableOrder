@@ -1,6 +1,7 @@
 package kang.tableorder.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,8 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @AllArgsConstructor
 @Builder
@@ -26,14 +25,12 @@ public class CartItemEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cart_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private CartEntity cartEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "menu_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private MenuEntity menuEntity;
 
   private int count;

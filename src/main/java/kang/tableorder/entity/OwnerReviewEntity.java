@@ -3,6 +3,7 @@ package kang.tableorder.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,24 +32,20 @@ public class OwnerReviewEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private RestaurantEntity restaurantEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "menu_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private MenuEntity menuEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "customer_review_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private CustomerReviewEntity customerReviewEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private UserEntity userEntity;
 
   @Column(nullable = false)

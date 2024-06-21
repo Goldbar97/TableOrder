@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import kang.tableorder.entity.OrdersEntity;
+import kang.tableorder.entity.OrdersItemEntity;
 import kang.tableorder.type.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,6 @@ public class OrderDto {
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;
     }
-
 
     @Builder
     @Getter
@@ -45,7 +45,8 @@ public class OrderDto {
             .restaurantName(ordersEntity.getRestaurantEntity().getName())
             .tablesNumber(ordersEntity.getTablesEntity().getNumber())
             .userNickname(
-                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity().getNickname()
+                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity()
+                    .getNickname()
                     : "비회원")
             .totalPrice(ordersEntity.getTotalPrice())
             .createdAt(ordersEntity.getCreatedAt())
@@ -79,16 +80,18 @@ public class OrderDto {
       private LocalDateTime createdAt;
       private OrderStatus status;
 
-      public static OrderDto.Read.Response toDto(OrdersEntity ordersEntity) {
+      public static OrderDto.Read.Response toDto(OrdersEntity ordersEntity, List<OrdersItemEntity> ordersItemEntities) {
 
         return OrderDto.Read.Response.builder()
             .id(ordersEntity.getId())
             .orderItems(
-                ordersEntity.getOrderItemEntities().stream().map(OrderItemDto.Read.Response::toDto)
+                ordersItemEntities.stream()
+                    .map(OrderItemDto.Read.Response::toDto)
                     .toList())
             .tablesNumber(ordersEntity.getTablesEntity().getNumber())
             .userNickname(
-                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity().getNickname()
+                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity()
+                    .getNickname()
                     : "비회원")
             .totalPrice(ordersEntity.getTotalPrice())
             .createdAt(ordersEntity.getCreatedAt())
@@ -122,16 +125,18 @@ public class OrderDto {
       private LocalDateTime createdAt;
       private OrderStatus status;
 
-      public static OrderDto.Update.Response toDto(OrdersEntity ordersEntity) {
+      public static OrderDto.Update.Response toDto(OrdersEntity ordersEntity, List<OrdersItemEntity> ordersItemEntities) {
 
         return OrderDto.Update.Response.builder()
             .id(ordersEntity.getId())
             .orderItems(
-                ordersEntity.getOrderItemEntities().stream().map(OrderItemDto.Read.Response::toDto)
+                ordersItemEntities.stream()
+                    .map(OrderItemDto.Read.Response::toDto)
                     .toList())
             .tablesNumber(ordersEntity.getTablesEntity().getNumber())
             .userNickname(
-                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity().getNickname()
+                ordersEntity.getUserEntity() != null ? ordersEntity.getUserEntity()
+                    .getNickname()
                     : "비회원")
             .totalPrice(ordersEntity.getTotalPrice())
             .createdAt(ordersEntity.getCreatedAt())
