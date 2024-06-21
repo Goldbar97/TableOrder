@@ -2,11 +2,14 @@ package kang.tableorder.service;
 
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.CartItemEntityDeleter;
 import kang.tableorder.dto.CartDto;
 import kang.tableorder.dto.CartItemDto;
 import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.CartItemEntity;
 import kang.tableorder.entity.MenuEntity;
+import kang.tableorder.entity.TablesEntity;
+import kang.tableorder.entity.UserEntity;
 import kang.tableorder.exception.CustomException;
 import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.CartItemRepository;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CartService {
 
+  private final CartItemEntityDeleter cartItemEntityDeleter;
   private final CartItemRepository cartItemRepository;
   private final CartRepository cartRepository;
   private final MenuRepository menuRepository;
@@ -71,17 +75,20 @@ public class CartService {
 
   // 카트 아이템 수정
   @Transactional
-  public CartDto.Update.Response updateMenuInCart(Long cartItemId,
+  public CartDto.Update.Response updateMenuInCart(
+      Long cartItemId,
       CartDto.Update.Request form) {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
-    CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(cartItemId, cartEntity)
+    CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(
+            cartItemId, cartEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_MENU));
 
     cartItemEntity.setCount(form.getCount());
 
     int totalPrice = cartItemEntity.getMenuEntity().getPrice() * cartItemEntity.getCount();
+
     cartItemEntity.setTotalPrice(totalPrice);
 
     CartItemEntity updated = cartItemRepository.save(cartItemEntity);
@@ -99,7 +106,11 @@ public class CartService {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
-    cartItemRepository.deleteByIdAndCartEntity(cartItemId, cartEntity);
+    CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(
+            cartItemId, cartEntity)
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_CART_ITEM));
+
+    cartItemEntityDeleter.deleteByCartItemEntity(cartItemEntity);
 
     cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
 
@@ -112,7 +123,7 @@ public class CartService {
 
     CartEntity cartEntity = getCartEntity(form.getTabletMacId());
 
-    cartItemRepository.deleteAllByCartEntity(cartEntity);
+    cartItemEntityDeleter.deleteByCartEntity(cartEntity);
 
     cartEntity.setTotalPrice(cartItemRepository.findTotalPriceByCartEntity(cartEntity));
 
@@ -123,11 +134,14 @@ public class CartService {
   private CartEntity getCartEntity(String tabletMacId) {
 
     if (userEntityGetter.isGuest()) {
-      return tablesRepository.findByTabletMacId(tabletMacId)
-          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES))
-          .getCartEntity();
+      TablesEntity tablesEntity = tablesRepository.findByTabletMacId(tabletMacId)
+          .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+
+      return cartRepository.findByTablesEntity(tablesEntity);
     } else {
-      return userEntityGetter.getUserEntity().getCartEntity();
+      UserEntity userEntity = userEntityGetter.getUserEntity();
+
+      return cartRepository.findByUserEntity(userEntity);
     }
   }
 }

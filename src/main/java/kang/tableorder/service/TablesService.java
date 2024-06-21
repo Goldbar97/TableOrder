@@ -2,7 +2,10 @@ package kang.tableorder.service;
 
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.TablesEntityDeleter;
 import kang.tableorder.dto.TablesDto;
+import kang.tableorder.entity.AccountEntity;
+import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
 import kang.tableorder.entity.UserEntity;
@@ -25,20 +28,24 @@ public class TablesService {
   private final UserEntityGetter userEntityGetter;
   private final CartRepository cartRepository;
   private final AccountRepository accountRepository;
+  private final TablesEntityDeleter tablesEntityDeleter;
 
   // 테이블 등록
   @Transactional
-  public TablesDto.Create.Response createTables(Long restaurantId,
+  public TablesDto.Create.Response createTables(
+      Long restaurantId,
       TablesDto.Create.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     // 번호 중복 확인
-    if (tablesRepository.existsByNumberAndRestaurantEntity(form.getNumber(), restaurantEntity)) {
+    if (tablesRepository.existsByNumberAndRestaurantEntity(
+        form.getNumber(), restaurantEntity)) {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_TABLES_NUMBER);
     }
 
@@ -49,6 +56,14 @@ public class TablesService {
 
     TablesEntity saved = tablesRepository.save(form.toEntity(restaurantEntity));
 
+    cartRepository.save(CartEntity.builder()
+        .tablesEntity(saved)
+        .build());
+
+    accountRepository.save(AccountEntity.builder()
+        .tablesEntity(saved)
+        .build());
+
     return TablesDto.Create.Response.toDto(saved);
   }
 
@@ -57,7 +72,8 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
@@ -72,11 +88,13 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(
+            tablesId,
             restaurantEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
@@ -85,21 +103,25 @@ public class TablesService {
 
   // 테이블 수정
   @Transactional
-  public TablesDto.Update.Response updateTables(Long restaurantId, Long tablesId,
+  public TablesDto.Update.Response updateTables(
+      Long restaurantId, Long tablesId,
       TablesDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(
+            tablesId,
             restaurantEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     // 테이블 번호 중복 확인
-    if (tablesRepository.existsByNumberAndRestaurantEntity(form.getNumber(), restaurantEntity)) {
+    if (tablesRepository.existsByNumberAndRestaurantEntity(
+        form.getNumber(), restaurantEntity)) {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_TABLES_NUMBER);
     }
 
@@ -128,19 +150,17 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(
+            tablesId,
             restaurantEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
-    cartRepository.delete(tablesEntity.getCartEntity());
-
-    accountRepository.delete(tablesEntity.getAccountEntity());
-
-    tablesRepository.delete(tablesEntity);
+    tablesEntityDeleter.deleteByTablesEntity(tablesEntity);
   }
 
   // 테이블 리스트 삭제
@@ -149,19 +169,14 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
         restaurantEntity);
 
-    tablesEntities.stream().forEach(e -> {
-      cartRepository.delete(e.getCartEntity());
-
-      accountRepository.delete(e.getAccountEntity());
-
-      tablesRepository.delete(e);
-    });
+    tablesEntityDeleter.deleteByTablesEntities(tablesEntities);
   }
 }

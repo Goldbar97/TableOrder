@@ -2,6 +2,7 @@ package kang.tableorder.service;
 
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.RestaurantEntityDeleter;
 import kang.tableorder.dto.RestaurantDto;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.UserEntity;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RestaurantService {
 
+  private final RestaurantEntityDeleter restaurantEntityDeleter;
   private final RestaurantRepository restaurantRepository;
   private final UserEntityGetter userEntityGetter;
 
@@ -54,12 +56,14 @@ public class RestaurantService {
 
   // 매장 정보 수정
   @Transactional
-  public RestaurantDto.Update.Response updateRestaurant(Long restaurantId,
+  public RestaurantDto.Update.Response updateRestaurant(
+      Long restaurantId,
       RestaurantDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
@@ -82,10 +86,11 @@ public class RestaurantService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
 
-    restaurantRepository.delete(restaurantEntity);
+    restaurantEntityDeleter.deleteByRestaurantEntity(restaurantEntity);
   }
 }

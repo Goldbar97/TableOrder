@@ -1,6 +1,7 @@
 package kang.tableorder.service;
 
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.AccountEntityDeleter;
 import kang.tableorder.dto.AccountDto;
 import kang.tableorder.entity.AccountEntity;
 import kang.tableorder.entity.TablesEntity;
@@ -17,9 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AccountService {
 
+  private final AccountEntityDeleter accountEntityDeleter;
   private final AccountRepository accountRepository;
-  private final UserEntityGetter userEntityGetter;
   private final TablesRepository tablesRepository;
+  private final UserEntityGetter userEntityGetter;
 
   @Transactional
   public AccountDto.Create.Response createAccount() {
@@ -44,15 +46,36 @@ public class AccountService {
     return AccountDto.Read.Response.toDto(accountEntity, userEntity.getName());
   }
 
-  public AccountDto.Read.Response readAccount(Long restaurantId, Long tablesId, AccountDto.Read.Request form) {
+  public AccountDto.Read.Response readAccount(
+      Long restaurantId, Long tablesId, AccountDto.Read.Request form) {
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
         tablesId, restaurantId,
         form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
-    AccountEntity accountEntity = tablesEntity.getAccountEntity();
+    AccountEntity accountEntity = accountRepository.findByTablesEntity(tablesEntity);
 
     return AccountDto.Read.Response.toDto(accountEntity, "비회원");
+  }
+
+  @Transactional
+  public void deleteAccount() {
+
+    UserEntity userEntity = userEntityGetter.getUserEntity();
+
+    accountEntityDeleter.deleteByUserEntity(userEntity);
+  }
+
+  @Transactional
+  public void deleteAccount(
+      Long restaurantId, Long tablesId,
+      AccountDto.GuestDeposit.Request form) {
+
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
+        tablesId, restaurantId,
+        form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+
+    accountEntityDeleter.deleteByTablesEntity(tablesEntity);
   }
 
   @Transactional
@@ -74,13 +97,14 @@ public class AccountService {
   }
 
   @Transactional
-  public AccountDto.GuestDeposit.Response depositAccount(Long restaurantId, Long tablesId, AccountDto.GuestDeposit.Request form) {
+  public AccountDto.GuestDeposit.Response depositAccount(
+      Long restaurantId, Long tablesId, AccountDto.GuestDeposit.Request form) {
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
         tablesId, restaurantId,
         form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
-    AccountEntity accountEntity = tablesEntity.getAccountEntity();
+    AccountEntity accountEntity = accountRepository.findByTablesEntity(tablesEntity);
 
     synchronized (accountEntity) {
       accountEntity.setBalance(accountEntity.getBalance() + form.getAmount());

@@ -32,8 +32,6 @@ public class TablesDto {
 
         return TablesEntity.builder()
             .restaurantEntity(restaurantEntity)
-            .cartEntity(CartEntity.builder().build())
-            .accountEntity(AccountEntity.builder().build())
             .number(this.number)
             .tabletMacId(this.tabletMacId)
             .build();

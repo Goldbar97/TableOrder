@@ -70,7 +70,8 @@ public class RestaurantController {
       @PathVariable Long restaurantId,
       @Valid @RequestBody RestaurantDto.Update.Request form) {
 
-    RestaurantDto.Update.Response updated = restaurantService.updateRestaurant(restaurantId, form);
+    RestaurantDto.Update.Response updated = restaurantService.updateRestaurant(
+        restaurantId, form);
 
     return ResponseEntity.ok(updated);
   }
