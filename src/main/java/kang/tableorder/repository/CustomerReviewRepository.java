@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import kang.tableorder.entity.CustomerReviewEntity;
 import kang.tableorder.entity.MenuEntity;
+import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,16 +13,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerReviewRepository extends JpaRepository<CustomerReviewEntity, Long> {
-
-  Optional<CustomerReviewEntity> findByIdAndUserEntity(Long id, UserEntity userEntity);
-
-  @Modifying
-  @Query("DELETE FROM CUSTOMER_REVIEW cr "
-      + "WHERE cr.id = :id "
-      + "AND cr.restaurantEntity.id = :restaurantId "
-      + "AND cr.menuEntity.id = :menuId "
-      + "AND cr.userEntity = :userEntity")
-  void deleteByAllId(Long id, Long restaurantId, Long menuId, UserEntity userEntity);
 
   List<CustomerReviewEntity> findAllByUserEntity(UserEntity userEntity);
 
@@ -36,6 +27,29 @@ public interface CustomerReviewRepository extends JpaRepository<CustomerReviewEn
       + "AND c.restaurantEntity.id = :restaurantId "
       + "AND c.menuEntity.id = :menuId "
       + "AND c.userEntity = :userEntity")
-  Optional<CustomerReviewEntity> findByAllId(Long id, Long restaurantId, Long menuId,
+  Optional<CustomerReviewEntity> findByAllId(
+      Long id, Long restaurantId, Long menuId,
       UserEntity userEntity);
+
+  @Modifying
+  @Query("DELETE FROM CUSTOMER_REVIEW cr WHERE cr.userEntity = :userEntity")
+  void deleteByUserEntity(UserEntity userEntity);
+
+  @Modifying
+  @Query("DELETE FROM CUSTOMER_REVIEW cr WHERE cr.menuEntity = :menuEntity")
+  void deleteByMenuEntity(MenuEntity menuEntity);
+
+  @Modifying
+  @Query("DELETE FROM CUSTOMER_REVIEW cr WHERE cr.restaurantEntity = :restaurantEntity")
+  void deleteByRestaurantEntity(RestaurantEntity restaurantEntity);
+
+  @Modifying
+  @Query("DELETE FROM CUSTOMER_REVIEW cr WHERE cr = :customerReviewEntity")
+  void deleteByCustomerReviewEntity(CustomerReviewEntity customerReviewEntity);
+
+  CustomerReviewEntity findByUserEntity(UserEntity userEntity);
+
+  CustomerReviewEntity findByMenuEntity(MenuEntity menuEntity);
+
+  CustomerReviewEntity findByRestaurantEntity(RestaurantEntity restaurantEntity);
 }

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
-import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.UserEntity;
 import kang.tableorder.type.UserRole;
 import lombok.Builder;
@@ -57,7 +56,6 @@ public class UserDto {
       public UserEntity toEntity() {
 
         return UserEntity.builder()
-            .cartEntity(CartEntity.builder().build())
             .email(this.email)
             .password(this.password)
             .name(this.name)
@@ -74,7 +72,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -86,7 +83,6 @@ public class UserDto {
 
         return Response.builder()
             .id(userEntity.getId())
-            .cartId(userEntity.getCartEntity().getId())
             .email(userEntity.getEmail())
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())
@@ -96,7 +92,6 @@ public class UserDto {
             .build();
       }
     }
-
 
   }
 
@@ -124,7 +119,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private List<UserRole> role;
       private String token;
@@ -133,7 +127,6 @@ public class UserDto {
 
         return UserDto.SignIn.Response.builder()
             .id(userEntity.getId())
-            .cartId(userEntity.getCartEntity().getId())
             .email(userEntity.getEmail())
             .role(userEntity.getRole())
             .token(token)
@@ -161,7 +154,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -174,7 +166,6 @@ public class UserDto {
 
         return UserDto.Read.Response.builder()
             .id(userEntity.getId())
-            .cartId(userEntity.getCartEntity().getId())
             .email(userEntity.getEmail())
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())
@@ -224,7 +215,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -237,7 +227,6 @@ public class UserDto {
 
         return UserDto.Update.Response.builder()
             .id(userEntity.getId())
-            .cartId(userEntity.getCartEntity().getId())
             .email(userEntity.getEmail())
             .name(userEntity.getName())
             .nickname(userEntity.getNickname())

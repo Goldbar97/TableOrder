@@ -41,7 +41,6 @@ public class TablesController {
     return ResponseEntity.ok(saved);
   }
 
-
   // 테이블 리스트 읽기
   @Operation(summary = "테이블 리스트 조회", description = "토큰, 매장ID 를 받고 해당 매장의 테이블을 조회합니다.")
   @GetMapping
@@ -76,7 +75,8 @@ public class TablesController {
       @PathVariable Long tablesId,
       @Valid @RequestBody TablesDto.Update.Request form) {
 
-    TablesDto.Update.Response updated = tablesService.updateTables(restaurantId, tablesId, form);
+    TablesDto.Update.Response updated = tablesService.updateTables(
+        restaurantId, tablesId, form);
 
     return ResponseEntity.ok(updated);
   }

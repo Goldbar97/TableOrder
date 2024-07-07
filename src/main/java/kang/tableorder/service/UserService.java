@@ -1,6 +1,8 @@
 package kang.tableorder.service;
 
+import kang.tableorder.component.EmailSender;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.UserEntityDeleter;
 import kang.tableorder.dto.UserDetailsDto;
 import kang.tableorder.dto.UserDto;
 import kang.tableorder.entity.UserEntity;
@@ -23,6 +25,8 @@ public class UserService implements UserDetailsService {
   private final TokenProvider tokenProvider;
   private final UserEntityGetter userEntityGetter;
   private final UserRepository userRepository;
+  private final UserEntityDeleter userEntityDeleter;
+  private final EmailSender emailSender;
 
   // 회원가입
   @Transactional
@@ -63,7 +67,6 @@ public class UserService implements UserDetailsService {
 
     return UserDto.SignIn.Response.toDto(userEntity, token);
   }
-
 
   // 사용자 본인 조회
   public UserDto.Read.Response readUser(UserDto.Read.Request form) {
@@ -116,7 +119,7 @@ public class UserService implements UserDetailsService {
       throw new CustomException(ErrorCode.WRONG_PASSWORD);
     }
 
-    userRepository.delete(userEntity);
+    userEntityDeleter.deleteByUserEntity(userEntity);
   }
 
   @Override

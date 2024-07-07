@@ -56,7 +56,8 @@ public class AccountDto {
       private int balance;
       private LocalDateTime createdAt;
 
-      public static AccountDto.Read.Response toDto(AccountEntity accountEntity, String userName) {
+      public static AccountDto.Read.Response toDto(
+          AccountEntity accountEntity, String userName) {
 
         return AccountDto.Read.Response.builder()
             .id(accountEntity.getId())
@@ -88,7 +89,8 @@ public class AccountDto {
       private String userName;
       private int balance;
 
-      public static AccountDto.UserDeposit.Response toDto(AccountEntity accountEntity,
+      public static AccountDto.UserDeposit.Response toDto(
+          AccountEntity accountEntity,
           String userName) {
 
         return AccountDto.UserDeposit.Response.builder()
@@ -124,7 +126,8 @@ public class AccountDto {
       private String userName;
       private int balance;
 
-      public static AccountDto.GuestDeposit.Response toDto(AccountEntity accountEntity,
+      public static AccountDto.GuestDeposit.Response toDto(
+          AccountEntity accountEntity,
           String userName) {
 
         return AccountDto.GuestDeposit.Response.builder()

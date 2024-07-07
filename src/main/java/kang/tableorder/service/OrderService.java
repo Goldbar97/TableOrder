@@ -17,8 +17,8 @@ import kang.tableorder.exception.ErrorCode;
 import kang.tableorder.repository.AccountRepository;
 import kang.tableorder.repository.CartItemRepository;
 import kang.tableorder.repository.CartRepository;
+import kang.tableorder.repository.OrdersItemRepository;
 import kang.tableorder.repository.OrdersRepository;
-import kang.tableorder.repository.OrdersitemRepository;
 import kang.tableorder.repository.RestaurantRepository;
 import kang.tableorder.repository.TablesRepository;
 import kang.tableorder.repository.VisitedUsersRepository;
@@ -39,18 +39,18 @@ public class OrderService {
   private final UserEntityGetter userEntityGetter;
   private final VisitedUsersRepository visitedUsersRepository;
   private final AccountRepository accountRepository;
-  private final OrdersitemRepository ordersItemRepository;
+  private final OrdersItemRepository ordersItemRepository;
 
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
   @Transactional
-  public OrderDto.Create.Response createOrder(Long restaurantId, OrderDto.Create.Request form) {
+  public OrderDto.Create.Response createOrder(OrderDto.Create.Request form) {
 
     CartEntity cartEntity;
     UserEntity userEntity;
     VisitedUsersEntity visitedUsersEntity = null;
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
+    RestaurantEntity restaurantEntity = restaurantRepository.findById(form.getRestaurantId())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
 
     TablesEntity tablesEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
@@ -59,18 +59,19 @@ public class OrderService {
     // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
     if (userEntityGetter.isGuest()) {
       userEntity = null;
-      cartEntity = tablesEntity.getCartEntity();
+      cartEntity = cartRepository.findByTablesEntity(tablesEntity);
     } else {
       userEntity = userEntityGetter.getUserEntity();
-      cartEntity = userEntity.getCartEntity();
+      cartEntity = cartRepository.findByUserEntity(userEntity);
     }
 
     if (userEntity != null) {
       visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
-              userEntity, restaurantId)
+              userEntity, form.getRestaurantId())
           .orElseGet(() -> visitedUsersRepository.save(VisitedUsersEntity.builder()
               .userEntity(userEntity)
-              .restaurantEntity(restaurantEntity)
+              .restaurantEntity(
+                  restaurantEntity)
               .visitedCount(0)
               .build())
           );
@@ -112,47 +113,10 @@ public class OrderService {
     return OrderDto.Create.Response.toDto(saved);
   }
 
-  // 주문 조회
-  public OrderDto.Read.Response readOrder(Long restaurantId, Long orderId,
-      OrderDto.Read.Request form) {
-
-    OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityId(orderId,
-            restaurantId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
-
-    return OrderDto.Read.Response.toDto(ordersEntity);
-  }
-
-  // 주문 리스트 조회
-  public List<OrderDto.Read.Response> readOrderList(Long restaurantId) {
-
-    UserEntity userEntity = userEntityGetter.getUserEntity();
-
-    List<OrdersEntity> ordersEntities = ordersRepository.findByRestaurantEntityIdAndRestaurantEntityUserEntity(
-        restaurantId, userEntity);
-
-    return ordersEntities.stream().map(OrderDto.Read.Response::toDto).toList();
-  }
-
-  // 주문 수정
-  @Transactional
-  public OrderDto.Update.Response updateOrder(Long restaurantId, Long orderId,
-      OrderDto.Update.Request form) {
-
-    UserEntity userEntity = userEntityGetter.getUserEntity();
-
-    OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityIdAndRestaurantEntityUserEntity(
-        orderId,
-        restaurantId, userEntity).orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
-
-    ordersEntity.setStatus(form.getStatus());
-
-    return OrderDto.Update.Response.toDto(ordersRepository.save(ordersEntity));
-  }
-
   // 결제
   @Transactional
-  public void performPayment(Long restaurantId, Long orderId,
+  public void performPayment(
+      Long restaurantId, Long orderId,
       OrderDto.Payment.Request form) {
 
     AccountEntity accountEntity = getAccountEntity(restaurantId, form.getTabletMacId());
@@ -169,9 +133,10 @@ public class OrderService {
         if (!userEntityGetter.isGuest()) {
           UserEntity userEntity = userEntityGetter.getUserEntity();
 
-          VisitedUsersEntity visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
-                  userEntity, restaurantId)
-              .orElseThrow(() -> new CustomException(ErrorCode.NOT_AVAILABLE));
+          VisitedUsersEntity visitedUsersEntity =
+              visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
+                      userEntity, restaurantId)
+                  .orElseThrow(() -> new CustomException(ErrorCode.NOT_AVAILABLE));
 
           visitedUsersEntity.setVisitedCount(visitedUsersEntity.getVisitedCount() + 1);
 
@@ -189,6 +154,36 @@ public class OrderService {
     } else {
       throw new CustomException(ErrorCode.NOT_AVAILABLE_ORDER);
     }
+  }
+
+  // 주문 조회
+  public OrderDto.Read.Response readOrder(Long restaurantId, Long orderId,
+      OrderDto.Read.Request form) {
+
+    OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityIdAndTablesEntityTabletMacId(
+            orderId, restaurantId, form.getTabletMacId())
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
+
+    List<OrdersItemEntity> ordersItemEntities = ordersItemRepository.findAllByOrdersEntity(
+        ordersEntity);
+
+    return OrderDto.Read.Response.toDto(ordersEntity, ordersItemEntities);
+  }
+
+  // 주문 리스트 조회
+  public List<OrderDto.Read.Response> readOrderList(Long restaurantId) {
+
+    UserEntity userEntity = userEntityGetter.getUserEntity();
+
+    List<OrdersEntity> ordersEntities =
+        ordersRepository.findByRestaurantEntityIdAndRestaurantEntityUserEntity(
+            restaurantId, userEntity);
+
+    return ordersEntities.stream().map(e -> {
+      List<OrdersItemEntity> ordersItemEntities = ordersItemRepository.findAllByOrdersEntity(e);
+
+      return OrderDto.Read.Response.toDto(e, ordersItemEntities);
+    }).toList();
   }
 
   // 환불
@@ -220,6 +215,28 @@ public class OrderService {
     }
   }
 
+  // 주문 수정
+  @Transactional
+  public OrderDto.Update.Response updateOrder(Long restaurantId, Long orderId,
+      OrderDto.Update.Request form) {
+
+    UserEntity userEntity = userEntityGetter.getUserEntity();
+
+    OrdersEntity ordersEntity =
+        ordersRepository.findByIdAndRestaurantEntityIdAndRestaurantEntityUserEntity(
+                orderId,
+                restaurantId, userEntity)
+            .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
+
+    ordersEntity.setStatus(form.getStatus());
+
+    OrdersEntity saved = ordersRepository.save(ordersEntity);
+
+    List<OrdersItemEntity> ordersItemEntities = ordersItemRepository.findAllByOrdersEntity(saved);
+
+    return OrderDto.Update.Response.toDto(saved, ordersItemEntities);
+  }
+
   private AccountEntity getAccountEntity(Long restaurantId, String tabletMacId) {
 
     if (userEntityGetter.isGuest()) {
@@ -227,7 +244,7 @@ public class OrderService {
               restaurantId, tabletMacId)
           .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
-      return tablesEntity.getAccountEntity();
+      return accountRepository.findByTablesEntity(tablesEntity);
     } else {
       return accountRepository.findByUserEntity(userEntityGetter.getUserEntity())
           .orElseThrow(() -> new CustomException(ErrorCode.NO_ACCOUNT));

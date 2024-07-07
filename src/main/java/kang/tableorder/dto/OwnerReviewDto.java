@@ -24,7 +24,8 @@ public class OwnerReviewDto {
       @NotBlank(message = "Description cannot be blank")
       private String description;
 
-      public OwnerReviewEntity toEntity(RestaurantEntity restaurantEntity, MenuEntity menuEntity,
+      public OwnerReviewEntity toEntity(
+          RestaurantEntity restaurantEntity, MenuEntity menuEntity,
           CustomerReviewEntity customerReviewEntity, UserEntity userEntity) {
 
         return OwnerReviewEntity.builder()
@@ -45,7 +46,8 @@ public class OwnerReviewDto {
       private Long id;
       private LocalDateTime createdAt;
 
-      public static OwnerReviewDto.Create.Response toDto(OwnerReviewEntity ownerReviewEntity) {
+      public static OwnerReviewDto.Create.Response toDto(
+          OwnerReviewEntity ownerReviewEntity) {
 
         return OwnerReviewDto.Create.Response.builder()
             .id(ownerReviewEntity.getId())
@@ -116,7 +118,8 @@ public class OwnerReviewDto {
       private LocalDateTime createdAt;
       private LocalDateTime updatedAt;
 
-      public static OwnerReviewDto.Update.Response toDto(OwnerReviewEntity ownerReviewEntity) {
+      public static OwnerReviewDto.Update.Response toDto(
+          OwnerReviewEntity ownerReviewEntity) {
 
         return Update.Response.builder()
             .id(ownerReviewEntity.getId())
