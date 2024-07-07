@@ -11,6 +11,6 @@ permissions:
     group: ec2-user
 hooks:
   AfterInstall:
-    - location: src/main/resources/startup.sh
+    - location: /home/ec2-user/build/startup.sh
       timeout: 60
       runas: ec2-user
