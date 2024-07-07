@@ -18,7 +18,8 @@ public class TablesEntityDeleter {
 
   public void deleteByRestaurantEntity(RestaurantEntity restaurantEntity) {
 
-    List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(restaurantEntity);
+    List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
+        restaurantEntity);
 
     for (TablesEntity tablesEntity : tablesEntities) {
       ordersEntityDeleter.deleteByTablesEntity(tablesEntity);

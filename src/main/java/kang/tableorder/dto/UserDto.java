@@ -92,7 +92,6 @@ public class UserDto {
             .build();
       }
     }
-
   }
 
   public static class SignIn {

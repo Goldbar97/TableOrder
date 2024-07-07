@@ -26,7 +26,6 @@ public class EmailSender {
       messageHelper.setSubject(SUBJECT);
       messageHelper.setText(htmlContent, true);
       javaMailSender.send(message);
-
     } catch (MessagingException e) {
       throw new RuntimeException(e);
     }
@@ -34,12 +33,11 @@ public class EmailSender {
 
   private String getVerificationMessage(String verificationNumber) {
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("<h1 style='text-align: center;'> [Chat-Connect] 인증매일</h1>")
-        .append("<h3 style='text-align: center;'> 인증코드 : <strong style='font-size: 32px; letter-spacing: 8px;'>")
-        .append(verificationNumber)
-        .append("</strong></h3>");
+    String sb = "<h1 style='text-align: center;'> [Chat-Connect] 인증매일</h1>"
+        + "<h3 style='text-align: center;'> 인증코드 : <strong style='font-size: 32px; letter-spacing: 8px;'>"
+        + verificationNumber
+        + "</strong></h3>";
 
-    return sb.toString();
+    return sb;
   }
 }

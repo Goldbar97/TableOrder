@@ -12,5 +12,4 @@ public class TableOrderApplication {
 
     SpringApplication.run(TableOrderApplication.class, args);
   }
-
 }
