@@ -2,10 +2,14 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
+  - source: appspec.yml
+    destination: /home/ec2-user/build/
+  - source: startup.sh
+    destination: /home/ec2-user/build/
+  - source: tableorder-*.jar
     destination: /home/ec2-user/build/
 permissions:
-  - object: /
+  - object: /home/ec2-user/build/startup.sh
     pattern: "**"
     owner: ec2-user
     group: ec2-user
