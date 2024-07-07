@@ -38,3 +38,4 @@ out/
 
 ### Local environment properties ###
 src/main/resources/secret.properties
+src/main/resources/application.yml

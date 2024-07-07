@@ -1,5 +1,6 @@
 package kang.tableorder.service;
 
+import kang.tableorder.component.EmailSender;
 import kang.tableorder.component.UserEntityGetter;
 import kang.tableorder.component.deleter.UserEntityDeleter;
 import kang.tableorder.dto.UserDetailsDto;
@@ -25,6 +26,7 @@ public class UserService implements UserDetailsService {
   private final UserEntityGetter userEntityGetter;
   private final UserRepository userRepository;
   private final UserEntityDeleter userEntityDeleter;
+  private final EmailSender emailSender;
 
   // 회원가입
   @Transactional

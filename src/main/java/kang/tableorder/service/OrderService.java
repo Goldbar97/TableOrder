@@ -44,13 +44,13 @@ public class OrderService {
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
   @Transactional
-  public OrderDto.Create.Response createOrder(Long restaurantId, OrderDto.Create.Request form) {
+  public OrderDto.Create.Response createOrder(OrderDto.Create.Request form) {
 
     CartEntity cartEntity;
     UserEntity userEntity;
     VisitedUsersEntity visitedUsersEntity = null;
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
+    RestaurantEntity restaurantEntity = restaurantRepository.findById(form.getRestaurantId())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
 
     TablesEntity tablesEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
@@ -67,7 +67,7 @@ public class OrderService {
 
     if (userEntity != null) {
       visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
-              userEntity, restaurantId)
+              userEntity, form.getRestaurantId())
           .orElseGet(() -> visitedUsersRepository.save(VisitedUsersEntity.builder()
               .userEntity(userEntity)
               .restaurantEntity(
