@@ -2,6 +2,7 @@ package kang.tableorder.service;
 
 import java.util.List;
 import kang.tableorder.component.UserEntityGetter;
+import kang.tableorder.component.deleter.MenuEntityDeleter;
 import kang.tableorder.dto.CustomerReviewDto;
 import kang.tableorder.dto.MenuDto;
 import kang.tableorder.entity.CustomerReviewEntity;
@@ -24,10 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MenuService {
 
+  private final CustomerReviewRepository customerReviewRepository;
+  private final MenuEntityDeleter menuEntityDeleter;
   private final MenuRepository menuRepository;
   private final RestaurantRepository restaurantRepository;
   private final UserEntityGetter userEntityGetter;
-  private final CustomerReviewRepository customerReviewRepository;
 
   // 메뉴 등록
   @Transactional
@@ -35,7 +37,8 @@ public class MenuService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
@@ -58,12 +61,14 @@ public class MenuService {
 
     Pageable pageable = PageRequest.of(page, size);
 
-    Page<MenuEntity> menuEntities = menuRepository.findAllByRestaurantEntityAndIsAvailableIsTrue(
-        restaurantEntity, pageable);
+    Page<MenuEntity> menuEntities =
+        menuRepository.findAllByRestaurantEntityAndIsAvailableIsTrue(
+            restaurantEntity, pageable);
 
     return menuEntities.getContent().stream().map(e -> {
-      CustomerReviewEntity topReview = customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(
-          e);
+      CustomerReviewEntity topReview =
+          customerReviewRepository.findTop1ByMenuEntityOrderByCreatedAtDesc(
+              e);
       return MenuDto.Read.Response.toDto(e, topReview);
     }).toList();
   }
@@ -80,8 +85,9 @@ public class MenuService {
 
     Pageable pageable = PageRequest.of(page, size);
 
-    Page<CustomerReviewEntity> customerReviewEntities = customerReviewRepository.findAllByMenuEntity(
-        menuEntity, pageable);
+    Page<CustomerReviewEntity> customerReviewEntities =
+        customerReviewRepository.findAllByMenuEntity(
+            menuEntity, pageable);
 
     List<CustomerReviewDto.Read.Response> list = customerReviewEntities.stream()
         .map(CustomerReviewDto.Read.Response::toDto).toList();
@@ -91,12 +97,14 @@ public class MenuService {
 
   // 메뉴 수정
   @Transactional
-  public MenuDto.Update.Response updateMenu(Long restaurantId, Long menuId,
+  public MenuDto.Update.Response updateMenu(
+      Long restaurantId, Long menuId,
       MenuDto.Update.Request form) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
+            restaurantId,
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
@@ -132,6 +140,9 @@ public class MenuService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    menuRepository.deleteByIdAndRestaurantEntity(menuId, restaurantEntity);
+    MenuEntity menuEntity = menuRepository.findByIdAndRestaurantEntity(menuId, restaurantEntity)
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_MENU));
+
+    menuEntityDeleter.deleteByMenuEntity(menuEntity);
   }
 }

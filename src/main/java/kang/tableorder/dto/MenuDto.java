@@ -1,6 +1,5 @@
 package kang.tableorder.dto;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -40,7 +39,8 @@ public class MenuDto {
       private Boolean isAvailable;
       private List<CustomerReviewDto.Read.Response> customerReview;
 
-      public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
+      public static MenuDto.Read.Response toDto(
+          MenuEntity menuEntity,
           CustomerReviewEntity customerReviewEntity) {
 
         MenuDto.Read.Response response = MenuDto.Read.Response.builder()
@@ -64,7 +64,8 @@ public class MenuDto {
         return response;
       }
 
-      public static MenuDto.Read.Response toDto(MenuEntity menuEntity,
+      public static MenuDto.Read.Response toDto(
+          MenuEntity menuEntity,
           List<CustomerReviewDto.Read.Response> list) {
 
         return MenuDto.Read.Response.builder()

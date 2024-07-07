@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kang.tableorder.dto.AccountDto;
-import kang.tableorder.dto.AccountDto.GuestDeposit;
-import kang.tableorder.dto.AccountDto.Read.Response;
-import kang.tableorder.dto.AccountDto.UserDeposit;
 import kang.tableorder.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +61,26 @@ public class AccountController {
     return ResponseEntity.ok(info);
   }
 
+  @DeleteMapping("/user/account")
+  public ResponseEntity<?> deleteAccount(
+      @RequestHeader("Authorization") String header) {
+
+    accountService.deleteAccount();
+
+    return ResponseEntity.ok("삭제되었습니다.");
+  }
+
+  @DeleteMapping("/restaurants/{restaurantId}/tables/{tablesId}/account")
+  public ResponseEntity<?> deleteAccount(
+      @PathVariable Long restaurantId,
+      @PathVariable Long tablesId,
+      @Valid @RequestBody AccountDto.GuestDeposit.Request form) {
+
+    accountService.deleteAccount(restaurantId, tablesId, form);
+
+    return ResponseEntity.ok("삭제되었습니다.");
+  }
+
   // 회원 입금
   @Operation(summary = "회원 입금", description = "토큰, 액수를 입력받고 입금합니다.")
   @PreAuthorize("hasRole('CUSTOMER')")
@@ -84,7 +102,8 @@ public class AccountController {
       @PathVariable Long tablesId,
       @Valid @RequestBody AccountDto.GuestDeposit.Request form) {
 
-    AccountDto.GuestDeposit.Response updated = accountService.depositAccount(restaurantId, tablesId, form);
+    AccountDto.GuestDeposit.Response updated = accountService.depositAccount(restaurantId,
+        tablesId, form);
 
     return ResponseEntity.ok(updated);
   }

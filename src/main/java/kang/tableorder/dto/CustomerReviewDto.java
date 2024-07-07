@@ -59,7 +59,8 @@ public class CustomerReviewDto {
 
         return Response.builder()
             .id(customerReviewEntity.getId())
-            .restaurantId(customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
+            .restaurantId(
+                customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
             .menuId(customerReviewEntity.getMenuEntity().getId())
             .menuName(customerReviewEntity.getMenuEntity().getName())
             .userNickname(customerReviewEntity.getUserEntity().getNickname())
@@ -97,7 +98,8 @@ public class CustomerReviewDto {
 
         return CustomerReviewDto.Read.Response.builder()
             .id(customerReviewEntity.getId())
-            .restaurantId(customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
+            .restaurantId(
+                customerReviewEntity.getMenuEntity().getRestaurantEntity().getId())
             .menuId(customerReviewEntity.getMenuEntity().getId())
             .menuName(customerReviewEntity.getMenuEntity().getName())
             .userNickname(customerReviewEntity.getUserEntity().getNickname())

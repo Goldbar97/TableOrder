@@ -61,7 +61,8 @@ public class CustomerReviewController {
       @PathVariable Long menuId,
       @PathVariable Long reviewId) {
 
-    CustomerReviewDto.Read.Response info = customerReviewService.readReview(restaurantId, menuId,
+    CustomerReviewDto.Read.Response info = customerReviewService.readReview(restaurantId,
+        menuId,
         reviewId);
 
     return ResponseEntity.ok(info);
@@ -78,7 +79,9 @@ public class CustomerReviewController {
       @Valid @RequestBody CustomerReviewDto.Update.Request form) {
 
     CustomerReviewDto.Update.Response updated = customerReviewService.updateReview(restaurantId,
-        menuId, reviewId, form);
+        menuId,
+        reviewId,
+        form);
 
     return ResponseEntity.ok(updated);
   }

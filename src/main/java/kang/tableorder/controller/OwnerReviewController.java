@@ -71,7 +71,8 @@ public class OwnerReviewController {
 
   // 리뷰 수정
   @Operation(summary = "리뷰 수정", description = "토큰, 매장ID, 메뉴ID, 손님리뷰ID, 점장리뷰ID 를 받고 자신의 리뷰를 수정합니다.")
-  @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews/{ownerReviewId}")
+  @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/reviews/{reviewId}/owner-reviews" +
+      "/{ownerReviewId}")
   public ResponseEntity<?> updateReview(
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,

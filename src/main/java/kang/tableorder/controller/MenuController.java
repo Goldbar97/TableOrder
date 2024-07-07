@@ -84,7 +84,6 @@ public class MenuController {
     return ResponseEntity.ok(updated);
   }
 
-
   // 메뉴 DELETE
   @Operation(summary = "메뉴 삭제", description = "토큰, 매장ID, 메뉴ID 를 받고 메뉴를 삭제합니다.")
   @PreAuthorize("hasRole('OWNER')")
