@@ -83,7 +83,8 @@ public class OrderDto {
       private LocalDateTime createdAt;
       private OrderStatus status;
 
-      public static OrderDto.Read.Response toDto(OrdersEntity ordersEntity, List<OrdersItemEntity> ordersItemEntities) {
+      public static OrderDto.Read.Response toDto(OrdersEntity ordersEntity,
+          List<OrdersItemEntity> ordersItemEntities) {
 
         return OrderDto.Read.Response.builder()
             .id(ordersEntity.getId())
@@ -128,7 +129,8 @@ public class OrderDto {
       private LocalDateTime createdAt;
       private OrderStatus status;
 
-      public static OrderDto.Update.Response toDto(OrdersEntity ordersEntity, List<OrdersItemEntity> ordersItemEntities) {
+      public static OrderDto.Update.Response toDto(OrdersEntity ordersEntity,
+          List<OrdersItemEntity> ordersItemEntities) {
 
         return OrderDto.Update.Response.builder()
             .id(ordersEntity.getId())

@@ -3,8 +3,6 @@ package kang.tableorder.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import kang.tableorder.entity.AccountEntity;
-import kang.tableorder.entity.CartEntity;
 import kang.tableorder.entity.RestaurantEntity;
 import kang.tableorder.entity.TablesEntity;
 import lombok.Builder;

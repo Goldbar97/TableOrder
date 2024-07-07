@@ -44,5 +44,4 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
   OrdersEntity findByRestaurantEntity(RestaurantEntity restaurantEntity);
 
   OrdersEntity findByAccountEntity(AccountEntity accountEntity);
-
 }

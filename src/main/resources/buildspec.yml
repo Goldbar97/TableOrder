@@ -17,5 +17,5 @@ phases:
 
 artifacts:
   files:
-    - build/libs/board-0.0.1-SNAPSHOT.war
+    - build/libs/board-*.jar
   discard-paths: yes

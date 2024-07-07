@@ -8,8 +8,6 @@ import kang.tableorder.dto.OrderDto;
 import kang.tableorder.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +28,6 @@ public class OrderController {
 
   // 주문 추가
   @Operation(summary = "주문 추가", description = "토큰(비필수), 매장ID, 주문 정보를 받고 주문을 추가합니다.")
-  @MessageMapping("/order")
-  @SendTo("/topic/orders")
   public OrderDto.Create.Response createOrder(OrderDto.Create.Request form) {
 
     OrderDto.Create.Response saved = orderService.createOrder(form);
