@@ -20,6 +20,9 @@ public class OrderDto {
     @Setter
     public static class Request {
 
+      @NotNull(message = "RestaurantId cannot be null")
+      private Long restaurantId;
+
       @Schema(defaultValue = "testTabletMacId")
       @NotBlank(message = "TabletMacId cannot be blank")
       private String tabletMacId;

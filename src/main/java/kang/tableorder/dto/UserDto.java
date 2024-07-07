@@ -72,7 +72,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -120,7 +119,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private List<UserRole> role;
       private String token;
@@ -156,7 +154,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
@@ -218,7 +215,6 @@ public class UserDto {
     public static class Response {
 
       private Long id;
-      private Long cartId;
       private String email;
       private String name;
       private String nickname;
