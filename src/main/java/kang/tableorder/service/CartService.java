@@ -33,9 +33,9 @@ public class CartService {
 
   // 카트 아이템 추가
   @Transactional
-  public void addMenuToCart(Long restaurantId, Long menuId, CartDto.Create.Request form) {
+  public void addMenuToCart(Long restaurantId, Long menuId, CartDto.Create.Request request) {
 
-    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
+    CartEntity cartEntity = getCartEntity(request.getTabletMacId());
 
     MenuEntity menuEntity = menuRepository.findByIdAndRestaurantEntityIdAndIsAvailableIsTrue(
             menuId, restaurantId)
@@ -49,8 +49,8 @@ public class CartService {
     CartItemEntity cartItemEntity = CartItemEntity.builder()
         .cartEntity(cartEntity)
         .menuEntity(menuEntity)
-        .count(form.getCount())
-        .totalPrice(menuEntity.getPrice() * form.getCount())
+        .count(request.getCount())
+        .totalPrice(menuEntity.getPrice() * request.getCount())
         .build();
 
     cartItemRepository.save(cartItemEntity);
@@ -61,9 +61,9 @@ public class CartService {
   }
 
   // 카트 아이템 리스트 조회
-  public CartDto.Read.Response readMenuListInCart(CartDto.Read.Request form) {
+  public CartDto.Read.Response readMenuListInCart(CartDto.Read.Request request) {
 
-    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
+    CartEntity cartEntity = getCartEntity(request.getTabletMacId());
 
     List<CartItemEntity> cartItemEntities = cartItemRepository.findAllByCartEntity(cartEntity);
 
@@ -77,15 +77,15 @@ public class CartService {
   @Transactional
   public CartDto.Update.Response updateMenuInCart(
       Long cartItemId,
-      CartDto.Update.Request form) {
+      CartDto.Update.Request request) {
 
-    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
+    CartEntity cartEntity = getCartEntity(request.getTabletMacId());
 
     CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(
             cartItemId, cartEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_MENU));
 
-    cartItemEntity.setCount(form.getCount());
+    cartItemEntity.setCount(request.getCount());
 
     int totalPrice = cartItemEntity.getMenuEntity().getPrice() * cartItemEntity.getCount();
 
@@ -102,9 +102,9 @@ public class CartService {
 
   // 카트 아이템 삭제
   @Transactional
-  public void deleteMenuInCart(Long cartItemId, CartDto.Delete.Request form) {
+  public void deleteMenuInCart(Long cartItemId, CartDto.Delete.Request request) {
 
-    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
+    CartEntity cartEntity = getCartEntity(request.getTabletMacId());
 
     CartItemEntity cartItemEntity = cartItemRepository.findByIdAndCartEntity(
             cartItemId, cartEntity)
@@ -119,9 +119,9 @@ public class CartService {
 
   // 카트 비우기
   @Transactional
-  public void deleteAllMenuInCart(CartDto.Delete.Request form) {
+  public void deleteAllMenuInCart(CartDto.Delete.Request request) {
 
-    CartEntity cartEntity = getCartEntity(form.getTabletMacId());
+    CartEntity cartEntity = getCartEntity(request.getTabletMacId());
 
     cartItemEntityDeleter.deleteByCartEntity(cartEntity);
 

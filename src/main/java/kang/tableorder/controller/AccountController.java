@@ -54,9 +54,9 @@ public class AccountController {
   public ResponseEntity<?> readAccount(
       @PathVariable Long restaurantId,
       @PathVariable Long tablesId,
-      @Valid @RequestBody AccountDto.Read.Request form) {
+      @Valid @RequestBody AccountDto.Read.Request request) {
 
-    AccountDto.Read.Response info = accountService.readAccount(restaurantId, tablesId, form);
+    AccountDto.Read.Response info = accountService.readAccount(restaurantId, tablesId, request);
 
     return ResponseEntity.ok(info);
   }
@@ -74,9 +74,9 @@ public class AccountController {
   public ResponseEntity<?> deleteAccount(
       @PathVariable Long restaurantId,
       @PathVariable Long tablesId,
-      @Valid @RequestBody AccountDto.GuestDeposit.Request form) {
+      @Valid @RequestBody AccountDto.GuestDeposit.Request request) {
 
-    accountService.deleteAccount(restaurantId, tablesId, form);
+    accountService.deleteAccount(restaurantId, tablesId, request);
 
     return ResponseEntity.ok("삭제되었습니다.");
   }
@@ -87,9 +87,9 @@ public class AccountController {
   @PutMapping("/user/account")
   public ResponseEntity<?> depositAccount(
       @RequestHeader("Authorization") String header,
-      @Valid @RequestBody AccountDto.UserDeposit.Request form) {
+      @Valid @RequestBody AccountDto.UserDeposit.Request request) {
 
-    AccountDto.UserDeposit.Response updated = accountService.depositAccount(form);
+    AccountDto.UserDeposit.Response updated = accountService.depositAccount(request);
 
     return ResponseEntity.ok(updated);
   }
@@ -100,10 +100,10 @@ public class AccountController {
   public ResponseEntity<?> depositAccount(
       @PathVariable Long restaurantId,
       @PathVariable Long tablesId,
-      @Valid @RequestBody AccountDto.GuestDeposit.Request form) {
+      @Valid @RequestBody AccountDto.GuestDeposit.Request request) {
 
     AccountDto.GuestDeposit.Response updated = accountService.depositAccount(restaurantId,
-        tablesId, form);
+        tablesId, request);
 
     return ResponseEntity.ok(updated);
   }

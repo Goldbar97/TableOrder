@@ -33,9 +33,9 @@ public class RestaurantController {
   @PostMapping
   public ResponseEntity<?> createRestaurant(
       @RequestHeader("Authorization") String header,
-      @Valid @RequestBody RestaurantDto.Create.Request form) {
+      @Valid @RequestBody RestaurantDto.Create.Request request) {
 
-    RestaurantDto.Create.Response saved = restaurantService.createRestaurant(form);
+    RestaurantDto.Create.Response saved = restaurantService.createRestaurant(request);
 
     return ResponseEntity.ok(saved);
   }
@@ -68,10 +68,10 @@ public class RestaurantController {
   public ResponseEntity<?> updateRestaurant(
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
-      @Valid @RequestBody RestaurantDto.Update.Request form) {
+      @Valid @RequestBody RestaurantDto.Update.Request request) {
 
     RestaurantDto.Update.Response updated = restaurantService.updateRestaurant(
-        restaurantId, form);
+        restaurantId, request);
 
     return ResponseEntity.ok(updated);
   }

@@ -30,9 +30,9 @@ public class CartController {
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Long restaurantId,
       @PathVariable Long menuId,
-      @Valid @RequestBody CartDto.Create.Request form) {
+      @Valid @RequestBody CartDto.Create.Request request) {
 
-    cartService.addMenuToCart(restaurantId, menuId, form);
+    cartService.addMenuToCart(restaurantId, menuId, request);
 
     return ResponseEntity.ok("추가됐습니다.");
   }
@@ -42,9 +42,9 @@ public class CartController {
   @GetMapping("/cart")
   public ResponseEntity<?> readMenuListInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @Valid @RequestBody CartDto.Read.Request form) {
+      @Valid @RequestBody CartDto.Read.Request request) {
 
-    CartDto.Read.Response cartItemsList = cartService.readMenuListInCart(form);
+    CartDto.Read.Response cartItemsList = cartService.readMenuListInCart(request);
 
     return ResponseEntity.ok(cartItemsList);
   }
@@ -55,9 +55,9 @@ public class CartController {
   public ResponseEntity<?> updateMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Long cartItemId,
-      @Valid @RequestBody CartDto.Update.Request form) {
+      @Valid @RequestBody CartDto.Update.Request request) {
 
-    CartDto.Update.Response updated = cartService.updateMenuInCart(cartItemId, form);
+    CartDto.Update.Response updated = cartService.updateMenuInCart(cartItemId, request);
 
     return ResponseEntity.ok(updated);
   }
@@ -68,9 +68,9 @@ public class CartController {
   public ResponseEntity<?> deleteMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Long cartItemId,
-      @Valid @RequestBody CartDto.Delete.Request form) {
+      @Valid @RequestBody CartDto.Delete.Request request) {
 
-    cartService.deleteMenuInCart(cartItemId, form);
+    cartService.deleteMenuInCart(cartItemId, request);
 
     return ResponseEntity.ok("삭제되었습니다.");
   }
@@ -80,9 +80,9 @@ public class CartController {
   @DeleteMapping("/cart")
   public ResponseEntity<?> deleteAllMenuInCart(
       @RequestHeader(value = "Authorization", required = false) String header,
-      @Valid @RequestBody CartDto.Delete.Request form) {
+      @Valid @RequestBody CartDto.Delete.Request request) {
 
-    cartService.deleteAllMenuInCart(form);
+    cartService.deleteAllMenuInCart(request);
 
     return ResponseEntity.ok("삭제되었습니다.");
   }

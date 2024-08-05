@@ -32,29 +32,27 @@ public class TablesService {
 
   // 테이블 등록
   @Transactional
-  public TablesDto.Create.Response createTables(
-      Long restaurantId,
-      TablesDto.Create.Request form) {
+  public TablesDto.Create.Response createTables(Long restaurantId,
+      TablesDto.Create.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
-            restaurantId,
-            userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+        userEntity).orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     // 번호 중복 확인
-    if (tablesRepository.existsByNumberAndRestaurantEntity(
-        form.getNumber(), restaurantEntity)) {
+    if (tablesRepository.existsByNumberAndRestaurantEntity(request.getNumber(), restaurantEntity)) {
+
       throw new CustomException(ErrorCode.ALREADY_EXISTS_TABLES_NUMBER);
     }
 
     // 태블릿 MAC ID 중복 확인
-    if (tablesRepository.existsByTabletMacId(form.getTabletMacId())) {
+    if (tablesRepository.existsByTabletMacId(request.getTabletMacId())) {
+
       throw new CustomException(ErrorCode.ALREADY_EXISTS_TABLETS_MAC_ID);
     }
 
-    TablesEntity saved = tablesRepository.save(form.toEntity(restaurantEntity));
+    TablesEntity saved = tablesRepository.save(request.toEntity(restaurantEntity));
 
     cartRepository.save(CartEntity.builder()
         .tablesEntity(saved)
@@ -68,6 +66,7 @@ public class TablesService {
   }
 
   // 테이블 리스트 조회
+  @Transactional(readOnly = true)
   public List<TablesDto.Read.Response> readTablesList(Long restaurantId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -84,28 +83,24 @@ public class TablesService {
   }
 
   // 테이블 조회
+  @Transactional(readOnly = true)
   public TablesDto.Read.Response readTables(Long restaurantId, Long tablesId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
-            restaurantId,
-            userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+        userEntity).orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(
-            tablesId,
-            restaurantEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+        restaurantEntity).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     return TablesDto.Read.Response.toDto(tablesEntity);
   }
 
   // 테이블 수정
   @Transactional
-  public TablesDto.Update.Response updateTables(
-      Long restaurantId, Long tablesId,
-      TablesDto.Update.Request form) {
+  public TablesDto.Update.Response updateTables(Long restaurantId, Long tablesId,
+      TablesDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -121,15 +116,15 @@ public class TablesService {
 
     // 테이블 번호 중복 확인
     if (tablesRepository.existsByNumberAndRestaurantEntity(
-        form.getNumber(), restaurantEntity)) {
+        request.getNumber(), restaurantEntity)) {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_TABLES_NUMBER);
     }
 
-    tablesEntity.setNumber(form.getNumber());
+    tablesEntity.setNumber(request.getNumber());
 
     // 이미 다른 테이블에 해당 태블릿 MAC ID 가 있으면 교환
-    if (tablesRepository.existsByTabletMacId(form.getTabletMacId())) {
-      TablesEntity tablesForSwap = tablesRepository.findByTabletMacId(form.getTabletMacId())
+    if (tablesRepository.existsByTabletMacId(request.getTabletMacId())) {
+      TablesEntity tablesForSwap = tablesRepository.findByTabletMacId(request.getTabletMacId())
           .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
       tablesForSwap.setTabletMacId(tablesEntity.getTabletMacId());
@@ -137,7 +132,7 @@ public class TablesService {
       tablesRepository.save(tablesForSwap);
     }
 
-    tablesEntity.setTabletMacId(form.getTabletMacId());
+    tablesEntity.setTabletMacId(request.getTabletMacId());
 
     TablesEntity updated = tablesRepository.save(tablesEntity);
 
@@ -150,15 +145,11 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
-            restaurantId,
-            userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+        userEntity).orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(
-            tablesId,
-            restaurantEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+    TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntity(tablesId,
+        restaurantEntity).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     tablesEntityDeleter.deleteByTablesEntity(tablesEntity);
   }
@@ -169,10 +160,8 @@ public class TablesService {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(
-            restaurantId,
-            userEntity)
-        .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
+    RestaurantEntity restaurantEntity = restaurantRepository.findByIdAndUserEntity(restaurantId,
+        userEntity).orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     List<TablesEntity> tablesEntities = tablesRepository.findAllByRestaurantEntity(
         restaurantEntity);

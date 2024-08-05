@@ -33,10 +33,10 @@ public class CustomerReviewController {
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
       @PathVariable Long menuId,
-      @Valid @RequestBody CustomerReviewDto.Create.Request form) {
+      @Valid @RequestBody CustomerReviewDto.Create.Request request) {
 
     CustomerReviewDto.Create.Response saved = customerReviewService.createReview(restaurantId,
-        menuId, form);
+        menuId, request);
 
     return ResponseEntity.ok(saved);
   }
@@ -76,12 +76,12 @@ public class CustomerReviewController {
       @PathVariable Long restaurantId,
       @PathVariable Long menuId,
       @PathVariable Long reviewId,
-      @Valid @RequestBody CustomerReviewDto.Update.Request form) {
+      @Valid @RequestBody CustomerReviewDto.Update.Request request) {
 
     CustomerReviewDto.Update.Response updated = customerReviewService.updateReview(restaurantId,
         menuId,
         reviewId,
-        form);
+        request);
 
     return ResponseEntity.ok(updated);
   }

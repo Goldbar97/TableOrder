@@ -27,6 +27,7 @@ public enum ErrorCode {
   NO_REVIEW(HttpStatus.NOT_FOUND, "없는 리뷰입니다."),
   NO_TABLES(HttpStatus.NOT_FOUND, "없는 테이블입니다."),
   NO_USER(HttpStatus.NOT_FOUND, "없는 계정입니다."),
+  WRONG_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증번호 입니다."),
   WRONG_MENU(HttpStatus.BAD_REQUEST, "매장에 등록되지 않은 메뉴입니다."),
   WRONG_OWNER(HttpStatus.FORBIDDEN, "매장에 등록되지 않은 계정입니다."),
   WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "틀린 비밀번호입니다.");
