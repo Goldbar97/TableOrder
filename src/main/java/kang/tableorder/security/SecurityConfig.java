@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,28 +38,18 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(e -> e.sessionCreationPolicy(
             SessionCreationPolicy.STATELESS))
+        .oauth2Login(Customizer.withDefaults())
         .authorizeHttpRequests(e -> {
           e
-              .requestMatchers("/signup", "/signin")
-              .permitAll();
-          e
-              .requestMatchers("/cart/**")
-              .permitAll();
-          e
-              .requestMatchers("/restaurants/**")
-              .permitAll();
-          e
-              .requestMatchers("/swagger-ui/**", "/swagger-ui.html",
-                  "/swagger-resources/**",
-                  "/v3/api-docs/**", "/webjars/**")
-              .permitAll();
-          e
-              .anyRequest()
-              .authenticated();
+              .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
+              .requestMatchers("/signup", "/signin", "/code").permitAll()
+              .requestMatchers("/cart/**").permitAll()
+              .requestMatchers("/restaurants/**").permitAll()
+              .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**",
+                  "/v3/api-docs/**", "/webjars/**").permitAll()
+              .anyRequest().authenticated();
         })
-        .addFilterBefore(
-            jwtAuthenticationFilter,
-            UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

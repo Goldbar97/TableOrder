@@ -34,9 +34,9 @@ public class TablesController {
   public ResponseEntity<?> createTables(
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
-      @Valid @RequestBody TablesDto.Create.Request form) {
+      @Valid @RequestBody TablesDto.Create.Request request) {
 
-    TablesDto.Create.Response saved = tablesService.createTables(restaurantId, form);
+    TablesDto.Create.Response saved = tablesService.createTables(restaurantId, request);
 
     return ResponseEntity.ok(saved);
   }
@@ -73,10 +73,10 @@ public class TablesController {
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
       @PathVariable Long tablesId,
-      @Valid @RequestBody TablesDto.Update.Request form) {
+      @Valid @RequestBody TablesDto.Update.Request request) {
 
     TablesDto.Update.Response updated = tablesService.updateTables(
-        restaurantId, tablesId, form);
+        restaurantId, tablesId, request);
 
     return ResponseEntity.ok(updated);
   }

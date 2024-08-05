@@ -28,9 +28,9 @@ public class OrderController {
 
   // 주문 추가
   @Operation(summary = "주문 추가", description = "토큰(비필수), 매장ID, 주문 정보를 받고 주문을 추가합니다.")
-  public OrderDto.Create.Response createOrder(OrderDto.Create.Request form) {
+  public OrderDto.Create.Response createOrder(OrderDto.Create.Request request) {
 
-    OrderDto.Create.Response saved = orderService.createOrder(form);
+    OrderDto.Create.Response saved = orderService.createOrder(request);
 
     return saved;
   }
@@ -42,9 +42,9 @@ public class OrderController {
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Long restaurantId,
       @PathVariable Long orderId,
-      @Valid @RequestBody OrderDto.Read.Request form) {
+      @Valid @RequestBody OrderDto.Read.Request request) {
 
-    OrderDto.Read.Response info = orderService.readOrder(restaurantId, orderId, form);
+    OrderDto.Read.Response info = orderService.readOrder(restaurantId, orderId, request);
 
     return ResponseEntity.ok(info);
   }
@@ -70,22 +70,22 @@ public class OrderController {
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
       @PathVariable Long orderId,
-      @Valid @RequestBody OrderDto.Update.Request form) {
+      @Valid @RequestBody OrderDto.Update.Request request) {
 
-    OrderDto.Update.Response updated = orderService.updateOrder(restaurantId, orderId, form);
+    OrderDto.Update.Response updated = orderService.updateOrder(restaurantId, orderId, request);
 
     return ResponseEntity.ok(updated);
   }
 
   // 결제
   @PostMapping("/{orderId}/payment")
-  public ResponseEntity<?> performPayment(
+  public ResponseEntity<?> perrequestPayment(
       @RequestHeader(value = "Authorization", required = false) String header,
       @PathVariable Long restaurantId,
       @PathVariable Long orderId,
-      @RequestBody OrderDto.Payment.Request form) {
+      @RequestBody OrderDto.Payment.Request request) {
 
-    orderService.performPayment(restaurantId, orderId, form);
+    orderService.perrequestPayment(restaurantId, orderId, request);
 
     return ResponseEntity.ok("결제되었습니다.");
   }

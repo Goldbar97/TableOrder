@@ -44,16 +44,16 @@ public class OrderService {
   // 주문 생성
   // TODO: WebSocket... 매장에 주문 요청 보내기
   @Transactional
-  public OrderDto.Create.Response createOrder(OrderDto.Create.Request form) {
+  public OrderDto.Create.Response createOrder(OrderDto.Create.Request request) {
 
     CartEntity cartEntity;
     UserEntity userEntity;
     VisitedUsersEntity visitedUsersEntity = null;
 
-    RestaurantEntity restaurantEntity = restaurantRepository.findById(form.getRestaurantId())
+    RestaurantEntity restaurantEntity = restaurantRepository.findById(request.getRestaurantId())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_RESTAURANT));
 
-    TablesEntity tablesEntity = tablesRepository.findByTabletMacId(form.getTabletMacId())
+    TablesEntity tablesEntity = tablesRepository.findByTabletMacId(request.getTabletMacId())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     // 회원일 경우 회원 장바구니, 비회원일 경우 테이블 장바구니
@@ -67,7 +67,7 @@ public class OrderService {
 
     if (userEntity != null) {
       visitedUsersEntity = visitedUsersRepository.findByUserEntityAndRestaurantEntityId(
-              userEntity, form.getRestaurantId())
+              userEntity, request.getRestaurantId())
           .orElseGet(() -> visitedUsersRepository.save(VisitedUsersEntity.builder()
               .userEntity(userEntity)
               .restaurantEntity(
@@ -115,11 +115,9 @@ public class OrderService {
 
   // 결제
   @Transactional
-  public void performPayment(
-      Long restaurantId, Long orderId,
-      OrderDto.Payment.Request form) {
+  public void perrequestPayment(Long restaurantId, Long orderId, OrderDto.Payment.Request request) {
 
-    AccountEntity accountEntity = getAccountEntity(restaurantId, form.getTabletMacId());
+    AccountEntity accountEntity = getAccountEntity(restaurantId, request.getTabletMacId());
 
     OrdersEntity ordersEntity = ordersRepository.findById(orderId)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
@@ -158,10 +156,10 @@ public class OrderService {
 
   // 주문 조회
   public OrderDto.Read.Response readOrder(Long restaurantId, Long orderId,
-      OrderDto.Read.Request form) {
+      OrderDto.Read.Request request) {
 
     OrdersEntity ordersEntity = ordersRepository.findByIdAndRestaurantEntityIdAndTablesEntityTabletMacId(
-            orderId, restaurantId, form.getTabletMacId())
+            orderId, restaurantId, request.getTabletMacId())
         .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
 
     List<OrdersItemEntity> ordersItemEntities = ordersItemRepository.findAllByOrdersEntity(
@@ -218,7 +216,7 @@ public class OrderService {
   // 주문 수정
   @Transactional
   public OrderDto.Update.Response updateOrder(Long restaurantId, Long orderId,
-      OrderDto.Update.Request form) {
+      OrderDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -228,7 +226,7 @@ public class OrderService {
                 restaurantId, userEntity)
             .orElseThrow(() -> new CustomException(ErrorCode.NO_ORDER));
 
-    ordersEntity.setStatus(form.getStatus());
+    ordersEntity.setStatus(request.getStatus());
 
     OrdersEntity saved = ordersRepository.save(ordersEntity);
 

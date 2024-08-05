@@ -23,6 +23,7 @@ public class AccountService {
   private final TablesRepository tablesRepository;
   private final UserEntityGetter userEntityGetter;
 
+  // 계좌 생성
   @Transactional
   public AccountDto.Create.Response createAccount() {
 
@@ -35,6 +36,8 @@ public class AccountService {
     return AccountDto.Create.Response.toDto(saved);
   }
 
+  // 계좌 조회
+  @Transactional(readOnly = true)
   public AccountDto.Read.Response readAccount() {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
@@ -46,18 +49,21 @@ public class AccountService {
     return AccountDto.Read.Response.toDto(accountEntity, userEntity.getName());
   }
 
+  // 비회원 계좌 조회
+  @Transactional(readOnly = true)
   public AccountDto.Read.Response readAccount(
-      Long restaurantId, Long tablesId, AccountDto.Read.Request form) {
+      Long restaurantId, Long tablesId, AccountDto.Read.Request request) {
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
         tablesId, restaurantId,
-        form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+        request.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     AccountEntity accountEntity = accountRepository.findByTablesEntity(tablesEntity);
 
     return AccountDto.Read.Response.toDto(accountEntity, "비회원");
   }
 
+  // 계좌 삭제
   @Transactional
   public void deleteAccount() {
 
@@ -66,20 +72,22 @@ public class AccountService {
     accountEntityDeleter.deleteByUserEntity(userEntity);
   }
 
+  // 비회원 계좌 삭제
   @Transactional
   public void deleteAccount(
       Long restaurantId, Long tablesId,
-      AccountDto.GuestDeposit.Request form) {
+      AccountDto.GuestDeposit.Request request) {
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
         tablesId, restaurantId,
-        form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+        request.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     accountEntityDeleter.deleteByTablesEntity(tablesEntity);
   }
 
+  // 계좌 입금
   @Transactional
-  public AccountDto.UserDeposit.Response depositAccount(AccountDto.UserDeposit.Request form) {
+  public AccountDto.UserDeposit.Response depositAccount(AccountDto.UserDeposit.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -88,7 +96,7 @@ public class AccountService {
             ErrorCode.NO_ACCOUNT));
 
     synchronized (accountEntity) {
-      accountEntity.setBalance(accountEntity.getBalance() + form.getAmount());
+      accountEntity.setBalance(accountEntity.getBalance() + request.getAmount());
     }
 
     AccountEntity updated = accountRepository.save(accountEntity);
@@ -96,18 +104,19 @@ public class AccountService {
     return AccountDto.UserDeposit.Response.toDto(updated, userEntity.getName());
   }
 
+  // 비회원 계좌 입금
   @Transactional
   public AccountDto.GuestDeposit.Response depositAccount(
-      Long restaurantId, Long tablesId, AccountDto.GuestDeposit.Request form) {
+      Long restaurantId, Long tablesId, AccountDto.GuestDeposit.Request request) {
 
     TablesEntity tablesEntity = tablesRepository.findByIdAndRestaurantEntityIdAndTabletMacId(
         tablesId, restaurantId,
-        form.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
+        request.getTabletMacId()).orElseThrow(() -> new CustomException(ErrorCode.NO_TABLES));
 
     AccountEntity accountEntity = accountRepository.findByTablesEntity(tablesEntity);
 
     synchronized (accountEntity) {
-      accountEntity.setBalance(accountEntity.getBalance() + form.getAmount());
+      accountEntity.setBalance(accountEntity.getBalance() + request.getAmount());
     }
 
     AccountEntity updated = accountRepository.save(accountEntity);

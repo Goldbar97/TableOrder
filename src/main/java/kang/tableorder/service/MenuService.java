@@ -33,7 +33,7 @@ public class MenuService {
 
   // 메뉴 등록
   @Transactional
-  public MenuDto.Create.Response createMenu(Long restaurantId, MenuDto.Create.Request form) {
+  public MenuDto.Create.Response createMenu(Long restaurantId, MenuDto.Create.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -43,11 +43,11 @@ public class MenuService {
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
     // 메뉴 중복 확인
-    if (menuRepository.existsByNameAndRestaurantEntity(form.getName(), restaurantEntity)) {
+    if (menuRepository.existsByNameAndRestaurantEntity(request.getName(), restaurantEntity)) {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_MENU);
     }
 
-    MenuEntity saved = menuRepository.save(form.toEntity(restaurantEntity));
+    MenuEntity saved = menuRepository.save(request.toEntity(restaurantEntity));
 
     return MenuDto.Create.Response.toDto(saved);
   }
@@ -97,9 +97,8 @@ public class MenuService {
 
   // 메뉴 수정
   @Transactional
-  public MenuDto.Update.Response updateMenu(
-      Long restaurantId, Long menuId,
-      MenuDto.Update.Request form) {
+  public MenuDto.Update.Response updateMenu(Long restaurantId, Long menuId,
+      MenuDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -111,19 +110,19 @@ public class MenuService {
     MenuEntity menuEntity = menuRepository.findByIdAndRestaurantEntity(menuId, restaurantEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_MENU));
 
-    menuEntity.setCategory((form.getCategory()));
+    menuEntity.setCategory((request.getCategory()));
 
-    menuEntity.setName(form.getName());
+    menuEntity.setName(request.getName());
 
-    menuEntity.setImageUrl(form.getImageUrl());
+    menuEntity.setImageUrl(request.getImageUrl());
 
-    menuEntity.setPrice(form.getPrice());
+    menuEntity.setPrice(request.getPrice());
 
-    menuEntity.setDescription(form.getDescription());
+    menuEntity.setDescription(request.getDescription());
 
-    menuEntity.setSpiciness(form.getSpiciness());
+    menuEntity.setSpiciness(request.getSpiciness());
 
-    menuEntity.setIsAvailable(form.getIsAvailable());
+    menuEntity.setIsAvailable(request.getIsAvailable());
 
     MenuEntity updated = menuRepository.save(menuEntity);
 

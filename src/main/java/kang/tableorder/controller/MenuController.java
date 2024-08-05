@@ -35,9 +35,9 @@ public class MenuController {
   public ResponseEntity<?> createMenu(
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
-      @Valid @RequestBody MenuDto.Create.Request form) {
+      @Valid @RequestBody MenuDto.Create.Request request) {
 
-    MenuDto.Create.Response saved = menuService.createMenu(restaurantId, form);
+    MenuDto.Create.Response saved = menuService.createMenu(restaurantId, request);
 
     return ResponseEntity.ok(saved);
   }
@@ -77,9 +77,9 @@ public class MenuController {
       @RequestHeader("Authorization") String header,
       @PathVariable Long restaurantId,
       @PathVariable Long menuId,
-      @Valid @RequestBody MenuDto.Update.Request form) {
+      @Valid @RequestBody MenuDto.Update.Request request) {
 
-    MenuDto.Update.Response updated = menuService.updateMenu(restaurantId, menuId, form);
+    MenuDto.Update.Response updated = menuService.updateMenu(restaurantId, menuId, request);
 
     return ResponseEntity.ok(updated);
   }

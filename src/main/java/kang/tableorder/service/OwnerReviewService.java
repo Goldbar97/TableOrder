@@ -32,9 +32,8 @@ public class OwnerReviewService {
 
   // 리뷰 추가
   @Transactional
-  public OwnerReviewDto.Create.Response createReview(
-      Long restaurantId, Long menuId,
-      Long reviewId, OwnerReviewDto.Create.Request form) {
+  public OwnerReviewDto.Create.Response createReview(Long restaurantId, Long menuId, Long reviewId,
+      OwnerReviewDto.Create.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -53,7 +52,7 @@ public class OwnerReviewService {
             reviewId, menuEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_REVIEW));
 
-    OwnerReviewEntity ownerReviewEntity = form.toEntity(restaurantEntity, menuEntity,
+    OwnerReviewEntity ownerReviewEntity = request.toEntity(restaurantEntity, menuEntity,
         customerReviewEntity, userEntity);
 
     OwnerReviewEntity saved = ownerReviewRepository.save(ownerReviewEntity);
@@ -71,9 +70,8 @@ public class OwnerReviewService {
     return ownerReviewEntities.stream().map(OwnerReviewDto.Read.Response::toDto).toList();
   }
 
-  public OwnerReviewDto.Read.Response readReview(
-      Long restaurantId, Long menuId,
-      Long reviewId, Long ownerReviewId) {
+  public OwnerReviewDto.Read.Response readReview(Long restaurantId, Long menuId, Long reviewId,
+      Long ownerReviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -88,9 +86,8 @@ public class OwnerReviewService {
 
   // 리뷰 수정
   @Transactional
-  public OwnerReviewDto.Update.Response updateReview(
-      Long restaurantId, Long menuId,
-      Long reviewId, Long ownerReviewId, OwnerReviewDto.Update.Request form) {
+  public OwnerReviewDto.Update.Response updateReview(Long restaurantId, Long menuId, Long reviewId,
+      Long ownerReviewId, OwnerReviewDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -100,7 +97,7 @@ public class OwnerReviewService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_REVIEW));
 
-    ownerReviewEntity.setDescription(form.getDescription());
+    ownerReviewEntity.setDescription(request.getDescription());
 
     OwnerReviewEntity updated = ownerReviewRepository.save(ownerReviewEntity);
 
@@ -109,9 +106,7 @@ public class OwnerReviewService {
 
   // 리뷰 삭제
   @Transactional
-  public void deleteReview(
-      Long restaurantId, Long menuId, Long reviewId,
-      Long ownerReviewId) {
+  public void deleteReview(Long restaurantId, Long menuId, Long reviewId, Long ownerReviewId) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 

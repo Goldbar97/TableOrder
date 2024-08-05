@@ -39,7 +39,7 @@ public class CustomerReviewService {
   @Transactional
   public CustomerReviewDto.Create.Response createReview(
       Long restaurantId, Long menuId,
-      CustomerReviewDto.Create.Request form) {
+      CustomerReviewDto.Create.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -78,7 +78,7 @@ public class CustomerReviewService {
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_AVAILABLE));
 
     CustomerReviewEntity saved = customerReviewRepository.save(
-        form.toEntity(menuEntity, userEntity));
+        request.toEntity(menuEntity, userEntity));
 
     return CustomerReviewDto.Create.Response.toDto(saved, visitedUsersEntity.getVisitedCount());
   }
@@ -115,7 +115,7 @@ public class CustomerReviewService {
   @Transactional
   public CustomerReviewDto.Update.Response updateReview(
       Long restaurantId, Long menuId,
-      Long reviewId, CustomerReviewDto.Update.Request form) {
+      Long reviewId, CustomerReviewDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -125,9 +125,9 @@ public class CustomerReviewService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.NO_MENU));
 
-    customerReviewEntity.setDescription(form.getDescription());
+    customerReviewEntity.setDescription(request.getDescription());
 
-    customerReviewEntity.setRating(form.getRating());
+    customerReviewEntity.setRating(request.getRating());
 
     CustomerReviewEntity updated = customerReviewRepository.save(customerReviewEntity);
 

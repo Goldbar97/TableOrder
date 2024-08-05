@@ -23,7 +23,7 @@ public class RestaurantService {
 
   // 매장 등록
   @Transactional
-  public RestaurantDto.Create.Response createRestaurant(RestaurantDto.Create.Request form) {
+  public RestaurantDto.Create.Response createRestaurant(RestaurantDto.Create.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -32,7 +32,7 @@ public class RestaurantService {
       throw new CustomException(ErrorCode.ALREADY_EXISTS_RESTAURANT);
     }
 
-    RestaurantEntity saved = restaurantRepository.save(form.toEntity(userEntity));
+    RestaurantEntity saved = restaurantRepository.save(request.toEntity(userEntity));
 
     return RestaurantDto.Create.Response.toDto(saved);
   }
@@ -58,7 +58,7 @@ public class RestaurantService {
   @Transactional
   public RestaurantDto.Update.Response updateRestaurant(
       Long restaurantId,
-      RestaurantDto.Update.Request form) {
+      RestaurantDto.Update.Request request) {
 
     UserEntity userEntity = userEntityGetter.getUserEntity();
 
@@ -67,13 +67,13 @@ public class RestaurantService {
             userEntity)
         .orElseThrow(() -> new CustomException(ErrorCode.WRONG_OWNER));
 
-    restaurantEntity.setName(form.getName());
+    restaurantEntity.setName(request.getName());
 
-    restaurantEntity.setLocation(form.getLocation());
+    restaurantEntity.setLocation(request.getLocation());
 
-    restaurantEntity.setDescription(form.getDescription());
+    restaurantEntity.setDescription(request.getDescription());
 
-    restaurantEntity.setPhoneNumber(form.getPhoneNumber());
+    restaurantEntity.setPhoneNumber(request.getPhoneNumber());
 
     RestaurantEntity saved = restaurantRepository.save(restaurantEntity);
 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import kang.tableorder.entity.UserEntity;
@@ -14,6 +15,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class UserDto {
+
+  public static class Code {
+
+    @Getter
+    @Setter
+    public static class Request {
+
+      @Schema(defaultValue = "test@naver.com")
+      @Email(message = "Email is invalid")
+      @NotBlank(message = "Email cannot be blank")
+      private String email;
+    }
+  }
 
   public static class SignUp {
 
@@ -26,10 +40,14 @@ public class UserDto {
       @NotBlank(message = "Email cannot be blank")
       private String email;
 
+      @Schema(defaultValue = "test12")
+      @Size(min = 6, max = 6, message = "Verification code must be 6 characters")
+      @NotBlank(message = "Verification code cannot be blank")
+      private String verificationCode;
+
       @Schema(defaultValue = "test1234")
       @NotBlank(message = "Password cannot be blank")
-      @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$",
-          message = "Password is invalid")
+      @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "Password is invalid")
       private String password;
 
       @Schema(defaultValue = "testName")
@@ -39,14 +57,12 @@ public class UserDto {
 
       @Schema(defaultValue = "testNickname")
       @NotBlank(message = "Nickname cannot be blank")
-      @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$",
-          message = "Invalid characters")
+      @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "Invalid characters")
       private String nickname;
 
       @Schema(defaultValue = "010-1234-5678")
       @NotBlank(message = "PhoneNumber cannot be blank")
-      @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
-          message = "PhoneNumber is invalid")
+      @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "PhoneNumber is invalid")
       private String phoneNumber;
 
       @Schema(defaultValue = "[\"CUSTOMER\"]")

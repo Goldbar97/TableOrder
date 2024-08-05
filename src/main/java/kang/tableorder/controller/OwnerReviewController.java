@@ -34,10 +34,10 @@ public class OwnerReviewController {
       @PathVariable Long restaurantId,
       @PathVariable Long menuId,
       @PathVariable Long reviewId,
-      @Valid @RequestBody OwnerReviewDto.Create.Request form) {
+      @Valid @RequestBody OwnerReviewDto.Create.Request request) {
 
     OwnerReviewDto.Create.Response saved = ownerReviewService.createReview(restaurantId, menuId,
-        reviewId, form);
+        reviewId, request);
 
     return ResponseEntity.ok(saved);
   }
@@ -79,10 +79,10 @@ public class OwnerReviewController {
       @PathVariable Long menuId,
       @PathVariable Long reviewId,
       @PathVariable Long ownerReviewId,
-      @Valid @RequestBody OwnerReviewDto.Update.Request form) {
+      @Valid @RequestBody OwnerReviewDto.Update.Request request) {
 
     OwnerReviewDto.Update.Response updated = ownerReviewService.updateReview(restaurantId, menuId,
-        reviewId, ownerReviewId, form);
+        reviewId, ownerReviewId, request);
 
     return ResponseEntity.ok(updated);
   }

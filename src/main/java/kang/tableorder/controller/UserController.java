@@ -22,13 +22,23 @@ public class UserController {
 
   private final UserService userService;
 
+  // 인증번호 발급
+  @Operation(summary = "인증번호 발급", description = "인증번호를 발급합니다.")
+  @PostMapping("/code")
+  public ResponseEntity<String> generateCode(@RequestBody @Valid UserDto.Code.Request request) {
+
+    userService.generateCode(request);
+
+    return ResponseEntity.ok("발급 완료");
+  }
+
   // 회원가입
   @Operation(summary = "회원가입", description = "이메일과 비밀번호로 회원가입합니다.")
   @PostMapping("/signup")
   public ResponseEntity<?> signUp(
-      @Valid @RequestBody UserDto.SignUp.Request form) {
+      @Valid @RequestBody UserDto.SignUp.Request request) {
 
-    UserDto.SignUp.Response signedUp = userService.signUp(form);
+    UserDto.SignUp.Response signedUp = userService.signUp(request);
 
     return ResponseEntity.ok(signedUp);
   }
@@ -37,9 +47,9 @@ public class UserController {
   @Operation(summary = "로그인", description = "회원가입했던 이메일과 비밀번호로 로그인하고 토큰을 발급받습니다.")
   @PostMapping("/signin")
   public ResponseEntity<?> signIn(
-      @Valid @RequestBody UserDto.SignIn.Request form) {
+      @Valid @RequestBody UserDto.SignIn.Request request) {
 
-    UserDto.SignIn.Response signedIn = userService.signIn(form);
+    UserDto.SignIn.Response signedIn = userService.signIn(request);
 
     return ResponseEntity.ok(signedIn);
   }
@@ -49,9 +59,9 @@ public class UserController {
   @GetMapping("/user")
   public ResponseEntity<?> readUser(
       @RequestHeader("Authorization") String header,
-      @Valid @RequestBody UserDto.Read.Request form) {
+      @Valid @RequestBody UserDto.Read.Request request) {
 
-    UserDto.Read.Response info = userService.readUser(form);
+    UserDto.Read.Response info = userService.readUser(request);
 
     return ResponseEntity.ok(info);
   }
@@ -61,9 +71,9 @@ public class UserController {
   @PutMapping("/user")
   public ResponseEntity<?> updateUser(
       @RequestHeader("Authorization") String header,
-      @Valid @RequestBody UserDto.Update.Request form) {
+      @Valid @RequestBody UserDto.Update.Request request) {
 
-    UserDto.Update.Response updated = userService.updateUser(form);
+    UserDto.Update.Response updated = userService.updateUser(request);
 
     return ResponseEntity.ok(updated);
   }
@@ -73,9 +83,9 @@ public class UserController {
   @DeleteMapping("/user")
   public ResponseEntity<?> deleteUser(
       @RequestHeader("Authorization") String header,
-      @Valid @RequestBody UserDto.Delete.Request form) {
+      @Valid @RequestBody UserDto.Delete.Request request) {
 
-    userService.deleteUser(form);
+    userService.deleteUser(request);
 
     return ResponseEntity.ok("삭제되었습니다.");
   }
