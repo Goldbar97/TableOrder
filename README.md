@@ -197,7 +197,7 @@
 ![image](https://github.com/Goldbar97/TableOrder/assets/100333239/7bab45b9-996f-498e-95e8-918474d3c8fc)
 
 ## ERD
-![image](https://github.com/Goldbar97/TableOrder/blob/66f40d1b448561948d8a6bc874f9be5e99421495/project_erd.PNG)
+![project_erd](https://github.com/user-attachments/assets/b2970332-68a9-41b7-bdcc-8f297729f423)
 
 ## 기술
 - JAVA
