@@ -211,10 +211,5 @@
 - MARIA DB
 - VALIDATION
 
-</br>
-
-- AWS S3
-- WEB SOCKET
-
 
 
